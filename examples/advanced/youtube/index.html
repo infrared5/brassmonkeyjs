@@ -1,0 +1,355 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title>YouTube</title>
+    <style type="text/css">
+      body{
+        margin:0px;
+        background: #1f1f1f;
+        font-family: Arial;
+      }
+      #video-container{
+      }
+      #search-container{
+        width: 602px;
+        margin: 0px auto;
+      }
+
+      #search-box{
+        width: 400px;
+        margin: 0px auto;  
+        padding: 20px;
+        background: #1f1f1f;
+      }
+      #search-box img{
+        margin-top: 2px;
+        height: 44px;
+      }
+      #search{
+        float: left;
+        width: 349px;
+        line-height: 26px;
+        font-size: 32px;
+
+      }
+      #search-results{
+        
+      }
+      .search-result-item{
+        background: white;
+        height: 110px;
+        width: 600px;
+        border: thin solid grey;
+      }
+      .current{
+        background: #cfcfef;
+      }
+      .search-result-item h1{
+        font-size: 16px;
+        margin: 10px 0px 0px 0px;
+      }
+      .search-result-item h1 a{
+        text-decoration: none;
+      }
+      .search-result-item p{
+        margin: 0px;
+      }
+      .search-result-item .views{
+        position: absolute;
+        font-weight: bold;
+        margin-top: 85px;
+      }
+      
+      .thumbnail-container{
+        float: left;
+        width: 118px;
+        height: 90px;
+        padding: 10px;
+      }
+      .info-container{
+        float: left;
+        width: 455px;
+        padding-left: 5px;
+        height: 105px;
+      }
+      
+    </style>      
+
+		<script type="text/javascript" src="../third-party/jquery-1.7.1.min.js"></script>    
+    <!-- Brass Monkey -->
+		<script type="text/javascript" src="../../../brassmonkey.js"></script>
+		<script>
+      bm.init({
+        name: "Youtube",
+        logging: false,
+        design: {
+          orientation: "portrait",
+          touchEnabled: false,
+          accelerometerEnabled: false,
+          images:[
+            //'/images/controllers/controller-bg.png'
+            'images/controller/bg.png',
+            'images/controller/play-button-up.png',
+            'images/controller/play-button-down.png',
+            'images/controller/search-button-up.png',
+            'images/controller/search-button-down.png'
+          ],
+          layout:[
+            {
+              type:   "image",
+              handler: "up",
+              image:  0,
+              x:      0,
+              y:      0,
+              width:  320,
+              height: 480
+            },
+            {
+              type:       "button",
+              handler:    "play",
+              imageUp:    1,
+              imageDown:  2,
+              x:          (320-240)/2,
+              y:          113,
+              width:      240,
+              height:     238
+            },
+            {
+              type:       "button",
+              handler:    "search",
+              imageUp:    3,
+              imageDown:  4,
+              x:          (320-240)/2,
+              y:          383,
+              width:      240,
+              height:     61
+            }
+          ]
+        }
+      });
+      
+		  bm.onLog(function(str){
+		    console.log(str);
+		  });
+		  
+		  bm.onDeviceConnected(function(device){
+		    bm.setKeyboardMode();
+		  });
+		  bm.onNavigationString(function(deviceId,str){
+        if(str=="backDown"){
+          $('#search').val('').focus();
+          bm.setKeyboardMode();
+        } else if(str=="upDown"){
+          if(currentVideo!=0){
+            currentVideo--;
+            updateCurrentVideoDisplay();
+          }
+        } else if(str=="downDown"){
+          if(currentVideo<10){
+            currentVideo++;
+            updateCurrentVideoDisplay();
+          }
+        } else if(str=="activateDown"){
+          $('#search-container').hide();
+          ytplayer.width = $(window).width();
+          ytplayer.height = $(window).height();
+          ytplayer.loadVideoById($($('.search-result-item').get(currentVideo)).find('a').attr('id'));
+          playVideo();
+          bm.setGamepadMode();
+        }
+      });
+		  
+		  bm.onInvocation(function(invoke, deviceId){
+        var keyDown = invoke.parameters[0].Value=="down";
+        if(!keyDown){
+          return;
+        }
+        if(invoke.methodName=="play"){
+          if(!playing){
+            playVideo();
+          } else {
+            pauseVideo();
+          }  
+        } else if(invoke.methodName=="search"){
+          pauseVideo();
+          bm.setKeyboardMode();
+          ytplayer.width = 1;
+          ytplayer.height = 1;
+          $('#search-results').empty();
+          $('#search-container').show();
+          $('#search').val('').focus();
+        }
+    	});
+    	bm.onKeyString(function(fromDeviceId,str){
+        var val = $('#search').val();
+        // For some reason presses of delete send over empty
+        // strings. So delete things in that case.
+        if(str==""){
+          $('#search').val(val.slice(0,-1));
+        } else if(str=="\n"){
+          doSearch();
+          
+        } else{
+          // Regular keypress, add to string
+          $('#search').val(val+str);;
+        }
+        
+      });
+      
+      function updateCurrentVideoDisplay(){
+        $('.search-result-item').removeClass('current');
+        $($('.search-result-item').get(currentVideo)).addClass('current');
+      }
+      
+      function doSearch(){
+        var url = "https://gdata.youtube.com/feeds/api/videos?"+
+                "q="+$('#search').val()+
+                "&orderby=viewCount"+
+                "&start-index=11"+
+                "&max-results=30"+
+                "&v=2"+
+                "&alt=json-in-script"+
+                "&prettyprint=true"+
+                "&callback=?";
+        console.log(url);
+        $.getJSON(
+          url,
+          function(data){
+            console.log(data);
+            // Clear the results
+            $('#search-results').empty();
+            
+            for(var i=0;i<data.feed.entry.length;i++){
+              var mediaGroup = data.feed.entry[i]['media$group'],
+                  itemHTML = "";
+              itemHTML+='<div class="search-result-item">';
+                itemHTML+='<div class="thumbnail-container">';
+                  itemHTML+='<img style="width: 120px;height:90px;" src="'+mediaGroup['media$thumbnail'][0].url+'"/>'
+                  //for(var j=0;j<mediaGroup['media$thumbnail'].length;j++){
+                  //  itemHTML+='<img style="width: 120px;height:90px;" src="'+mediaGroup['media$thumbnail'][j].url+'"/>'
+                  //}
+                itemHTML+='</div>';
+                itemHTML+='<div class="info-container">';
+                  itemHTML+='<span class="views">Views: '+data.feed.entry[i]['yt$statistics']['viewCount']+'</span>'
+                  
+                  var title = mediaGroup['media$title']['$t'];
+                  if(title.length>41){
+                    title = title.slice(0,41-4)+"…";
+                  }
+                  itemHTML+='<h1><a id="'+mediaGroup['yt$videoid']['$t']+'" href="http://youtube.com/?v='+mediaGroup['yt$videoid']['$t']+'">'+title+'</a></h1>';
+                  var description = mediaGroup['media$description']['$t'];
+                  if(description.length>146){
+                    description = description.slice(0,146-4)+"…";
+                  }
+                  itemHTML+='<p>'+description+'</p>'
+                itemHTML+='</div>';  
+              itemHTML+='</div>';
+              
+              $('#search-results').append(itemHTML);
+              
+              bm.setNavMode();
+              currentVideo = 0;
+              updateCurrentVideoDisplay();
+            }
+            //$('#search-results').html(JSON.stringify(data));
+          }
+        )
+      }
+    	
+    	$(document).ready(function(){
+        $('#search').focus().keydown(function(e){
+          if(e.keyCode==13){
+            doSearch();
+          }
+        });
+    	});
+		</script>
+    
+    <script src="http://www.google.com/jsapi" type="text/javascript"></script>
+    
+    <script type="text/javascript">
+      /*
+       * Chromeless player has no controls.
+       */
+      
+      
+      // Allow the user to set the volume from 0-100
+      function setVideoVolume() {
+        var volume = parseInt(document.getElementById("volumeSetting").value);
+        if(isNaN(volume) || volume < 0 || volume > 100) {
+          alert("Please enter a valid volume between 0 and 100.");
+        }
+        else if(ytplayer){
+          ytplayer.setVolume(volume);
+        }
+      }
+      var playing=false;
+      function playVideo() {
+        if (ytplayer&&!playing) {
+          ytplayer.playVideo();
+          playing=true;
+        }
+      }
+      
+      function pauseVideo() {
+        if (ytplayer&&playing) {
+          ytplayer.pauseVideo();
+          playing=false;
+        }
+      }
+      
+      function muteVideo() {
+        if(ytplayer) {
+          ytplayer.mute();
+        }
+      }
+      
+      function unMuteVideo() {
+        if(ytplayer) {
+          ytplayer.unMute();
+        }
+      }
+      
+      
+      // This function is automatically called by the player once it loads
+      function onYouTubePlayerReady(playerId) {
+        ytplayer = document.getElementById("ytPlayer");
+        ytplayer.addEventListener("onStateChange", "onPlayerStateChange");
+        ytplayer.addEventListener("onError", "onPlayerError");
+        //Load an initial video into the player
+        ytplayer.cueVideoById("6JnGBs88sL0");
+      }
+      
+      // The "main method" of this sample. Called when someone clicks "Run".
+      function loadPlayer() {
+        // Lets Flash from another domain call JavaScript
+        var params = { allowScriptAccess: "always" };
+        // The element id of the Flash embed
+        var atts = { id: "ytPlayer" },
+            width = $(window).width(),
+            height = $(window).height(); 
+        // All of the magic handled by SWFObject (http://code.google.com/p/swfobject/)
+        swfobject.embedSWF("http://www.youtube.com/apiplayer?" +
+                           "version=3&enablejsapi=1&playerapiid=player1", 
+                           "youtube-container", 1, 1, "9", null, null, params, atts);
+      }
+      function _run() {
+        loadPlayer();
+      }
+      google.setOnLoadCallback(_run);
+    </script>
+  </head>
+  <body>
+    <div id="search-container">
+      <div id="search-box">
+        <input type="text" id="search"></input><img src="search.png"/>
+      </div>
+      <div id="search-results"></div>
+    </div>
+    <div id="video-container">
+      <div id="youtube-container">Loading...</div>
+    </div>
+  </body>
+</html>
+​

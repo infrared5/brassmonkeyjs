@@ -1,0 +1,763 @@
+<html>
+<head>
+  <title>Continuous SoundCloud Player</title>
+  <link href='http://fonts.googleapis.com/css?family=Aldrich' rel='stylesheet' type='text/css'>
+  <link href='css/core.css' rel='stylesheet' type='text/css'>
+
+
+  <!-- Brass Monkey -->
+  <script type="text/javascript" src="../../../brassmonkey.js"></script>
+  <script>
+    var controller = {
+      name: "Sound Cloud",
+      logging: false,
+      rootURL: "../../",
+      design: {
+        orientation: "portrait",
+        touchEnabled: true,
+        accelerometerEnabled: false,
+        images:[
+          //'/images/controllers/controller-bg.png'
+          'img/controller/bg.png',
+          'img/controller/play-button-up.png',
+          'img/controller/play-button-down.png',
+          'img/controller/search-button-up.png',
+          'img/controller/search-button-down.png',
+          'img/controller/play-bar-up.png',
+          'img/controller/play-bar-down.png',
+          'img/controller/prev-up.png',
+          'img/controller/prev-down.png',
+          'img/controller/next-up.png',
+          'img/controller/next-down.png',
+          'img/controller/clear-up.png',
+          'img/controller/clear-down.png'
+        ],
+        layout:[
+          {
+            type:   "image",
+            handler: "up",
+            image:  0,
+            x:      0,
+            y:      0,
+            width:  320,
+            height: 480
+          },
+          {
+            type:       "button",
+            handler:    "play",
+            imageUp:    1,
+            imageDown:  2,
+            x:          (320-240)/2,
+            y:          70,
+            width:      240,
+            height:     238
+          },
+          {
+            type:       "button",
+            handler:    "search",
+            imageUp:    3,
+            imageDown:  4,
+            x:          (320-240)/2,
+            y:          320,
+            width:      240,
+            height:     61
+          },
+          {
+            type:       "button",
+            handler:    "play-bar",
+            imageUp:    5,
+            imageDown:  6,
+            x:          0,
+            y:          480-73,
+            width:      320,
+            height:     53
+          },
+          {
+            type:       "button",
+            handler:    "prev",
+            imageUp:    7,
+            imageDown:  8,
+            x:          0,
+            y:          320,
+            width:      64,
+            height:     64
+          },
+          {
+            type:       "button",
+            handler:    "next",
+            imageUp:    9,
+            imageDown:  10,
+            x:          320-64,
+            y:          320,
+            width:      64,
+            height:     64
+          },
+          {
+            type:       "button",
+            handler:    "clear",
+            imageUp:    11,
+            imageDown:  12,
+            x:          0,
+            y:          0,
+            width:      118,
+            height:     38
+          }
+        ]
+      }
+    };
+    bm.init(controller);
+    bm.onLog(function(str){
+      console.log(str);
+    });
+    
+    bm.onDeviceConnected(function(device){
+      if(window.location.hash=="#groups"){
+        bm.setKeyboardMode();
+      } else if(window.location.hash=="#playlist"){
+        bm.setGamepadMode();
+      }
+    });
+
+    // Look Controls
+  	var  lookTouchId,
+  	     startX,startProgress;
+  	bm.onDeviceConnected(function(device){
+      bm.enableTouch(device.deviceId,true,1/60.0);
+    });
+  	bm.onTouchesReceived(function(touch){
+      // We only track one finger at a time. If a touch event
+      // started in the touch tracking area we store it in
+      // lookTouchId and only respond to events from it until
+      // a touchEnd event is received for it and then we start
+      // listening for a new touchstart event with the right x/y
+      // coordinates
+      if( (lookTouchId!==undefined&&touch.id!=lookTouchId)||
+          (lookTouchId!==undefined&&touch.id!=lookTouchId&&touch.phase.value!=1) ){
+        return;
+      }
+  
+      globalY=0;
+      // Touch Start
+      if( touch.phase.value==1&&
+          touch.y>controller.design.layout[3].y&&
+          touch.y<(controller.design.layout[3].y+controller.design.layout[3].height) ){
+        lookTouchId=touch.id;
+        
+        var newPos =touch.x/(controller.design.layout[3].width*1.0)*player.sound.duration;
+        player.progress(newPos);
+        
+      // Touch Move
+      } else if(touch.phase.value==2&&
+          touch.y>controller.design.layout[3].y&&
+          touch.y<(controller.design.layout[3].y+controller.design.layout[3].height)){
+        var newPos =touch.x/(controller.design.layout[3].width*1.0)*player.sound.duration;
+        player.progress(newPos);
+      // Touch End
+      } else if(touch.phase.value==4){
+        lookTouchId = undefined;
+      }
+  	});    
+    
+    bm.onInvocation(function(invoke, deviceId){
+      var keyDown = invoke.parameters[0].Value=="down";
+      if(!keyDown){
+        return;
+      }
+      if(invoke.methodName=="play"){
+        player.el.find('.controls .pause:visible, .controls .play:visible').mousedown();
+          
+      } else if(invoke.methodName=="search"){
+        if(window.location.hash=='#groups'){
+          bm.setKeyboardMode();
+        }
+        window.location.hash = '#groups';
+        $('.group-name').val("");
+        
+      } else if(invoke.methodName=="next"){
+        $('#playlist .content a.active').parent().next('li').find('a').click()
+      } else if(invoke.methodName=="prev"){
+        $('#playlist .content a.active').parent().prev('li').find('a').click()
+      } else if(invoke.methodName=="clear"){
+        var items = [];
+        $('.group-list li a.remove').each(function(idx,element){
+          items.push(element);
+          
+        });
+        for(var i=0;i<items.length;i++){
+          removeGroup(items[i]);
+        }
+//        $('#groups').each(function(){console.log('hi');});
+        $('.groups .count').html('0');
+
+        soundManager.pauseAll();        
+//        player.el.find('.controls .pause:visible, .controls .play:visible').mousedown();
+
+//        $('#groups .count').html('0');
+      }            
+    });
+    bm.onKeyString(function(fromDeviceId,str){
+      var val = $('.group-name').val();
+      // For some reason presses of delete send over empty
+      // strings. So delete things in that case.
+      if(str==""){
+        $('.group-name').val(val.slice(0,-1));
+      } else if(str=="\n"){
+        $('.add-group').click();
+
+        bm.setGamepadMode();
+      } else{
+        // Regular keypress, add to string
+        $('.group-name').val(val+str);
+      }
+      
+    });
+  </script>
+  
+  <script type="text/javascript" src="js/build.min.js"></script>
+</head>
+<body>
+  <div id="ui" class="ui-box">
+    <div id="player"></div>
+
+    <div id="playlist">
+      <div id="buttons" class="ui-box">
+        <ul>
+          <li class="unselectable playlist"><a href="#playlist">playlist (<span class="count">0</span>)</a></li>
+          <li class="unselectable groups"><a href="#groups">groups (<span class="count">0</span>)</a></li>
+          <li class="unselectable help"><a href="#help">help</a></li>
+          <li class="unselectable about"><a href="#about">about</a></li>
+        </ul>
+      </div>
+      <div class="content scroller">
+        <ul class="playlist page"></ul>
+
+        <div class="groups page">
+          <input type="text" name="group" class="group-name" value="" />
+          <a href="#" class="add-group">+</a>
+
+          <div class="no-groups">
+            <h1>It looks like there are no groups here!</h1>
+            <p>
+              To get started, type a SoundCloud group in the box and press enter or click the plus!<br />
+            <p>
+            <p>
+              Examples include: dubstep, dnb, rock, metal, etc...
+            </p>
+            <h1>How do I find more groups?</h1>
+            <p>
+              Head over to <a target="_blank" href="http://soundcloud.com/groups">SoundCloud groups</a> and navigate to a group that interests you.
+            </p>
+            <p><img src="img/finding-groups.png" /></p>
+            <p>
+              Now enter the last part of the url (highlighted in red in the image).
+            </p>
+            <p><img src="img/enter-group-name.png" /></p>
+          </div>
+
+          <ul class="group-list"></ul>
+
+        </div>
+
+        <div class="help page">
+          <h1>Basic Usage</h1>
+          <p>
+            Using this player is simple just add some groups and you'll be off!
+          </p>
+
+          <h1>Keyboard Shortcuts</h1>
+          <ul>
+            <li>up arrow - volume up</li>
+            <li>down arrow - volume down</li>
+            <li>left arrow - previous track</li>
+            <li>right arrow - next track</li>
+            <li>space - toggle pause</li>
+            <li>] - seek 500ms into the future</li>
+            <li>[ - seek 500ms into the past</li>
+            <li>? - show this screen</li>
+          </p>
+
+          <h1>If things go horribly wrong</h1>
+          <p>
+            Click <a class="reset" href="#">here</a> and everything will be reset.
+          </p>
+        </div>
+
+        <div class="about page">
+        <h1>Another SoundCloud player?</h1>
+        <p>
+          So, I have grown tired of how SoundCloud plays through groups and thought about how it could be fixed.
+        </p>
+        <p>
+          Currently, SoundCloud plays tracks in reverse chronological order.  This is problematic because you will end up hearing
+          the same tracks over and over if you let it stream on.  This player solves that problem by playing tracks in chronological order.
+        </p>
+        <p>
+          When you add a group, the latest tracks will be immediately added to your playlist. After each track is played, soundcloud is queried and a new set of tracks are retrieved. As long as people are uploading tracks you will continue to hear new music!
+        </p>
+        <p>
+          To add to the fun, your exact state is stored in localStorage. If you refresh or accidentally close the tab, your next visit will land you in the exact state you were in before you navigated away from the page!
+        </p>
+
+        <h1>Built by</h1>
+        <p>
+          Developed by <a target="_blank" href="http://twitter.com/tmpvar">@tmpvar</a><br />
+          Designed by <a target="_blank" href="http://twitter.com/R_H_2">@R_H_2</a>
+        </p>
+
+        <h1>Open source</h1>
+        <p>
+          As always, this project is open source! <a target="_blank" href="http://github.com/tmpvar/soundcloud-player">Fork me</a> on github!
+        </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    $(function() {
+      window.useHTML5Audio = true;
+      var storage = window.storage = JSON.parse(localStorage.getItem('state') || '{ "tracks" : [], "groups" : [] }');
+
+      var save = function() {
+        localStorage.removeItem('state');
+        localStorage.setItem('state', JSON.stringify(storage));
+      };
+
+      window.reset = function() {
+        storage = {
+          groups : {},
+          tracks : []
+        }
+        save();
+        window.location.reload();
+      };
+
+      $('.reset').click(function(e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        reset();
+      })
+
+      var player = window.player = new Player({
+        selector      : '#player',
+        width : 400,
+        height: 400,
+        volume : storage.volume || 70, // in percent
+        soundcloud : {
+          key    : 'bc73a3deaf438619d689a1100a066ce1',
+        },
+        soundManager  : {
+          url : 'sm2/swf/',
+          flashVersion : 9,
+          useFlashBlock : false
+        },
+        theme : {
+          progress : {
+            background : {
+              color : 'rgba(0,0,0,1)',
+              radius : 196
+            },
+            buffering : { // buffer bar
+              radius: 110,
+              color : "#b0b0b0"
+            },
+            playing : {
+              radius: 196, // waveform highlighter height
+              color: "#11db11"
+            },
+            bufferOverlay : { // buffer bar overlay
+              radius: 110,
+              color : "rgba(1, 0, 1, 0.5)"
+            },
+            inner : { // innermost circle
+              radius : 105,
+              color : 'black'
+            }
+          },
+          waveform : {
+            slices : 600, // number of slices to cut the sound cloud wave form into
+            height : 100, // height of the waveform to render
+            offset : 197, // translate this far off of the center
+            color  : "rgba(0,0,0,1)", // color of the waveform
+            background : "rgba(255,255,255,1)", // color behind the waveform
+            replace : 'white', // initial color that the waveform replaces
+            compositeOperations : {
+              replace : 'source-over', // bottom of the stack
+              background : 'source-out', // replace the waveform
+              slice : 'destination-out',
+            },
+            outerWidth: 5 // skew the waveform slice so it is bigger on the outside of the circle
+          },
+          loading : {
+
+            slices: 50, // total number of slices
+            speed : 4, // fall speed of slices
+            rate : 16, // time between slice changes
+            fade : {
+              hide : 700, // time to fade in in ms
+              show : 100 // time to fade out in ms
+            },
+            inner: {
+              radius : 50, // inner circle radius
+              color : '#000', // inner circle color
+            },
+            slice : {
+              radius : 200, // maximum size of the slices
+              color : '#000', // slice color
+            }
+          }
+        }
+      });
+
+      $('#playlist .playlist a.play-track').live('click', function(e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+
+        $('#playlist .active').removeClass('active');
+        $(this).addClass('active');
+        player.load($(this).attr('href'), function() {
+          $('.play').trigger('mousedown');
+        });
+        return false;
+      });
+
+      $('#playlist #buttons li').click(function(e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        window.location.hash = $(this).find('a').attr('href');
+
+        if ($(this).is('.playlist')) {
+          scrollToTrack(0);
+        }
+        return false;
+      });
+
+      $('#playlist #buttons li a').click(function(e) {
+        e.preventDefault();
+      });
+
+      var navigate = function() {
+        $('#playlist .content > *').hide();
+
+        var loc = 'playlist';
+        if (window.location.hash.length > 1) {
+          loc = window.location.hash.replace('#', '');
+        }
+
+        if (loc === 'playlist' && $('.group-list li').length === 0) {
+          window.location.hash = '#groups';
+          loc = 'groups';
+        }
+
+        $('#playlist .content .' + loc).show();
+        $('#playlist .content .' + loc).find(':input:first').focus();
+        $('#playlist #buttons li.selected').removeClass('selected');
+        $('#playlist #buttons li.' + loc).addClass('selected');
+        
+        if(window.location.hash=="#groups"){
+          bm.setKeyboardMode();
+        } else if(window.location.hash=="#playlist"){
+          bm.setGamepadMode();
+        }
+      };
+
+      player.el.bind('finished', function() {
+        $('#playlist .content a.active').parent().next('li').find('a').click()
+      });
+
+      var appendTrackTimer;
+      var updateTrackCount = function() {
+        $('#buttons .playlist .count').text($('.playlist li').length);
+        $('#buttons .playlist .count').addClass('active');
+        clearTimeout(appendTrackTimer);
+        appendTrackTimer = setTimeout(function() {
+          $('#buttons .playlist .count').removeClass('active');
+        }, 2000);
+      };
+
+      var appendTrack = function(track) {
+        if (storage.groups[track.group]) {
+          var title = track.title;
+          title = '[' + storage.groups[track.group].name + '] ' + title;
+          $('#playlist ul.playlist').append('<li><a class="play-track" href="' + track.url + '">' + title + '</a></li>');
+        }
+        updateTrackCount();
+      };
+
+      var appendGroupTimer;
+      var updateGroupCount = function() {
+        clearTimeout(appendGroupTimer);
+        appendGroupTimer = setTimeout(function() {
+          $('#buttons .groups .count').removeClass('active');
+        }, 2000);
+      };
+
+      var appendGroup = function(name, unique, id, prepend) {
+        if (unique !== name) {
+          name = name + ' (' + unique + ')';
+        }
+        // TODO: kick off resolver
+        $('.no-groups').hide();
+        var markup = '<li class="resolving"><a href="#" class="remove">x</a> <a href="#' + id + '">' + name + '</a></li>';
+        $('.group-list').append(markup);
+
+        $('#buttons .groups .count').text($('.group-list li').length);
+        $('#buttons .groups .count').addClass('active');
+
+        updateGroupCount();
+      };
+
+      var tracklist = {};
+      $.each(storage.tracks, function(idx, track) {
+        tracklist[track.id] = true;
+        appendTrack(track);
+      });
+
+      $.each(storage.groups, function(id, group) {
+        if (!group || !group.name) {
+          reset();
+          return false;
+        }
+        appendGroup(group.name, group.unique, id)
+      });
+
+      removeGroup = function(item){
+        var groupId = parseInt($(item).next('a').attr('href').replace('#', ''), 10);
+        delete storage.groups[groupId];
+
+        if (storage.tracks && storage.tracks.filter) {
+          storage.tracks = storage.tracks.filter(function(track) {
+            if (track.group === groupId) {
+              $('#playlist .playlist a[href="' + track.url + '"]').parent().remove();
+              delete tracklist[track.id];
+              return false;
+            }
+            return true;
+          });
+        }
+
+        if (storage.tracks.length === 0) {
+          $('.no-groups').fadeIn();
+        }
+        save();
+
+        $(item).parent().remove();
+        updateTrackCount();
+        updateGroupCount();
+      }
+
+      $('.group-list li a.remove').live('click', function() {
+        removeGroup(this);  
+        return false;
+      });
+
+      $('.group-name').bind('keydown', function(e) {
+        e.stopPropagation();
+        $(this).removeClass('error');
+        if (e.keyCode === 13) {
+          $('.add-group').click();
+        }
+      });
+
+      $('.add-group').bind('click', function() {
+        var name = $.trim($('.group-name').val());
+        if (name === '') {
+          $('.group-name').addClass('error');
+          return false;
+        }
+
+        var url = 'http://soundcloud.com/groups/' + name;
+        var ok = false;
+        $.ajax({
+          url : "http://api.soundcloud.com/resolve.json?client_id=" + player.soundcloud.key + "&url=" + url,
+          dataType : 'jsonp',
+          timeout : 1000,
+          success : function(data) {
+            if (!storage.groups[data.id]) {
+              storage.groups[data.id] = {
+                name : data.name,
+                unique : data.permalink
+              };
+              updatePlaylist(data.id);
+              appendGroup(data.name, data.permalink, data.id);
+              window.location.hash = "#playlist";
+              save();
+            }
+
+            $('.group-name').val('');
+            updateGroupCount();
+          },
+          complete: function(jqXHR,textStatus){
+            
+          },
+          error:function (xhr, ajaxOptions, thrownError){
+            $('.group-name').val("");
+          }
+        });
+      });
+
+      player.el.bind('playing', function(e, data) {
+        storage.position = data.value;
+        save();
+      });
+
+      player.el.bind('trackinfo', function(e, data) {
+        storage.current = data.id;
+        scrollToTrack();
+        save();
+      });
+
+      player.el.bind('loaded', scrollToTrack);
+
+      var scrollToTrack = function() {
+        var current = $('#playlist .playlist a.active');
+        var scroller = current.parents('.scroller');
+
+        var coff = current.offset();
+        var poff = current.parents('ul').offset();
+
+        if (coff && poff) {
+          scroller.animate({
+            scrollTop : (coff.top - poff.top) - scroller.height()*.25
+          }, 200);
+        }
+      };
+
+      player.el.bind('volume', function(e, volume) {
+        storage.volume = volume;
+        player.volume = volume;
+        save();
+      });
+
+      var updatePlaylist = window.updatePlaylist = function(group_id) {
+        if (!group_id) { return; }
+        $.ajax({
+          url : 'https://api.soundcloud.com/groups/' + group_id + '/tracks.json?client_id=' + player.soundcloud.key,
+          dataType : 'json',
+          success: function(data) {
+            var originalLength = $('#playlist .playlist li').length, track;
+            for (var i=0, l=data.length; i<l; i++) {
+
+              if (!tracklist[data[i].id]) {
+                track = {
+                  id: data[i].id,
+                  url : data[i].permalink_url,
+                  title : data[i].title,
+                  username : data[i].user.username,
+                  group : group_id
+                };
+                storage.tracks.push(track);
+
+                tracklist[data[i].id] = true;
+                appendTrack(track);
+              }
+            }
+
+            save();
+
+            if (originalLength === 0) {
+              window.location.hash = "#playlist";
+              $('#playlist .playlist li:first a').click();
+            }
+          }
+        });
+      };
+
+      player.el.bind('finished', function() {
+        $.each(storage.groups, function(id, group) {
+          updatePlaylist(id);
+        })
+      });
+
+      updatePlaylist();
+
+      $(window).bind('keydown', function(e) {
+        switch (e.keyCode) {
+          case 39: // right arrow (next track)
+            $('#playlist .content a.active').parent().next('li').find('a').click()
+          break;
+
+          case 37: // left arrow (previous track)
+            $('#playlist .content a.active').parent().prev('li').find('a').click()
+          break;
+
+          case 32:
+            player.el.find('.controls .pause:visible, .controls .play:visible').mousedown()
+          break;
+
+          case 40: // down arrow (volume down)
+            player.volumeControl(player.volumeControl()-5);
+          break;
+
+          case 38: // up array (volume up)
+            player.volumeControl(player.volumeControl()+5);
+          break;
+
+          case 221: // right bracket (jump forward)
+            player.progress(player.progress() + 500)
+          break;
+
+          case 219: // left bracket (jump backward)
+            player.progress(player.progress() - 500)
+          break;
+
+          case 191: // '/' for showing the help screen
+            if (e.shiftKey) {
+              window.location.hash = "#help";
+            }
+
+          break;
+
+        }
+      });
+
+      var urlHash = false;
+      setInterval(function() {
+        if (urlHash !== window.location.hash) {
+          urlHash = window.location.hash;
+          navigate();
+        }
+      }, 50);
+
+      $(window).load(function() {
+        var current = storage.tracks.length, tracks = storage.tracks, found;
+        while (current--) {
+          if (tracks[current].id === storage.current) {
+            found = tracks[current];
+            break;
+          }
+        }
+
+        if (found) {
+          $('#playlist a[href="' + found.url + '"]').addClass('active');
+          player.load(storage.current);
+          player.el.one('sound:created', function() {
+            player.el.trigger('loading');
+            var targetPercent = storage.position/player.sound.meta.duration;
+            player.el.bind('buffering', function waitForBuffer(e, o) {
+              if (targetPercent < o.value/o.total) {
+                player.el.unbind('buffering', waitForBuffer);
+                player.sound.setPosition(storage.position);
+                player.el.trigger('loaded');
+                $('.play').mousedown();
+              }
+            });
+          });
+        } else {
+          $('#playlist .content a:first').click();
+        }
+      });
+    });
+  </script>
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-633948-2']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+</body>
+</html>

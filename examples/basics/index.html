@@ -1,0 +1,42 @@
+<html>
+<head>
+  <title>Basics - HTML5 SDK for Brass Monkey</title>
+
+  <script type="text/javascript" src="../../brassmonkey.js"></script>
+  <script>
+    bm.init({
+      name: "Basics - SDK Examples",
+      design: {
+        orientation: "portrait",
+        touchEnabled: false,
+        accelerometerEnabled: false,
+        images:[
+          'simple.png'
+        ],
+        layout:[
+          {
+            type:   "image",
+            image:  0,
+            x:      0,
+            y:      0,
+            width:  320,
+            height: 480
+          }
+        ]
+      }
+    });
+    
+    bm.onDeviceConnected(function(device){
+      document.getElementById('log').innerHTML += '<p>Device Connected</p>';
+    });
+    
+    bm.onDeviceDisconnected(function(device){
+      document.getElementById('log').innerHTML += '<p>Device Disconnected</p>';
+    });
+  </script>
+</head>
+<body>
+  <div id="log"></div>
+</body>
+</html>
+

@@ -1,0 +1,347 @@
+
+h1 {
+  font-size: 18px;
+}
+
+#ui {
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: 10px;
+  right: 10px;
+  min-width: 913px;
+  min-height: 400px;
+}
+
+.page {
+  display: none;
+}
+
+
+.container {
+  position: absolute;
+
+}
+
+  .container .track-info {
+    font-family: Aldrich, helvetica,arial;
+    position: absolute;
+    text-align: center;
+    z-index: 150;
+    color: #d0d0d0;
+    width: 200px;
+    display:none;
+    cursor: default;
+    font-size: 12px;
+  }
+
+  .container .track-info:hover {
+    color: #fff;
+  }
+
+  .container .layer {
+    position:absolute;
+  }
+
+  .container .layer.progress {
+    z-index: 100;
+  }
+
+  .container .layer.waveform {
+    z-index: 101;
+  }
+
+  .container .layer.loading {
+    z-index: 151;
+  }
+
+  .container .controls {
+    display:none;
+  }
+
+    .container .controls img{
+      position: absolute;
+      z-index : 120;
+      left: 0px;
+      top: 0px;
+      cursor: pointer;
+    }
+
+    .container .controls img.pause {
+      margin-left: 2px;
+    }
+
+  .container .volume {
+    position:absolute;
+    z-index:150;
+    display:none;
+    width: 50px;
+    height: 20px;
+    background-color: transparent;
+    cursor: default;
+  }
+
+  .container .volume .bar {
+    display:block;
+    float:left;
+    width: 3px;
+    margin:0px;
+    margin-left: 2px;
+    height: 20px;
+    bottom:16px;
+    background: white;
+    cursor: default;
+  }
+
+  .container .volume .bar.active {
+    background-color: #11db11;
+  }
+
+.unselectable{
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.ui-box {
+  padding: 10px;
+  font-family: Aldrich, helvetica,arial;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border: 1px solid #606060;/*#5A6D7D;*/
+  box-shadow:2px 2px 5px #000000;
+  position:absolute;
+  background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAABCAYAAADn9T9+AAAAHElEQVQIHWN0cHD4zwAFjIyMYNa/f/8YYGwYDQB7jgTEUlYfBwAAAABJRU5ErkJggg==') #202020;
+  opacity: 1;
+}
+
+.ui-box .heading {
+  margin:0px;
+  text-shadow:2px 2px 1px #101010;
+  color: white;
+  font-size:16px;
+}
+
+.scroller::-webkit-scrollbar {
+  height: 16px;
+   -webkit-border-radius: 2px;
+  opacity: 0.7;
+}
+
+.scroller::-webkit-scrollbar-track {
+
+  height: 16px;
+  background:#3a3a3a;
+}
+
+.scroller::-webkit-scrollbar-corner {
+  background: #2a2a2a;
+}
+.scroller::-webkit-scrollbar-thumb {
+  border-top: 1px solid #blue;
+  background: #202020;
+  -webkit-border-radius: 2px;
+}
+
+#playlist  {
+  position:absolute;
+  right:5px;
+  top:65px;
+  left: 425px;
+  bottom: 10px;
+  min-width: 482px;
+  border-right: 0;
+}
+
+  #playlist .content {
+    overflow: auto;
+    position:absolute;
+    bottom:0px;
+    top: 10px;
+    right: 5px;
+    left: 0px;
+    border: 1px solid #000;
+    background: #303030;
+    opacity: 1;
+  }
+
+  #playlist .heading {
+    border-bottom: 1px solid #505050;
+  }
+
+  #playlist ul{
+    margin:0;
+    padding: 5px;
+  }
+  #playlist li {
+    cursor: pointer;
+    margin:0px;
+    padding:0px;
+    list-style: none;
+    white-space:nowrap;
+    padding: 0px 0px 3px 0px;
+  }
+
+   #playlist .content .playlist {
+    opacity: 1;
+   }
+
+  .playlist li a, .ui-box .content {
+    font-family: Aldrich, helvetica,arial;
+    line-height: 20px;
+    font-size: 14px;
+    color: #fff;
+    text-decoration:none;
+  }
+
+  .playlist .active {
+    color: #11db11;
+  }
+
+#buttons {
+  position:absolute;
+  z-index: 155;
+  right: 5px;
+  left: -1;
+  margin:0;
+  padding: 0;
+  border-width: 0px;
+  top: -50px;
+  background-color: #505050;
+  opacity: 1;
+  font-size: 14px;
+  border-left: 1px solid #202020;
+}
+  #buttons ul {
+    margin-top: 10px;
+    padding:0;
+  }
+  #buttons ul li {
+    float:left;
+    width: 100px;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+
+    height: 30px;
+    line-height: 33px;
+    padding: 5px 0px 5px 5px;
+    margin: 0px 0px 10px 10px;
+
+    color: #fff;
+
+    border: 1px solid #808080;
+    background-color: #4a4a4a;
+    opacity: 1;
+  }
+
+  #buttons ul li a {
+    text-decoration: none;
+    color: white;
+    opacity: 1;
+  }
+
+  #buttons ul li.selected {
+    background: #1a1a1a;
+    color: #fff;
+    opacity:1;
+  }
+
+.groups .group-name {
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border: 1px solid #606060;/*#5A6D7D;*/
+  box-shadow:2px 2px 5px #000000;
+  height: 51px;
+  font-size: 30px;
+  outline: none;
+  opacity: .6;
+  position:absolute;
+  left: 5px;
+  top: 10px;
+  right: 75px;
+}
+
+.groups .add-group {
+  position:absolute;
+  font-size: 49px;
+  text-decoration: none;
+  top: 25px;
+  right: 20px;
+  color: green;
+  padding: 2px 5px 4px 5px;
+}
+
+.groups .group-name.error {
+  border: 2px solid red;
+}
+
+#playlist .groups .group-list, #playlist .groups .no-groups {
+  position:absolute;
+  top: 65px;
+  left: 15px;
+  right: 15px;
+  padding:0;
+}
+
+#playlist .groups .group-list li {
+  list-style:none;
+  font-size: 18px;
+  line-height: 32px;
+  padding-top:4px;
+  background: #101010;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border: 1px solid #101010;/*#101010;*/
+  margin-top: 10px;
+  box-shadow:2px 2px 5px #000000;
+  opacity: 0.7;
+  overflow: hidden;
+}
+
+#playlist .groups .group-list li a {
+  color: white;
+  text-decoration: none;
+  padding: 5px;
+}
+
+#playlist .groups .group-list li a.remove {
+  color: red;
+  font-size: 24px;
+  line-height: 32px;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border: 1px solid #202020;/*#5A6D7D;*/
+  margin-left:4px;
+}
+
+#playlist .content .help, #playlist .content .about {
+  position:absolute;
+  top: 5px;
+  left: 5px;
+  right: 5px;
+  padding: 5px;
+  max-width: 600px;
+}
+
+  #playlist .content .about a, #playlist .content .help a, .count.active, .groups .no-groups a {
+    color: #2BD811;
+    text-decoration:none;
+  }
+
+  .groups .no-groups img {
+    border: 1px solid #a0a0a0;
+    padding: 2px;
+    background-color: #000;
+  }
+
+body {
+  background: #303030;
+  padding: 0;
+  margin: 0;
+  overflow:hidden;
+}
