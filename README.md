@@ -39,17 +39,3 @@ Running the demos locally
 * Get the SDK as mentioned above.
 * Go into the SDK folder.
 * Open index.html in your browser.
-
-
-Spaceport Demos
--------------
-
-Some of the demos require running their own servers because they ajax in content dynamically which is not allowed when opening a local file in a browser rather than hosting it. 
-
-We provide a simple Python server to host the brassmonkeyjs folder.
-
-    ./start-server
-    Then open http://localhost:8181/
-    Select demos from there. 
-    (Don't forget to download "Brass Monkey" from the App Store for remote controlling.)
-    
