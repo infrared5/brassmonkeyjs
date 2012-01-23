@@ -1,42 +1,39 @@
 <html>
 <head>
   <title>Basics - HTML5 SDK for Brass Monkey</title>
+  
+  <script type="text/javascript" src="/scripts/brassmonkey-swfobject.js"></script>
+  <script type="text/javascript" src="/scripts/brassmonkey-uncompressed.js"></script>
 
-  <script type="text/javascript" src="../../brassmonkey.js"></script>
   <script>
     bm.init({
       name: "Basics - SDK Examples",
       design: {
         orientation: "portrait",
         touchEnabled: false,
-        accelerometerEnabled: false,
-        images:[
-          'simple.png'
-        ],
-        layout:[
-          {
-            type:   "image",
-            image:  0,
-            x:      0,
-            y:      0,
-            width:  320,
-            height: 480
-          }
-        ]
+        accelerometerEnabled: false
       }
     });
     
     bm.onDeviceConnected(function(device){
-      document.getElementById('log').innerHTML += '<p>Device Connected</p>';
+      document.getElementById('log').innerHTML += '<p>A Device Connected: "'+device.deviceName+'" | "'+device.deviceId+'"</p>';
     });
     
     bm.onDeviceDisconnected(function(device){
-      document.getElementById('log').innerHTML += '<p>Device Disconnected</p>';
+      document.getElementById('log').innerHTML += '<p>A Device Disconnected: "'+device.deviceName+'" | "'+device.deviceId+'"</p>';
     });
+    
+    bm.onShowSlot(function(color){
+      document.getElementById('slot-color').style.background = color;
+    });
+
   </script>
 </head>
 <body>
+  <h1>Slot Color</h1>
+  <div id="slot-color" style="width:100px;height:100px;"></div>
   <div id="log"></div>
+  
 </body>
 </html>
 
