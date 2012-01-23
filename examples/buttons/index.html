@@ -1,0 +1,65 @@
+<html>
+<head>
+  <title>Buttons - HTML5 SDK for Brass Monkey</title>
+  
+  <script type="text/javascript" src="/scripts/brassmonkey-swfobject.js"></script>
+  <script type="text/javascript" src="/scripts/brassmonkey-uncompressed.js"></script>
+
+  <script>
+    bm.init({
+      name: "Buttons - SDK Examples",
+      design: {
+        orientation: "portrait",
+        touchEnabled: false,
+        accelerometerEnabled: false,
+        images:[
+          'background.png',
+          'button-up.png',
+          'button-down.png'
+        ],
+        layout:[{
+          type:   "image",
+          image:  0,
+          x:      0,
+          y:      0,
+          width:  320,
+          height: 480
+        }, {
+          type:       "button",
+          handler:    "push",
+          imageUp:    1,
+          imageDown:  2,
+          x:          (320-160)/2-3,
+          y:          (480-160)/2,
+          width:      160,
+          height:     160
+        }]
+      }
+    });
+    
+    bm.onShowSlot(function(color){
+      document.getElementById('slot-color').style.background = color;
+    });
+    
+    bm.onInvocation(function(invoke, deviceId){
+      var keyDown = invoke.parameters[0].Value=="down";
+      if(keyDown){
+        document.getElementById('up').style.display = "none";
+        document.getElementById('down').style.display = "inline";
+      } else {
+        document.getElementById('up').style.display = "inline";
+        document.getElementById('down').style.display = "none";
+      }
+    });
+    
+
+  </script>
+</head>
+<body>
+  <div id="slot-color" style="width:100px;height:100px;text-align:center;line-height:100px;font-family:Arial;">Slot Color</div>
+  
+  <img id="up" src="button-up.png" />
+  <img id="down" src="button-down.png" style="display:none;"/>
+</body>
+</html>
+

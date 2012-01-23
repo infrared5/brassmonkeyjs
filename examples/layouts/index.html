@@ -14,8 +14,9 @@
         accelerometerEnabled: false,
         images:[
           'background.png',
-          'button-up.png',
-          'button-down.png'
+          'bananas.png',
+          'pineapple.png',
+          'watermelon.png'
         ],
         layout:[{
           type:   "image",
@@ -24,15 +25,27 @@
           y:      0,
           width:  320,
           height: 480
-        }, {
-          type:       "button",
-          handler:    "push",
-          imageUp:    1,
-          imageDown:  2,
-          x:          (320-160)/2-3,
-          y:          (480-160)/2,
-          width:      160,
-          height:     160
+        },{
+          type:   "image",
+          image:  1,
+          x:      9,
+          y:      16,
+          width:  128,
+          height: 128
+        },{
+          type:   "image",
+          image:  2,
+          x:      110,
+          y:      170,
+          width:  128,
+          height: 128
+        },{
+          type:   "image",
+          image:  3,
+          x:      181,
+          y:      336,
+          width:  128,
+          height: 128
         }]
       }
     });
@@ -44,10 +57,7 @@
   </script>
 </head>
 <body>
-  <h1>Slot Color</h1>
-  <div id="slot-color" style="width:100px;height:100px;"></div>
-  
-  
+  <div id="slot-color" style="width:100px;height:100px;text-align:center;line-height:100px;font-family:Arial;">Slot Color</div>
 </body>
 </html>
 
