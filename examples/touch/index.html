@@ -65,8 +65,22 @@
       document.getElementById('slot-color').style.background = color;
     });
     
+    var devicePaintColor = {};
     bm.onDeviceConnected(function(device){
       bm.enableTouch(device.deviceId,true,1.0/90.0);
+      
+      // Add an element to show this users paint brush color
+      document.getElementById('container').innerHTML+='<div id="'+device.deviceId+'" style="width:90px;height:90px;float:left;text-align:center;line-height:90px;font-family:Arial;background:red;border:5px solid black;">Paint Color</div>';
+      // Set the users 
+      devicePaintColor[device.deviceId]="red";
+    });
+    
+    bm.onDeviceDisconnected(function(device){
+    
+      // Remove device's Paint Color display element
+      document.getElementById('container').removeChild(document.getElementById(device.deviceId));
+      // Remove device's paint color from our records
+      devicePaintColor[device.deviceId]=undefined;
     });
     
     bm.onInvocation(function(invoke, deviceId){
@@ -79,7 +93,7 @@
         ctx.fillStyle="black";
         ctx.fillRect(0,0,width,height);
       } else {
-        document.getElementById('paint-color').style.background = ctx.strokeStyle = invoke.methodName;
+        document.getElementById(deviceId).style.background = devicePaintColor[deviceId] = invoke.methodName;
       }
       
     });
@@ -89,7 +103,7 @@
         width = Math.floor(320*1.5),
         height = Math.floor(480*1.5);
       
-    bm.onTouchesReceived(function(touch){
+    bm.onTouchesReceived(function(touch,deviceId){
       var x = Math.floor(touch.x/320*width),
           y = Math.floor(touch.y/(480-64)*height)-2-64;
 
@@ -103,6 +117,9 @@
         ctx.fillRect(x,y,4,4);
       } else if(touch.phase.value==2){
         
+        // Red is the starting paint brush color
+        ctx.strokeStyle = devicePaintColor[deviceId];
+      
         ctx.beginPath();  
         ctx.moveTo(lastTouch['t'+touch.id].x,lastTouch['t'+touch.id].y);
         ctx.lineTo(x,y);
@@ -127,9 +144,6 @@
       ctx.fillStyle="black";
       ctx.fillRect(0,0,width,height);
       
-      // Red is the starting paint brush color
-      ctx.strokeStyle = "red";
-      
       // Line Caps/Joins to be round
       ctx.lineCap = ctx.lineJoin = "round";
       ctx.lineWidth = 4;
@@ -138,10 +152,10 @@
   </script>
 </head>
 <body onload="onload();">
-  <div id="slot-color" style="width:100px;height:100px;float:left;text-align:center;line-height:100px;font-family:Arial;">Slot Color</div>
-  <div id="paint-color" style="width:90px;height:90px;float:left;text-align:center;line-height:90px;font-family:Arial;background:red;border:5px solid black;">Paint Color</div>
-  <div style="clear:both;"></div>
-  
+  <div id="container" style="height: 100px; width: 500px;">
+    <div id="slot-color" style="width:100px;height:100px;float:left;text-align:center;line-height:100px;font-family:Arial;">Slot Color</div>
+    
+  </div>
   <canvas id="canvas"></canvas>
 </body>
 </html>
