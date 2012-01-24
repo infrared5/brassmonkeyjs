@@ -1,16 +1,17 @@
 <html>
 <head>
-  <title>Buttons - HTML5 SDK for Brass Monkey</title>
+  <title>Accelerometer - HTML5 SDK for Brass Monkey</title>
   
   <script type="text/javascript" src="../../brassmonkey.js"></script>
-
+  <script type="text/javascript" src="accelerometer.js"></script>
+  
   <script>
     bm.init({
-      name: "Buttons - SDK Examples",
+      name: "Accelerometer - SDK Examples",
       design: {
         orientation: "portrait",
         touchEnabled: false,
-        accelerometerEnabled: true]
+        accelerometerEnabled: true
       }
     });
     
@@ -21,11 +22,20 @@
     bm.onDeviceConnected(function(device){
       bm.enableAccelerometer(device.deviceId,true,1.0/60.0);
     });
+    
+    bm.onAccelReceived(function(accel){
+      drawAccel(accel.acceleration);
+      //document.getElementById("accel").innerHTML = accel.acceleration.x+" "+accel.acceleration.y+" "+accel.acceleration.z
+		});
 
+
+    function onload(){
+      init();
+    }
   </script>
 </head>
-<body>
+<body onload="onload();">
   <div id="slot-color" style="width:100px;height:100px;text-align:center;line-height:100px;font-family:Arial;">Slot Color</div>
+  <canvas id="canvas"></canvas>
 </body>
 </html>
-
