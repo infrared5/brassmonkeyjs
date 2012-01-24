@@ -207,7 +207,7 @@ function init(){
   }
 
   var averages = [],
-      averagesCount = 2;
+      averagesCount = 5;
 
   function smooth(accel) {
 
