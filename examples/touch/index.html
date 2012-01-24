@@ -1,0 +1,147 @@
+<html>
+<head>
+  <title>Touch - HTML5 SDK for Brass Monkey</title>
+  
+  <script type="text/javascript" src="../../brassmonkey.js"></script>
+
+  <script>
+    bm.init({
+      name: "Touch - SDK Examples",
+      design: {
+        orientation: "portrait",
+        touchEnabled: true,
+        accelerometerEnabled: false,
+        images:[
+          'red-up.png',
+          'red-down.png',
+          'green-up.png',
+          'green-down.png',
+          'blue-up.png',
+          'blue-down.png',
+          'clear-up.png',
+          'clear-down.png'
+        ],
+        layout:[{
+          type:       "button",
+          handler:    "red",
+          imageUp:    0,
+          imageDown:  1,
+          x:          0,
+          y:          400,
+          width:      80,
+          height:     80
+        },{
+          type:       "button",
+          handler:    "green",
+          imageUp:    2,
+          imageDown:  3,
+          x:          80,
+          y:          400,
+          width:      80,
+          height:     80
+        },{
+          type:       "button",
+          handler:    "blue",
+          imageUp:    4,
+          imageDown:  5,
+          x:          160,
+          y:          400,
+          width:      80,
+          height:     80
+        },{
+          type:       "button",
+          handler:    "clear",
+          imageUp:    6,
+          imageDown:  7,
+          x:          240,
+          y:          400,
+          width:      80,
+          height:     80
+        }]
+      }
+    });
+    
+    bm.onShowSlot(function(color){
+      document.getElementById('slot-color').style.background = color;
+    });
+    
+    bm.onDeviceConnected(function(device){
+      bm.enableTouch(device.deviceId,true,1.0/90.0);
+    });
+    
+    bm.onInvocation(function(invoke, deviceId){
+      var keyDown = invoke.parameters[0].Value=="down";
+      if(!keyDown){
+        return; // We do actions on button down only
+      }
+      
+      if(invoke.methodName=="clear"){
+        ctx.fillStyle="black";
+        ctx.fillRect(0,0,width,height);
+      } else {
+        document.getElementById('paint-color').style.background = ctx.strokeStyle = invoke.methodName;
+      }
+      
+    });
+    
+    var lastTouch = {},
+        cvs,ctx,
+        width = Math.floor(320*1.5),
+        height = Math.floor(480*1.5);
+            
+    bm.onTouchesReceived(function(touch){
+      var x = Math.floor(touch.x/320*width),
+          y = Math.floor(touch.y/(480-64)*height)-2-64;
+
+      if(touch.phase.value==1){
+        lastTouch['t'+touch.id] = {
+          x: touch.x,
+          y: touch.y
+        };
+
+        ctx.fillStyle=ctx.strokeStyle;
+        ctx.fillRect(x,y,2,2);
+      } else if(touch.phase.value==2){
+        ctx.moveTo(lastTouch['t'+touch.id].x,lastTouch['t'+touch.id].y);
+        ctx.lineTo(x,y);
+        ctx.stroke();
+        lastTouch['t'+touch.id] = {
+          x: x,
+          y: y
+        };
+      } else if(touch.phase.value==4){
+        ctx.fillStyle="red";
+        ctx.fillRect(x,y,2,2); 
+        lastTouch['t'+touch.id] = undefined;
+      }      
+    });
+    
+    function onload(){
+      cvs = document.getElementById('canvas');
+      cvs.width = width;
+      cvs.height = height;
+      
+      ctx = cvs.getContext('2d');
+      
+      // Clear the canvas to black to start
+      ctx.fillStyle="black";
+      ctx.fillRect(0,0,width,height);
+      
+      // Red is the starting paint brush color
+      ctx.strokeStyle = "red";
+      
+      // Line Caps/Joins to be round
+      ctx.lineCap = ctx.lineJoin = "round";
+      ctx.lineWidth = 4;
+      
+    }
+  </script>
+</head>
+<body onload="onload();">
+  <div id="slot-color" style="width:100px;height:100px;float:left;text-align:center;line-height:100px;font-family:Arial;">Slot Color</div>
+  <div id="paint-color" style="width:90px;height:90px;float:left;text-align:center;line-height:90px;font-family:Arial;background:red;border:5px solid black;">Paint Color</div>
+  <div style="clear:both;"></div>
+  
+  <canvas id="canvas"></canvas>
+</body>
+</html>
