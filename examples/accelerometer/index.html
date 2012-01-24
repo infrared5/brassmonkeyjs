@@ -1,0 +1,31 @@
+<html>
+<head>
+  <title>Buttons - HTML5 SDK for Brass Monkey</title>
+  
+  <script type="text/javascript" src="../../brassmonkey.js"></script>
+
+  <script>
+    bm.init({
+      name: "Buttons - SDK Examples",
+      design: {
+        orientation: "portrait",
+        touchEnabled: false,
+        accelerometerEnabled: true]
+      }
+    });
+    
+    bm.onShowSlot(function(color){
+      document.getElementById('slot-color').style.background = color;
+    });
+    
+    bm.onDeviceConnected(function(device){
+      bm.enableAccelerometer(device.deviceId,true,1.0/60.0);
+    });
+
+  </script>
+</head>
+<body>
+  <div id="slot-color" style="width:100px;height:100px;text-align:center;line-height:100px;font-family:Arial;">Slot Color</div>
+</body>
+</html>
+
