@@ -88,7 +88,7 @@
         cvs,ctx,
         width = Math.floor(320*1.5),
         height = Math.floor(480*1.5);
-            
+      
     bm.onTouchesReceived(function(touch){
       var x = Math.floor(touch.x/320*width),
           y = Math.floor(touch.y/(480-64)*height)-2-64;
@@ -100,8 +100,10 @@
         };
 
         ctx.fillStyle=ctx.strokeStyle;
-        ctx.fillRect(x,y,2,2);
+        ctx.fillRect(x,y,4,4);
       } else if(touch.phase.value==2){
+        
+        ctx.beginPath();  
         ctx.moveTo(lastTouch['t'+touch.id].x,lastTouch['t'+touch.id].y);
         ctx.lineTo(x,y);
         ctx.stroke();
@@ -110,8 +112,6 @@
           y: y
         };
       } else if(touch.phase.value==4){
-        ctx.fillStyle="red";
-        ctx.fillRect(x,y,2,2); 
         lastTouch['t'+touch.id] = undefined;
       }      
     });
