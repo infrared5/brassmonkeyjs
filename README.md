@@ -25,6 +25,8 @@ Get the SDK (Includes demos. Will separate soon.)
 or,
 
     git clone git@github.com:brassmonkey/brassmonkeyjs.git
+    git submodule init
+    git submodule update
     
 
 Documentation
