@@ -27,7 +27,7 @@ or,
     git clone git@github.com:brassmonkey/brassmonkeyjs.git
     git submodule init
     git submodule update
-    
+    (Put brassmonkeyjs folder some where on an http server and then open it's url ../brassmonkeyjs. Working on making it be able to be hosted without a server via file:// too.)
 
 Documentation
 =============
