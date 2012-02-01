@@ -1,36 +1,56 @@
+<!DOCTYPE html>
 <html>
 <head>
   <title>Basics - HTML5 SDK for Brass Monkey</title>
-  
-  <script type="text/javascript" src="../../brassmonkey.js"></script>
-  
-  <script>
-    bm.init({
-      name: "Basics - SDK Examples",
-      design: {
-        orientation: "portrait",
-        touchEnabled: false,
-        accelerometerEnabled: false
-      }
-    });
-    
-    bm.onDeviceConnected(function(device){
-      document.getElementById('log').innerHTML += '<p>A Device Connected: "'+device.deviceName+'" | "'+device.deviceId+'"</p>';
-    });
-    
-    bm.onDeviceDisconnected(function(device){
-      document.getElementById('log').innerHTML += '<p>A Device Disconnected: "'+device.deviceName+'" | "'+device.deviceId+'"</p>';
-    });
-    
-    bm.onShowSlot(function(color){
-      document.getElementById('slot-color').style.background = color;
-    });
-
-  </script>
+  <link rel="stylesheet" type="text/css" href="../../shared/styles/shared.css">  
 </head>
 <body>
-  <div id="slot-color" style="width:100px;height:100px;text-align:center;line-height:100px;font-family:Arial;">Slot Color</div>
-  <div id="log"></div>
+  <div class="header-wrapper">
+    <div class="header">
+      <div class="logo">
+        <a href="/"><img src="../../shared/images/logo.png"/></a>
+      </div>
+      <div class="tabs">
+        <a href="/"><img src="../../shared/images/button-home.png"/></a>
+        <a href="/about"><img src="../../shared/images/button-about.png"/></a>
+        <a href="/developers/"><img src="../../shared/images/button-developers.png"/></a>
+        <a href="/team"><img src="../../shared/images/button-contact.png"/></a>
+      </div>
+    </div>
+  </div>
+  <div class="cookie-crumbs-wrapper">
+    <div class="cookie-crumbs">
+      <span><a href="../../../">Developer SDKs</a></span> > <span><a href="../../">HTML5</a></span> > <span>Basics Example</span>
+    </div>
+  </div>
+  <div class="content">
+    <div class="sub-header">
+      <a href="../../"><img src="../../shared/images/return-examples.png"></a>
+      <img class="logo" src="../../shared/images/html5-icon.png"/>
+      <h1>Basics</h1>
+      <h2>Example from the HTML5 SDK.</h2>
+      
+    </div>
+    <img class="separator" src="../../shared/images/separator.png"/>
+    <div class="demo">
+      <iframe src="basics.html"></iframe>
+      <h1>Description</h1>
+      <p>In this example we show how to include/initialize the Brass Monkey SDK, listen for deviceConnected/deviceDisconnect events, and displaying your app's slot color.</p>
+      <a class="download" href="basics.html">Raw HTML (View Source).<img src="../../shared/images/download-icon.png"/></a>
+    </div>
+    <img class="separator" src="../../shared/images/separator.png"/>
+  </div>
+  
+  <div class="footer">
+    <div class="tabs">
+      <a class="current" href="/">Home</a>
+      <a href="/about">About</a>
+      <a href="/developers/">Developers</a>
+      <a href="/team">Contact</a>
+    </div>
+    <div class="copyright">
+      <p>©2011 Brass Monkey. All Rights Reserved.</p>
+    </div>
+  </div>
 </body>
 </html>
-

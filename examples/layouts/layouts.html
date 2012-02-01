@@ -1,0 +1,62 @@
+<html>
+<head>
+  <title>Layouts - HTML5 SDK for Brass Monkey</title>
+  
+  <script type="text/javascript" src="../../brassmonkey.js"></script>
+  
+  <script>
+    bm.init({
+      name: "Layouts - SDK Examples",
+      design: {
+        orientation: "portrait",
+        touchEnabled: false,
+        accelerometerEnabled: false,
+        images:[
+          '../shared/background.png',
+          'bananas.png',
+          'pineapple.png',
+          'watermelon.png'
+        ],
+        layout:[{
+          type:   "image",
+          image:  0,
+          x:      0,
+          y:      0,
+          width:  320,
+          height: 480
+        },{
+          type:   "image",
+          image:  1,
+          x:      9,
+          y:      16,
+          width:  128,
+          height: 128
+        },{
+          type:   "image",
+          image:  2,
+          x:      110,
+          y:      170,
+          width:  128,
+          height: 128
+        },{
+          type:   "image",
+          image:  3,
+          x:      181,
+          y:      336,
+          width:  128,
+          height: 128
+        }]
+      }
+    });
+    
+    bm.onShowSlot(function(color){
+      document.getElementById('slot-color').style.background = color;
+    });
+
+  </script>
+</head>
+<body style="margin:0px;background:white;">
+  <div id="slot-color" style="width:100px;height:100px;text-align:center;line-height:100px;font-family:Arial;">Slot Color</div>
+</body>
+</html>
+

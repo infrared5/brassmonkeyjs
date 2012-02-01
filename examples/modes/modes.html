@@ -1,0 +1,75 @@
+<html>
+<head>
+  <title>Modes - HTML5 SDK for Brass Monkey</title>
+  
+  <script type="text/javascript" src="../../brassmonkey.js"></script>
+
+  <script>
+    bm.init({
+      name: "Modes - SDK Examples",
+      design: {
+        orientation: "portrait",
+        touchEnabled: false,
+        accelerometerEnabled: false,
+        images:[
+          '../shared/background.png'
+        ],
+        layout:[{
+          type:   "image",
+          image:  0,
+          x:      0,
+          y:      0,
+          width:  320,
+          height: 480
+        }]
+      }
+    });
+    
+    bm.onShowSlot(function(color){
+      document.getElementById('slot-color').style.background = color;
+    });
+    
+    bm.onInvocation(function(invoke, deviceId){
+      var keyDown = invoke.parameters[0].Value=="down";
+      if(keyDown){
+        document.getElementById('up').style.display = "none";
+        document.getElementById('down').style.display = "inline";
+      } else {
+        document.getElementById('up').style.display = "inline";
+        document.getElementById('down').style.display = "none";
+      }
+    });
+    
+    function onload(){
+      document.getElementById('gamepad').onclick = function(){
+        bm.setGamepadMode();
+      }
+      document.getElementById('navigation').onclick = function(){
+        bm.setNavMode();
+      }
+      document.getElementById('keyboard').onclick = function(){
+        bm.setKeyboardMode();
+      }
+    }
+  </script>
+  <style>
+    img{
+      width: 200px;
+      height: 340px;
+    }
+    img:hover{
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body style="margin:0px;background:white;" onload="onload();">
+  <div id="slot-color" style="width:100px;height:100px;text-align:center;line-height:100px;font-family:Arial;">Slot Color</div>
+  
+  <h1>Select a Controller Mode</h1>
+  <img id="gamepad" src="gamepad.png"/>
+  <img id="navigation" src="navigation.png"/>
+  <img id="keyboard" src="keyboard.png"/>
+  
+</body>
+</html>
+

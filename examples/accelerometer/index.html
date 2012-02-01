@@ -1,41 +1,58 @@
+<!DOCTYPE html>
 <html>
 <head>
   <title>Accelerometer - HTML5 SDK for Brass Monkey</title>
-  
-  <script type="text/javascript" src="../../brassmonkey.js"></script>
-  <script type="text/javascript" src="accelerometer.js"></script>
-  
-  <script>
-    bm.init({
-      name: "Accelerometer - SDK Examples",
-      design: {
-        orientation: "portrait",
-        touchEnabled: false,
-        accelerometerEnabled: true
-      }
-    });
-    
-    bm.onShowSlot(function(color){
-      document.getElementById('slot-color').style.background = color;
-    });
-    
-    bm.onDeviceConnected(function(device){
-      bm.enableAccelerometer(device.deviceId,true,1.0/60.0);
-    });
-    
-    bm.onAccelReceived(function(accel){
-      drawAccel(accel.acceleration);
-      //document.getElementById("accel").innerHTML = accel.acceleration.x+" "+accel.acceleration.y+" "+accel.acceleration.z
-		});
-
-
-    function onload(){
-      init();
-    }
-  </script>
+  <link rel="stylesheet" type="text/css" href="../../shared/styles/shared.css">  
 </head>
-<body onload="onload();">
-  <div id="slot-color" style="width:100px;height:100px;text-align:center;line-height:100px;font-family:Arial;">Slot Color</div>
-  <canvas id="canvas"></canvas>
+<body>
+  <div class="header-wrapper">
+    <div class="header">
+      <div class="logo">
+        <a href="/"><img src="../../shared/images/logo.png"/></a>
+      </div>
+      <div class="tabs">
+        <a href="/"><img src="../../shared/images/button-home.png"/></a>
+        <a href="/about"><img src="../../shared/images/button-about.png"/></a>
+        <a href="/developers/"><img src="../../shared/images/button-developers.png"/></a>
+        <a href="/team"><img src="../../shared/images/button-contact.png"/></a>
+      </div>
+    </div>
+  </div>
+  <div class="cookie-crumbs-wrapper">
+    <div class="cookie-crumbs">
+      <span><a href="../../../">Developer SDKs</a></span> > <span><a href="../../">HTML5</a></span> > <span>Basics Example</span>
+    </div>
+  </div>
+  <div class="content">
+    <div class="sub-header">
+      <a href="../../"><img src="../../shared/images/return-examples.png"></a>
+      <img class="logo" src="../../shared/images/html5-icon.png"/>
+      <h1>Accelerometer</h1>
+      <h2>Example from the HTML5 SDK.</h2>
+      
+    </div>
+    <img class="separator" src="../../shared/images/separator.png"/>
+    <div class="demo">
+      <iframe src="accelerometer.html" style="height:612px"></iframe>
+      <h1>Description</h1>
+      <p>Demonstrates listening for accelerometer events, setting the frequency of sampling, and visualizing the orientation of the phone.</p>
+      <p>Note: We currently don't support gyroscope, but this is coming soon. Also we are going to be updating the APIs to match as nearly as possible emerging web standards for accelerometer events (All events for that matter).</p>
+      
+      <a class="download" href="accelerometer.html">Raw HTML (View Source).<img src="../../shared/images/download-icon.png"/></a>
+    </div>
+    <img class="separator" src="../../shared/images/separator.png"/>
+  </div>
+  
+  <div class="footer">
+    <div class="tabs">
+      <a class="current" href="/">Home</a>
+      <a href="/about">About</a>
+      <a href="/developers/">Developers</a>
+      <a href="/team">Contact</a>
+    </div>
+    <div class="copyright">
+      <p>©2011 Brass Monkey. All Rights Reserved.</p>
+    </div>
+  </div>
 </body>
 </html>

@@ -1,65 +1,190 @@
+<!DOCTYPE html>
 <html>
 <head>
-  <title>Brass Monkey HTML5 SDK</title>
-  <style>
-    body{
-      margin: 0px;
-    }
-    .container{
-      padding-top: 2px;
-      width: 900px;
-      margin: 0 auto;
-      text-align: center;
-      font-family: Arial;
-      font-weight: bold;
-
-    }
-    .container a{
-      text-decoration: none;
-    }
-    .container a img{
-      margin: 10px;
-    }
-    .container ul{
-      list-style-type: none;
-      text-align: left;
-      width: 280px;
-      margin: 0 auto;
-      background: #BfBfff;
-      border: thin solid grey;
-      padding: 10px 30px;
-      line-height: 25px;
-    }
-    .container li{
-      list-style-type:circle;
-    }
-    .container li a{
-      text-decoration: underline;
-    }
-    
-  </style>
+  <title>HTML5 - Brass Monkey SDK</title>
+  <link rel="stylesheet" type="text/css" href="shared/styles/shared.css">  
 </head>
 <body>
-  <a href="http://github.com/brassmonkey/brassmonkeyjs"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://a248.e.akamai.net/assets.github.com/img/e6bef7a091f5f3138b8cd40bc3e114258dd68ddf/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub"></a>
-  <div class="container">    
-    <h1>Brass Monkey HTML5 SDK</h1>
-    <h2><a href="https://github.com/brassmonkey/brassmonkeyjs/blob/master/README.md">Read This To Get Started</a></h2>
-    <h2>View Our Presentation: <a href="https://docs.google.com/presentation/pub?id=1T5Ry0-wbbGfChQV9A0OtzCW5paCLAGpFTiM8ASB5pDs&start=false&loop=false&delayms=3000">Intro to the Brass Monkey HTML5 SDK</a></h2>
-    
-    <h1>Demo Applications</h1>
-    <h2><a href="http://itunes.apple.com/us/app/brass-monkey/id455013514?mt=8">Install our iPhone App</a> & then select one of the demos.</h2>
-    
-    <ul>
-      <li><a href="examples/basics/">Basics</a></li>
-      <li><a href="examples/layouts/">Layouts</a></li>
-      <li><a href="examples/buttons/">Buttons</a></li>
-      <li><a href="examples/modes/">Controller Modes</a></li>
-      <li><a href="examples/touch/">Touch Events</a></li>
-      <li><a href="examples/multiplayer/">Multiplayer</a></li>
-      <li><a href="examples/accelerometer/">Accelerometer</a></li>
-      <li><a href="examples/advanced/youtube/">Youtube (Advanced)</a></li>
-      <li><a href="examples/advanced/soundcloud-player/">Sound Cloud Player (Advanced)</a></li>
-    </ul>
+  <div class="header-wrapper">
+    <div class="header">
+      <div class="logo">
+        <a href="/"><img src="shared/images/logo.png"/></a>
+      </div>
+      <div class="tabs">
+        <a href="/"><img src="shared/images/button-home.png"/></a>
+        <a href="/about"><img src="shared/images/button-about.png"/></a>
+        <a href="/developers/"><img src="shared/images/button-developers.png"/></a>
+        <a href="/team"><img src="shared/images/button-contact.png"/></a>
+      </div>
+    </div>
+  </div>
+  <div class="cookie-crumbs-wrapper">
+    <div class="cookie-crumbs">
+      <span><a href="../">Developer SDKs</a></span> > <span>HTML5</span>
+    </div>
+  </div>
+  <div class="content">
+    <div class="sub-header">
+      <img class="logo" src="shared/images/html5-icon.png"/>
+      <h1>HTML5 SDK</h1>
+      <h2>Documentation and examples.</h2>
+    </div>
+    <img class="separator" src="shared/images/separator.png"/>
+    <div class="container">    
+      
+      <div class="sdk-intro">
+        <p>Welcome to the Brass Monkey HTML5 SDK. To get started checkout out our SDK examples projects below. (Full Documentation coming soon.)</p>
+        
+        <p>You must Agree to our Developer Agreement before using Brass Monkey's Platform. (<a class="open-in-same-tab" href="/downloads/developer-contract.html">HTML</a> | <a class="open-in-same-tab" href="/downloads/developer-contract.pdf">PDF</a>)</p>
+        
+        <p>Join the <a href="http://groups.google.com/group/brass-monkey-sdk-private-beta?hl=en"><strong>Brass Monkey Google Group.</strong></a> to join our community.</p>
+        
+        <a class="download" href="brassmonkey.js">Download brassmonkey.js <img src="shared/images/download-icon.png"/></a>
+        <a class="download" href="https://github.com/brassmonkey/brassmonkeyjs/zipball/master">Download the examples. (.ZIP) <img src="shared/images/download-icon.png"/></a>
+        <a class="download" href="http://github.com/brassmonkey/brassmonkeyjs">Clone the examples on github.<img src="shared/images/download-icon.png"/></a>
+        
+      </div>
+      <img class="separator" src="shared/images/separator.png"/>
+      <h1>Examples</h1>
+      <div class="examples" id="examples">
+        
+        <a class="example" href="examples/basics/index.html">
+          <div class="wrapper">
+            <img class="logo" src="images/examples-basics.png"/>
+            <div class="example-info">
+              <h1>Basics</h1>
+              <p>In this example we show how to include/initialize the Brass Monkey SDK, listen for deviceConnected/deviceDisconnect events, and displaying your app's slot color.</p>
+              <img class="launch" src="shared/images/launch-app-button.png"/>
+            </div>
+            <div class="clear"></div>
+          </div>          
+        </a>
+        <img class="separator" src="shared/images/separator.png"/>
+        
+        <a class="example" href="examples/layouts/index.html">
+          <div class="wrapper">
+            <img class="logo" src="images/examples-layouts.png"/>
+            <div class="example-info">
+              <h1>Layouts</h1>
+              <p>We demonstrate laying out background images and buttons in this example.</p>
+              <img class="launch" src="shared/images/launch-app-button.png"/>
+            </div>
+            <div class="clear"></div>
+          </div>
+        </a>
+        <img class="separator" src="shared/images/separator.png"/>
+        
+        <a class="example" href="examples/buttons/index.html">
+          <div class="wrapper">
+            <img class="logo" src="images/examples-buttons.png"/>
+            <div class="example-info">
+              <h1>Buttons</h1>
+              <p>Example of laying out buttons, creating up/down image states, listening for button events, and animating a button in response to those events.</p>
+              <img class="launch" src="shared/images/launch-app-button.png"/>
+            </div>
+            <div class="clear"></div>
+          </div>
+        </a>
+        <img class="separator" src="shared/images/separator.png"/>
+        
+        <a class="example" href="examples/modes/index.html">
+          <div class="wrapper">
+            <img class="logo" src="images/examples-modes.png"/>
+            <div class="example-info">
+              <h1>Controller Modes</h1>
+              <p>The Brass Monkey app comes with some pre-built controllers: one is for keyboard input and the other is a standardized navigation controller. And of course there is the custom controller you provide. In this example we show how you switch between those controller modes.</p>
+              <p>Coming soon we'll show you how to listen to Keyboard/Navigation controller events.</p>
+              <img class="launch" src="shared/images/launch-app-button.png"/>
+            </div>
+            <div class="clear"></div>
+          </div>
+        </a>
+        <img class="separator" src="shared/images/separator.png"/>
+        
+        <a class="example" href="examples/touch/">
+          <div class="wrapper">
+            <img class="logo" src="images/examples-touch.png"/>
+            <div class="example-info">
+              <h1>Touch Events</h1>
+              <p>This example covers listening for touch events and demonstrates handling multi-touch via a simple drawing application.</p>
+              <p>Bonus: It supports multiple users simultaneously. Make sure to try drawing with multiple fingers.</p>
+              <img class="launch" src="shared/images/launch-app-button.png"/>
+            </div>
+            <div class="clear"></div>
+          </div>
+
+        </a>
+        <img class="separator" src="shared/images/separator.png"/>
+        
+        <a class="example" href="examples/accelerometer/index.html">
+          <div class="wrapper">
+            <img class="logo" src="images/examples-accelerometer.png"/>
+            <div class="example-info">
+              <h1>Accelerometer</h1>
+              <p>Demonstrates listening for accelerometer events, setting the frequency of sampling, and visualizing the orientation of the phone.</p>
+              <p>Note: We currently don't support gyroscope, but this is coming soon. Also we are going to be updating the APIs to match as nearly as possible emerging web standards for accelerometer events (All events for that matter).</p>
+              <img class="launch" src="shared/images/launch-app-button.png"/>
+            </div>
+            <div class="clear"></div>
+          </div>
+        </a>
+        <img class="separator" src="shared/images/separator.png"/>
+        
+        <a class="example" href="examples/multiplayer/index.html">
+          <div class="wrapper">
+            <img class="logo" src="images/examples-multiplayer.png"/>
+            <div class="example-info">
+              <h1>Multiplayer</h1>
+              <p>This is a simple example of supporting N+ players via a simple pong game.</p>
+              <img class="launch" src="shared/images/launch-app-button.png"/>
+            </div>
+            <div class="clear"></div>
+          </div>
+
+        </a>
+        <img class="separator" src="shared/images/separator.png"/>
+        
+        <a class="example" href="examples/youtube/index.html">
+          <div class="wrapper">
+            <img class="logo" src="images/examples-youtube.png"/>
+            <div class="example-info">
+              <h1>Youtube (Advanced)</h1>
+              <p>In this example we demonstrate a mix of features including: controller modes, button events, and the youtube search/player apis.</p>
+              <img class="launch" src="shared/images/launch-app-button.png"/>
+            </div>
+            <div class="clear"></div>
+          </div>
+
+        </a>
+        <img class="separator" src="shared/images/separator.png"/>
+        
+        <a class="example" href="examples/soundcloud/index.html">
+          <div class="wrapper">
+            <img class="logo" src="images/examples-soundcloud.png"/>
+            <div class="example-info">
+              <h1>Sound Cloud (Advanced)</h1>
+              <p>Similar features to the youtube example. This time using sound cloud's apis to search and find music. Includes ability to scrub the music time line too.</p>
+              <img class="launch" src="shared/images/launch-app-button.png"/>
+            </div>
+            <div class="clear"></div>
+          </div>
+
+        </a>
+      </div>
+    </div>
+    <img class="separator" src="shared/images/separator.png"/>
+  </div>
+  
+  <div class="footer">
+    <div class="tabs">
+      <a class="current" href="/">Home</a>
+      <a href="/about">About</a>
+      <a href="/developers/">Developers</a>
+      <a href="/team">Contact</a>
+    </div>
+    <div class="copyright">
+      <p>©2011 Brass Monkey. All Rights Reserved.</p>
+    </div>
   </div>
 </body>
 </html>

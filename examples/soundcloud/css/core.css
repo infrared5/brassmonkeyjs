@@ -144,14 +144,19 @@ h1 {
   -webkit-border-radius: 2px;
 }
 
+#player{
+  margin: 20px 0px 0px 160px;
+}
+
 #playlist  {
   position:absolute;
   right:5px;
   top:65px;
-  left: 425px;
+  left: 0px;
   bottom: 10px;
   min-width: 482px;
   border-right: 0;
+  margin-top: 400px;
 }
 
   #playlist .content {

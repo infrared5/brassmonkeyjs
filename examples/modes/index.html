@@ -1,75 +1,58 @@
+<!DOCTYPE html>
 <html>
 <head>
-  <title>Modes - HTML5 SDK for Brass Monkey</title>
-  
-  <script type="text/javascript" src="../../brassmonkey.js"></script>
-
-  <script>
-    bm.init({
-      name: "Modes - SDK Examples",
-      design: {
-        orientation: "portrait",
-        touchEnabled: false,
-        accelerometerEnabled: false,
-        images:[
-          '../shared/background.png'
-        ],
-        layout:[{
-          type:   "image",
-          image:  0,
-          x:      0,
-          y:      0,
-          width:  320,
-          height: 480
-        }]
-      }
-    });
-    
-    bm.onShowSlot(function(color){
-      document.getElementById('slot-color').style.background = color;
-    });
-    
-    bm.onInvocation(function(invoke, deviceId){
-      var keyDown = invoke.parameters[0].Value=="down";
-      if(keyDown){
-        document.getElementById('up').style.display = "none";
-        document.getElementById('down').style.display = "inline";
-      } else {
-        document.getElementById('up').style.display = "inline";
-        document.getElementById('down').style.display = "none";
-      }
-    });
-    
-    function onload(){
-      document.getElementById('gamepad').onclick = function(){
-        bm.setGamepadMode();
-      }
-      document.getElementById('navigation').onclick = function(){
-        bm.setNavMode();
-      }
-      document.getElementById('keyboard').onclick = function(){
-        bm.setKeyboardMode();
-      }
-    }
-  </script>
-  <style>
-    img{
-      width: 240px;
-      height: 360px;
-    }
-    img:hover{
-      cursor: pointer;
-    }
-  </style>
+  <title>Layouts - HTML5 SDK for Brass Monkey</title>
+  <link rel="stylesheet" type="text/css" href="../../shared/styles/shared.css">  
 </head>
-<body onload="onload();">
-  <div id="slot-color" style="width:100px;height:100px;text-align:center;line-height:100px;font-family:Arial;">Slot Color</div>
+<body>
+  <div class="header-wrapper">
+    <div class="header">
+      <div class="logo">
+        <a href="/"><img src="../../shared/images/logo.png"/></a>
+      </div>
+      <div class="tabs">
+        <a href="/"><img src="../../shared/images/button-home.png"/></a>
+        <a href="/about"><img src="../../shared/images/button-about.png"/></a>
+        <a href="/developers/"><img src="../../shared/images/button-developers.png"/></a>
+        <a href="/team"><img src="../../shared/images/button-contact.png"/></a>
+      </div>
+    </div>
+  </div>
+  <div class="cookie-crumbs-wrapper">
+    <div class="cookie-crumbs">
+      <span><a href="../../../">Developer SDKs</a></span> > <span><a href="../../">HTML5</a></span> > <span>Basics Example</span>
+    </div>
+  </div>
+  <div class="content">
+    <div class="sub-header">
+      <a href="../../"><img src="../../shared/images/return-examples.png"></a>
+      <img class="logo" src="../../shared/images/html5-icon.png"/>
+      <h1>Controller Modes</h1>
+      <h2>Example from the HTML5 SDK.</h2>
+      
+    </div>
+    <img class="separator" src="../../shared/images/separator.png"/>
+    <div class="demo">
+      <iframe src="modes.html" style="height:530px"></iframe>
+      <h1>Description</h1>
+      <p>The Brass Monkey app comes with some pre-built controllers: one is for keyboard input and the other is a standardized navigation controller. And of course there is the custom controller you provide. In this example we show how you switch between those controller modes.</p>
+      <p>Coming soon we'll show you how to listen to Keyboard/Navigation controller events.</p>
+      
+      <a class="download" href="modes.html">Raw HTML (View Source).<img src="../../shared/images/download-icon.png"/></a>
+    </div>
+    <img class="separator" src="../../shared/images/separator.png"/>
+  </div>
   
-  <h1>Select a Controller Mode</h1>
-  <img id="gamepad" src="gamepad.png"/>
-  <img id="navigation" src="navigation.png"/>
-  <img id="keyboard" src="keyboard.png"/>
-  
+  <div class="footer">
+    <div class="tabs">
+      <a class="current" href="/">Home</a>
+      <a href="/about">About</a>
+      <a href="/developers/">Developers</a>
+      <a href="/team">Contact</a>
+    </div>
+    <div class="copyright">
+      <p>©2011 Brass Monkey. All Rights Reserved.</p>
+    </div>
+  </div>
 </body>
 </html>
-

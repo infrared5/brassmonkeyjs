@@ -5,7 +5,7 @@ init = function (){
       height = 512+128,
       paddleWidth = width/15;
   cvs.width = width;
-  cvs.height = height;
+  cvs.height = 512+88;
   
   // For testing purposes uncomment this to test N>0 player
   // rendering code without connecting
