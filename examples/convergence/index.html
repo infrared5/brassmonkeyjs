@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html manifest="offline.appcache">
+<head>
+    <meta charset="UTF-8" />
+  	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=IE8" />
+    <title>The Convergence Brass Monkey Mod - Brass Monkey</title>
+    
+    <script type="text/javascript" src="../../brassmonkey.js"></script>
+    
+	<!-- Note: running this exported project from disk may not work exactly like preview, since browsers block some features on the file:// protocol.  Once you've uploaded it to a server, it should work OK. -->
+	
+    <style type="text/css">
+		* {
+			padding: 0;
+			margin: 0;
+		}
+		body {
+			background: #fff;
+			color: #fff;
+			background-image:url('images/page_bg.jpg');
+		}
+		#ContentWrapper {
+	        margin-left: auto;
+			margin-right: auto;
+			width: 960px;
+			height: 640px;
+			background-color: white;
+        }
+		#UpdateBar {
+	        position: static;
+			width: 960px;
+			height: 64px;
+			background: #000;
+			background-color: white;
+			color: #036;
+			border: 5px solid white;
+			font-size: 9px;
+			font-family: Verdana, Geneva, sans-serif;
+        }
+		#CCatLogo
+		{
+			/*background-image:url('images/ccatlogo.png');*/
+			width: 54px;
+			height: 64px;
+			float:right;
+		}
+		canvas {
+			position: static;
+			border: 5px solid white;
+		}
+    </style>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-9628132-5']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</head> 
+ 
+<body>
+	<br/>
+	<!-- The canvas the project will render to.  If you change its ID, don't forget to change the
+	ID the runtime looks for in the jQuery ready event (above). -->
+	<div id="ContentWrapper">
+	<canvas id="c2canvas" width="960" height="640" oncontextmenu="return false;" onselectstart="return false;">
+		<!-- This text is displayed if the visitor's browser does not support HTML5.
+		You can change it, but it is a good idea to link to a description of a browser
+		and provide some links to download some popular HTML5-compatible browsers. -->
+		Your browser does not appear to support HTML5.  Try upgrading your browser to the latest version.  <a href="http://www.whatbrowser.org">What is a browser?</a>
+		<br/><br/><a href="http://www.microsoft.com/windows/internet-explorer/default.aspx">Microsoft Internet Explorer</a><br/>
+		<a href="http://www.mozilla.com/firefox/">Mozilla Firefox</a><br/>
+		<a href="http://www.google.com/chrome/">Google Chrome</a><br/>
+		<a href="http://www.apple.com/safari/download/">Apple Safari</a><br/>
+		<a href="http://www.google.com/chromeframe">Google Chrome Frame for Internet Explorer</a><br/>
+	</canvas>
+	<div id="UpdateBar"><div id="CCatLogo"><a href="../index.html"><img src="images/ccatlogo.png"></a></div>
+    	<b>Version 0.3</b><br/>- Early version with missing content. Sound, more levels and a level selector on the way!<br/>- More updates will be available quickly because now I can work without hiding it from my wife! \o/
+    
+    </div>
+    
+    </div>
+    
+    
+	<!-- Pages load faster with scripts at the bottom -->
+	
+	<script src="jquery-1.6.3.min.js"></script>
+
+
+	
+    <!-- The runtime script.  You can rename it, but don't forget to rename the reference here as well.
+    This file will have been minified and obfuscated if you enabled "Minify script" during export. -->
+	<script src="c2runtime.js"></script>
+
+
+    <script>
+        // Start the Construct 2 project running on window load.
+        jQuery(document).ready(function ()
+        {
+            // Create new runtime using the c2canvas
+			cr.createRuntime("c2canvas");
+        });
+    </script>
+</body> 
+</html> 
+<!-- Localized -->
