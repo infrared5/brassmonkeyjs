@@ -543,8 +543,12 @@ cr.behaviors = {};
           touchEnabled: false,
           accelerometerEnabled: false,
           images:[
-            'button-up.png',
-            'button-down.png'
+            'left-up.png',
+            'left-down.png',
+            'right-up.png',
+            'right-down.png',
+            'switchup-up.png',
+            'switchup-down.png'
           ],
           layout:[{
             type:       "button",
@@ -552,27 +556,27 @@ cr.behaviors = {};
             imageUp:    0,
             imageDown:  1,
             x:          0,
-            y:          (320-160)/2,
-            width:      160,
-            height:     160
+            y:          0,
+            width:      120,
+            height:     320
           }, {
             type:       "button",
             handler:    "right",
-            imageUp:    0,
-            imageDown:  1,
-            x:          160,
-            y:          (320-160)/2,
-            width:      160,
-            height:     160
+            imageUp:    2,
+            imageDown:  3,
+            x:          120,
+            y:          0,
+            width:      120,
+            height:     320
           }, {
             type:       "button",
             handler:    "switchup",
-            imageUp:    0,
-            imageDown:  1,
-            x:          320,
-            y:          (320-160)/2,
-            width:      160,
-            height:     160
+            imageUp:    4,
+            imageDown:  5,
+            x:          240,
+            y:          0,
+            width:      240,
+            height:     320
           }]
         }
       });
@@ -586,7 +590,6 @@ cr.behaviors = {};
       // handlers are created.
       // The global var is named 'emulatedKeyInstance'
       function emulatedKeyUp(keyCode){
-        console.log('keyUp');
         this.keyMap[keyCode] = false;
         this.triggerKey = keyCode;
         this.eventRan = false;
@@ -597,7 +600,6 @@ cr.behaviors = {};
       }
       
       function emulatedKeyDown(keyCode){
-        console.log('keyDown');
         if (this.keyMap[keyCode]) {
             return;
         }
@@ -614,13 +616,15 @@ cr.behaviors = {};
         var keyDown = invoke.parameters[0].Value=="down",
             keyMapping = {
               left: 37,
-              right: 38,
+              right: 39,
               switchup: 90
             }
         
         if(keyDown){
+          console.log(invoke.methodName+' keyDown');
           emulatedKeyDown.call(emulatedKeyInstance,keyMapping[invoke.methodName]);
         } else {
+          console.log(invoke.methodName+' keyUp');
           emulatedKeyUp.call(emulatedKeyInstance,keyMapping[invoke.methodName]);
         }
       });
