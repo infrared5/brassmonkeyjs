@@ -1,11 +1,16 @@
 <!DOCTYPE html>
+
 <html manifest="offline.appcache">
+<!--
+<html>
+-->
 <head>
     <meta charset="UTF-8" />
   	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=IE8" />
     <title>The Convergence Brass Monkey Mod - Brass Monkey</title>
     
     <script type="text/javascript" src="../../brassmonkey.js"></script>
+    <script type="text/javascript" src="buttons.js"></script>
     
 	<!-- Note: running this exported project from disk may not work exactly like preview, since browsers block some features on the file:// protocol.  Once you've uploaded it to a server, it should work OK. -->
 	
@@ -20,10 +25,8 @@
 			background-image:url('images/page_bg.jpg');
 		}
 		#ContentWrapper {
-	        margin-left: auto;
-			margin-right: auto;
-			width: 960px;
-			height: 640px;
+			width: 970px;
+			height: 650px;
 			background-color: white;
         }
 		#UpdateBar {
@@ -65,7 +68,6 @@
 </head> 
  
 <body>
-	<br/>
 	<!-- The canvas the project will render to.  If you change its ID, don't forget to change the
 	ID the runtime looks for in the jQuery ready event (above). -->
 	<div id="ContentWrapper">
@@ -80,10 +82,7 @@
 		<a href="http://www.apple.com/safari/download/">Apple Safari</a><br/>
 		<a href="http://www.google.com/chromeframe">Google Chrome Frame for Internet Explorer</a><br/>
 	</canvas>
-	<div id="UpdateBar"><div id="CCatLogo"><a href="../index.html"><img src="images/ccatlogo.png"></a></div>
-    	<b>Version 0.3</b><br/>- Early version with missing content. Sound, more levels and a level selector on the way!<br/>- More updates will be available quickly because now I can work without hiding it from my wife! \o/
-    
-    </div>
+	
     
     </div>
     
