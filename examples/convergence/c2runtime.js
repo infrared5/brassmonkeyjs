@@ -3821,6 +3821,7 @@ cr.plugins_.Mouse = function (runtime) {
     };
     var instanceProto = pluginProto.Instance.prototype;
     instanceProto.onCreate = function () {
+        /*
         jQuery(document).mousemove((function (self) {
             return function (info) {
                 self.onMouseMove(info);
@@ -3841,6 +3842,7 @@ cr.plugins_.Mouse = function (runtime) {
                 self.onDoubleClick(info);
             };
         })(this));
+        */
     };
     instanceProto.onMouseMove = function (info) {
         var offset = jQuery(this.runtime.canvas).offset();
@@ -4620,6 +4622,7 @@ cr.behaviors.Platform = function (runtime) {
         this.maxFall = this.properties[5];
         this.defaultControls = (this.properties[6] === 1); // 0=no, 1=yes
         if (this.defaultControls) {
+            /*
             jQuery(document).keydown((function (self) {
                 return function (info) {
                     self.onKeyDown(info);
@@ -4630,6 +4633,7 @@ cr.behaviors.Platform = function (runtime) {
                     self.onKeyUp(info);
                 };
             })(this));
+            */
         }
         this.runtime.addDestroyCallback((function (self) {
             return function (inst) {
@@ -5409,9 +5413,9 @@ cr.getProjectModel = function () {
             [], false],
         ["t52", cr.plugins_.TiledBg, ["images/mainmenu_bg.png", 171405], null, [], false],
         ["t53", cr.plugins_.Sprite, null, [
-            ["Default", 5, false, 1, 0, false, [
-                ["images/about_btn-default-000.png", 1011, 1, 0.5, 0.507937, [],
-                    [-0.458333, -0.412698, 0, -0.507937, 0.458333, -0.412698, 0.5, -0.0158736, 0.458333, 0.396825, 0, 0.492063, -0.458333, 0.396825, -0.5, -0.0158736]
+            ["Default", 5, false, 10, 121, true, [
+                ["images/transparent.png", 101132, 10, 3.5, 3.507937, [],
+                    [-4.458333, -0.412698, 0, -0.507937, 0.458333, -0.412698, 0.5, -0.0158736, 0.458333, 0.396825, 0, 0.492063, -0.458333, 0.396825, -0.5, -0.0158736]
                 ]
             ]]
         ],
