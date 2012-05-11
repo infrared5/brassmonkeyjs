@@ -549,28 +549,28 @@ cr.behaviors = {};
             height:     320
           }, {
             type:       "image",
+            button:     "switchup",
+            image:      2,
+            x:          280,
+            y:          88,
+            width:      192,
+            height:     146
+          }, {
+            type:       "image",
             button:     "left",
             image:      0,
-            x:          0,
+            x:          15,
             y:          0,
-            width:      120,
+            width:      80,
             height:     320
           }, {
             type:       "image",
             button:     "right",
             image:      1,
-            x:          120,
+            x:          176,
             y:          0,
-            width:      120,
+            width:      80,
             height:     320
-          }, {
-            type:       "image",
-            button:     "switchup",
-            image:      2,
-            x:          258,
-            y:          79,
-            width:      200,
-            height:     163
           }];
           
       bm.init({
@@ -3742,7 +3742,7 @@ cr.plugins_.Keyboard = function (runtime) {
     };
     var instanceProto = pluginProto.Instance.prototype;
     instanceProto.onCreate = function () {
-      jQuery(document).keydown((function (self) {
+      /*jQuery(document).keydown((function (self) {
         
         return function (info) {
           self.onKeyDown(info);
@@ -3752,7 +3752,7 @@ cr.plugins_.Keyboard = function (runtime) {
         return function (info) {
           self.onKeyUp(info);
         };
-      })(this));
+      })(this));*/
       emulatedKeyInstance = this;
     };
     instanceProto.onKeyDown = function (info) {
