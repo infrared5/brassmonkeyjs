@@ -549,28 +549,28 @@ cr.behaviors = {};
             height:     320
           }, {
             type:       "image",
-            button:     "switchup",
+            button:     "flip",
             image:      2,
             x:          280,
-            y:          88,
+            y:          92,
             width:      192,
             height:     146
           }, {
             type:       "image",
             button:     "left",
             image:      0,
-            x:          15,
-            y:          0,
-            width:      80,
-            height:     320
+            x:          0,
+            y:          113,
+            width:      103,
+            height:     103
           }, {
             type:       "image",
             button:     "right",
             image:      1,
-            x:          176,
-            y:          0,
-            width:      80,
-            height:     320
+            x:          167,
+            y:          113,
+            width:      103,
+            height:     103
           }];
           
       bm.init({
@@ -621,26 +621,18 @@ cr.behaviors = {};
       }
       
       bm.onDeviceConnected(function(device){
-        bm.setNavMode();
+        bm.enableTouch(device.deviceId,true,1.0/60.0);
       });
       
       var keyMapping = {
             left: 37,
             right: 39,
-            switchup: 90
+            flip: 90
           };
       
       bm.onInvocation(function(invoke, deviceId){
         var keyDown = invoke.parameters[0].Value=="down"        
         emulateKeyEvent(invoke.methodName,keyDown);
-      });
-      
-      bm.onNavigationString(function(deviceId,str){
-        if(str=="activateDown"){
-          globalRunTime.changelayout = globalLayouts[2];
-          bm.enableTouch(deviceId,true,1.0/30.0);
-          bm.setGamepadMode();
-        }
       });
       
       function emulateKeyEvent(key,isDown){
@@ -651,7 +643,13 @@ cr.behaviors = {};
           emulatedKeyUp.call(emulatedKeyInstance,keyMapping[key]);
         }
       }
+      var gameStarted = false;
       buttons.init(layout,function(button,down){
+        if(button=="flip"&&down==true&&!gameStarted){
+          globalRunTime.changelayout = globalLayouts[2];
+          gameStarted = true;
+          return;
+        }
         //console.log(button+(down?' keyDown':' keyUp'));
         emulateKeyEvent(button,down);
       })
