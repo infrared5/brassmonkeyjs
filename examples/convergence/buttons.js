@@ -56,7 +56,7 @@ bm.onTouchesReceived(function(touch,deviceId){
         // If this is the first touch on this button generate a down event
         if(isEmptyObject(buttonTouchLists[b])){
 
-          cb(b,true);
+          cb(b,true,deviceId);
         }
         // Add to buttonTouchLists list for that button
         buttonTouchLists[b][makeId(touch,deviceId)] = makeId(touch,deviceId);
@@ -76,7 +76,7 @@ bm.onTouchesReceived(function(touch,deviceId){
       if(isOverButton(x,y,buttons[b])){
         // If this is the first touch on this button generate a down event
         if(isEmptyObject(buttonTouchLists[b])){
-          cb(b,true);
+          cb(b,true,deviceId);
         }
         // Add to buttonTouchLists list for that button
         buttonTouchLists[b][makeId(touch,deviceId)] = makeId(touch,deviceId);
@@ -87,7 +87,7 @@ bm.onTouchesReceived(function(touch,deviceId){
           delete buttonTouchLists[b][makeId(touch,deviceId)];
           if(isEmptyObject(buttonTouchLists[b])){
 
-            cb(b,false);
+            cb(b,false,deviceId);
           }        
         }
       }
@@ -104,7 +104,7 @@ bm.onTouchesReceived(function(touch,deviceId){
       if( buttonTouchLists[b][makeId(touch,deviceId)]!==undefined){
         delete buttonTouchLists[b][makeId(touch,deviceId)];
         if(isEmptyObject(buttonTouchLists[b])){
-          cb(b,false);
+          cb(b,false,deviceId);
         }
       }
     }
