@@ -6,6 +6,9 @@
 
   <script>
     bm.init({
+    	swfURL:"../../brassmonkey.swf",
+      bmAppId:"62e822bc0e6b9f22fc158763591845be",
+      bmMaxPlayers:1,
       name: "Modes - SDK Examples",
       design: {
         orientation: "portrait",
@@ -24,6 +27,16 @@
         }]
       }
     });
+    
+  	bm.onDeviceAvailable(function(device){  		
+  		device.controlMode=bm.MODE_GAMEPAD;
+  		return device;
+  	});
+  	
+    
+    function close() {
+    	bm.close();
+    } ;
     
     bm.onShowSlot(function(color){
       document.getElementById('slot-color').style.background = color;
@@ -62,7 +75,7 @@
     }
   </style>
 </head>
-<body style="margin:0px;background:white;" onload="onload();">
+<body style="margin:0px;background:white;" onload="onload();" onunload="close();">
   <div id="slot-color" style="width:100px;height:100px;text-align:center;line-height:100px;font-family:Arial;">Slot Color</div>
   
   <h1>Select a Controller Mode</h1>

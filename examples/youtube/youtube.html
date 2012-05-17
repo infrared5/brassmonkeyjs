@@ -81,6 +81,7 @@
 		<script type="text/javascript" src="../../brassmonkey.js"></script>
 		<script>
       bm.init({
+      	swfURL:"../../brassmonkey.swf",
         name: "Youtube - SDK Examples",
         logging: false,
         design: {
@@ -129,9 +130,19 @@
         }
       });
       
+      function close() {
+      	bm.close();
+      } ;
+      
 		  bm.onLog(function(str){
 		    console.log(str);
 		  });
+		    
+		  	bm.onDeviceAvailable(function(device){  		
+		  		device.controlMode=bm.MODE_GAMEPAD;
+		  		return device;
+		  	});
+		  	
 		  
 		  bm.onDeviceConnected(function(device){
 		    bm.setKeyboardMode();
@@ -340,7 +351,7 @@
       google.setOnLoadCallback(_run);
     </script>
   </head>
-  <body>
+  <body onunload="close();">
     <div id="search-container">
       <div id="search-box">
         <input type="text" id="search"></input><img src="search.png"/>

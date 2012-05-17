@@ -7,6 +7,9 @@
   
   <script>
     bm.init({
+    	swfURL:"../../brassmonkey.swf",
+      bmAppId:"62e822bc0e6b9f22fc158763591845be",
+      bmMaxPlayers:2,
       name: "Multiplayer - SDK Examples",
       design: {
         orientation: "portrait",
@@ -14,7 +17,14 @@
         accelerometerEnabled: false
       }
     });
-
+    
+  	bm.onDeviceAvailable(function(device){  		
+  		device.controlMode=bm.MODE_GAMEPAD;
+  		return device;
+  	});    
+    function close() {
+    	bm.close();
+    } ;
     var players = {},
         initialMessage = "Connect to 'Multiplayer - SDK Examples' (Requires 2 players)";//with at least 2 players.";
         
@@ -81,7 +91,7 @@
     }
   </script>
 </head>
-<body onload="onload();" style="background:black;">
+<body onload="onload();" style="background:black;" onunload="close();">
   <div id="slot-color" style="width:100px;height:100px;text-align:center;line-height:100px;font-family:Arial;">Slot Color</div>
   <div id="instructions" style="width:512px;height:32px;line-height:32px;font-size:16px;font-family:Arial;color:white;"></div>
   <canvas id="canvas"></canvas>

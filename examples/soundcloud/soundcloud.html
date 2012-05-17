@@ -9,7 +9,10 @@
   <script type="text/javascript" src="../../brassmonkey.js"></script>
   <script>
     var controller = {
-      name: "Sound Cloud - SDK Examples",
+        swfURL:"../../brassmonkey.swf",
+   		bmAppId:"62e822bc0e6b9f22fc158763591845be",
+    	bmMaxPlayers:1,
+    	name: "Sound Cloud - SDK Examples",
       logging: false,
       rootURL: "../../",
       design: {
@@ -106,10 +109,21 @@
       }
     };
     bm.init(controller);
+    
+    function close() {
+    	bm.close();
+    } ;
+    
     bm.onLog(function(str){
       console.log(str);
     });
     
+  	bm.onDeviceAvailable(function(device){  		
+  		device.controlMode=bm.MODE_GAMEPAD;
+  		return device;
+  	});
+  	
+
     bm.onDeviceConnected(function(device){
       if(window.location.hash=="#groups"){
         bm.setKeyboardMode();
@@ -121,6 +135,7 @@
     // Look Controls
   	var  lookTouchId,
   	     startX,startProgress;
+    
   	bm.onDeviceConnected(function(device){
       bm.enableTouch(device.deviceId,true,1/60.0);
     });
@@ -215,7 +230,7 @@
   
   <script type="text/javascript" src="js/build.min.js"></script>
 </head>
-<body>
+<body onunload="close();">
   <div id="player"></div>
   <div id="ui" class="ui-box">
     

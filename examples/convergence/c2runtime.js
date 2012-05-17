@@ -574,6 +574,9 @@ cr.behaviors = {};
           }];
           
       bm.init({
+    	swfURL:"../../brassmonkey.swf",
+        bmAppId:"62e822bc0e6b9f22fc158763591845be",
+        bmMaxPlayers:1,
         name: "The Convergence",
         design: {
           orientation: "landscape",
@@ -589,6 +592,15 @@ cr.behaviors = {};
         }
       });
       
+   	bm.onDeviceAvailable(function(device){  		
+    		device.controlMode=bm.MODE_GAMEPAD;
+    		return device;
+   	});
+    	
+
+      function close() {
+      	bm.close();
+      } ;
       bm.onShowSlot(function(color){
         //document.getElementById('slot-color').style.background = color;
       });

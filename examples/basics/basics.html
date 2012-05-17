@@ -6,13 +6,25 @@
   
   <script>
     bm.init({
-      name: "Basics - SDK Examples",
+   	  swfURL:"../../brassmonkey.swf",
+      bmAppId:"62e822bc0e6b9f22fc158763591845be",
+      bmMaxPlayers:1,    	
+      name: "Basics - SDK Examples",     
       design: {
         orientation: "portrait",
         touchEnabled: false,
         accelerometerEnabled: false
       }
     });
+    
+  	bm.onDeviceAvailable(function(device){  		
+  		device.controlMode=bm.MODE_GAMEPAD;
+  		return device;
+  	});
+  	
+    function close() {
+    	bm.close();
+    } ;
     
     bm.onDeviceConnected(function(device){
       document.getElementById('log').innerHTML += '<p>A Device Connected: "'+device.deviceName+'" | "'+device.deviceId+'"</p>';
@@ -28,7 +40,7 @@
 
   </script>
 </head>
-<body style="margin:0px;background:white;">
+<body style="margin:0px;background:white;" onunload="close();">
   <div id="slot-color" style="width:100px;height:100px;text-align:center;line-height:100px;font-family:Arial;">Slot Color</div>
   <div id="log"></div>
 </body>
