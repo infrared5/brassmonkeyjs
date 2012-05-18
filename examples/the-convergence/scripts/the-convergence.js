@@ -661,16 +661,11 @@ cr.behaviors = {};
             gameStarted = true;
             return;
           }  
-        
           emulatedKeyDown.call(emulatedKeyInstance,keyMapping[key]);
         } else {
           emulatedKeyUp.call(emulatedKeyInstance,keyMapping[key]);
         }
       }
-      buttons.init(layout,function(button,down){
-        //console.log(button+(down?' keyDown':' keyUp'));
-        emulateKeyEvent(button,down);
-      })
       // Brass Monkey End
     };
     var runtimeProto = cr.runtime.prototype;
