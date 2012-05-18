@@ -1,0 +1,128 @@
+* {
+	padding: 0;
+	margin: 0;
+}
+body {
+	background: #fff;
+	color: #fff;
+	background-image:url('../images/page_bg.jpg');
+}
+#ContentWrapper {
+	width: 970px;
+	height: 650px;
+	overflow: hidden;
+	background-color: white;
+    }
+#UpdateBar {
+      position: static;
+	width: 960px;
+	height: 64px;
+	background: #000;
+	background-color: white;
+	color: #036;
+	border: 5px solid white;
+	font-size: 9px;
+	font-family: Verdana, Geneva, sans-serif;
+    }
+#CCatLogo
+{
+	/*background-image:url('../images/ccatlogo.png');*/
+	width: 54px;
+	height: 64px;
+	float:right;
+}
+canvas {
+	position: static;
+	border: 5px solid white;
+}
+.error-message{
+  width: 940px;
+  height: 32px;
+  background: #A62A20;
+  opacity: 1;
+  padding: 10px 15px;
+  text-decoration: none;
+  display:block;
+}
+.error-message-wrapper{
+  width: 920px;
+  margin: 0px auto ;
+}
+.error-message-wrapper{
+  width: 940px;
+  margin: 0px auto ;
+}
+.error-message-wrapper .left,.error-message-wrapper .right{
+  float: left;
+}
+.error-message-wrapper .left{
+  width: 35px;
+  margin-left:20px;
+}
+.error-message-wrapper .right{
+  width: 885px;
+}
+.error-message-wrapper img{
+  margin-top: 3px;
+}
+.error-message-wrapper p{
+  font-size: 18px;
+  line-height: 32px;
+  font-weight: bold;
+  color: white;
+  font-family: Arial;
+
+}
+.error-message-wrapper p.download-from-adobe{
+  text-decoration: underline;
+  color: #FFFFFF;
+}
+.wrapper{
+  width: 980px;
+  height: 660px;
+  background: #414141 url('../images/bg-gradient.png') repeat-x;
+}
+.content{
+  background: #0A0A0A;
+  width: 732px;
+  height: 460px;
+  margin: 64px auto;
+  padding: 0px 64px;
+  text-align: center;
+  font-family:Arial;
+}
+.content a{
+  text-decoration: none;
+}
+.content a:hover{
+  text-decoration: underline;
+}
+.separator{
+  margin: 20px 2px;
+  display:none;
+}
+.bottom{
+  position: absolute;
+  margin-top: 440px;
+}
+
+.what-is-a-browser{
+  padding-top: 75px;
+}
+.what-is-a-browser a{
+  color: white;
+}
+h2{
+  color: #efefef;
+  font-size: 18px;
+  margin: 70px 0px 15px 0px;
+}
+.browsers p{
+  padding: 5px 0px;
+}
+.browsers a{
+  color: #AFAFAF;
+}
+.browsers a:hover{
+  text-decoration: underline;
+}
