@@ -126,11 +126,25 @@ C()&&y(a,b,c,e)},removeSWF:function(a){g.w3&&B(a)},createCSS:function(a,b,c,f){g
 			}
 			
 			
-			window.parent.passingObj!==void 0&&window.parent.passingObj.appId!==void 0&&window.parent.passingObj.portalId!==void 0?
-					(   a.bmDeviceId=window.parent.passingObj.appId,a.bmPortalId=window.parent.passingObj.portalId   ):	
-						a.bmDeviceId=Math.floor(Math.random()*281474943156225).toString(16);
-
-			bm.deviceId=a.bmDeviceId;
+			// Generate us a unique device ID.
+    // If one has been supplied to us (By this being loaded from within an iFrame on the website)
+    // then use that one instead.
+      // Are we embedded on the portal?
+    if( bm.wereParams&&
+        bm.getParams['appId']!==undefined&&
+        bm.getParams['portalId']!==undefined){
+        
+      a.bmDeviceId = bm.getParams['appId'];
+      a.bmPortalId = bm.getParams['portalId'];
+        
+    } else {  // Or are we standalone
+      // If so generate our own random app/device ID
+      //flashvars.bmDeviceId = "8f74e835162d";
+      //flashvars.bmDeviceId = "8f74e835162d";
+      a.bmDeviceId = Math.floor(Math.random()*16777215*16777215).toString(16);
+    }
+    
+    bm.deviceId = a.bmDeviceId;
 			
 			swfobject.embedSWF(
 					bm.options.swfURL,c.id,"1","1","9.0.124","",a,
@@ -248,6 +262,16 @@ bm.init=function(a)
 	
 	//bm.options.design.images=a.design.images?a.design.images:[];
 	//bm.options.design.layout=a.design.layout?a.design.layout:[]
+	bm.getParams = {};
+  bm.wereParams = false;
+  document.location.search.replace(/\??(?:([^=]+)=([^&]*)&?)/g, function () {
+    function decode(s) {
+      return decodeURIComponent(s.split("+").join(" "));
+    }
+    bm.getParams[decode(arguments[1])] = decode(arguments[2]);
+    bm.wereParams=true;
+  });
+  
 };
 for(var C="#ff6600,#ffcc00,#ff3399,#ff0066,#cc00ff,#999900,#9999cc,#00cc99,#287200,#00ccff,#003366,#99ff00,#cc0000,#80cd68,#6600ff".split(","),y="DeviceConnected,DeviceDisconnected,NavigationString,KeyString,Invocation,ShakeReceived,AccelReceived,Log,ShowSlot".split(","),A=0;A<y.length;A++)
 	
@@ -422,9 +446,10 @@ bm.setGamepadMode=function(a){document.getElementById("brassmonkey")&&document.g
 bm.setVisibility=function(a){document.getElementById("brassmonkey")&&document.getElementById("brassmonkey").SetVisibility!==void 0&&document.getElementById("brassmonkey").SetVisibility(a,true)};
 bm.enableAccelerometer=function(a,b,e){setTimeout(function(){document.getElementById("brassmonkey").EnableAccelerometer(a,b,e)},2E3)};
 bm.enableTouch=function(a,b,e){setTimeout(function(){document.getElementById("brassmonkey").EnableTouch(a,b,e)},2E3)};
-bm.getWidth=function(){return window.parent.passingObj!==void 0&&window.parent.passingObj.width!==void 0?window.parent.passingObj.width:-1};
-bm.getHeight=function(){return window.parent.passingObj!==void 0&&window.parent.passingObj.height!==void 0?window.parent.passingObj.height:-1};
-bm.getFullscreen=function(){return window.parent.passingObj!==void 0&&window.parent.passingObj.fullScreen!==void 0?window.parent.passingObj.fullScreen:false};
+
+//bm.getWidth=function(){return window.parent.passingObj!==void 0&&window.parent.passingObj.width!==void 0?window.parent.passingObj.width:-1};
+//bm.getHeight=function(){return window.parent.passingObj!==void 0&&window.parent.passingObj.height!==void 0?window.parent.passingObj.height:-1};
+//bm.getFullscreen=function(){return window.parent.passingObj!==void 0&&window.parent.passingObj.fullScreen!==void 0?window.parent.passingObj.fullScreen:false};
 
 
 window.addEventListener?window.addEventListener("DOMContentLoaded",F,false):window.attachEvent("onload",F)
