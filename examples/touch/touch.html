@@ -63,9 +63,6 @@
         }]
       }
     });
-    function close() {
-    	bm.close();
-    } ;
     bm.onShowSlot(function(color){
       document.getElementById('slot-color').style.background = color;
     });
@@ -169,7 +166,7 @@
     }
   </script>
 </head>
-<body style="margin:0px;background:white;" onload="onload();" onunload="close();">
+<body style="margin:0px;background:white;" onload="onload();">
   <div id="container" style="height: 100px; width: 500px;">
     <div id="slot-color" style="width:100px;height:100px;float:left;text-align:center;line-height:100px;font-family:Arial;">Slot Color</div>
     

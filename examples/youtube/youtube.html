@@ -58,11 +58,7 @@
           ]
         }
       });
-      
-      function close() {
-      	bm.close();
-      } ;
-      
+            
 		  bm.onLog(function(str){
 		    console.log(str);
 		  });
@@ -280,7 +276,7 @@
       google.setOnLoadCallback(_run);
     </script>
   </head>
-  <body onunload="close();">
+  <body>
     <div id="search-container">
       <div id="search-box">
         <input type="text" id="search"></input><img src="search.png"/>

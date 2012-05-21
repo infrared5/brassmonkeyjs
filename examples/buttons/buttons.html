@@ -43,12 +43,7 @@
   		device.controlMode=bm.MODE_GAMEPAD;
   		return device;
   	});
-  	
-
-    function close() {
-    	bm.close();
-    } ;
-    
+  	    
     bm.onShowSlot(function(color){
       document.getElementById('slot-color').style.background = color;
     });
@@ -67,7 +62,7 @@
 
   </script>
 </head>
-<body style="margin:0px;background:white;" onunload="close();">
+<body style="margin:0px;background:white;">
   <div id="slot-color" style="width:100px;height:100px;text-align:center;line-height:100px;font-family:Arial;">Slot Color</div>
   
   <img id="up" src="button-up.png" />

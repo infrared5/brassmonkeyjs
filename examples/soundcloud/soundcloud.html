@@ -109,11 +109,7 @@
       }
     };
     bm.init(controller);
-    
-    function close() {
-    	bm.close();
-    } ;
-    
+        
     bm.onLog(function(str){
       console.log(str);
     });
@@ -230,7 +226,7 @@
   
   <script type="text/javascript" src="js/build.min.js"></script>
 </head>
-<body onunload="close();">
+<body>
   <div id="player"></div>
   <div id="ui" class="ui-box">
     

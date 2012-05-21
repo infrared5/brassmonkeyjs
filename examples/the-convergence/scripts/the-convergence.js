@@ -577,7 +577,7 @@ cr.behaviors = {};
           
       bm.init({
     	swfURL:"../../brassmonkey.swf",
-        bmAppId:"62e822bc0e6b9f22fc158763591845be",
+        bmAppId:"dfbc9769ef641e415aac8ee86224c9fa",
         bmMaxPlayers:1,
         name: "The Convergence",
         design: {
@@ -602,10 +602,6 @@ cr.behaviors = {};
     		return device;
    	});
     	
-
-      function close() {
-      	bm.close();
-      } ;
       bm.onShowSlot(function(color){
         //document.getElementById('slot-color').style.background = color;
       });

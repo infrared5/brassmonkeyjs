@@ -86,7 +86,7 @@ C()&&y(a,b,c,e)},removeSWF:function(a){g.w3&&B(a)},createCSS:function(a,b,c,f){g
 			for(c=0;c<e.length;c++)
 			{	
 				try{
-					console.log("apply? "+a);
+					//console.log("apply? "+a);
 					e[c].apply(bm,arguments);
 				}
 				catch(z){
@@ -270,10 +270,6 @@ bm.onTouchesReceivedInternal=function(a){for(var b=0;b<a.touches.length;b++)for(
 bm.onSocketReady=function(){};
 bm.setNavMode=function(a){	document.getElementById("brassmonkey")&&document.getElementById("brassmonkey").SetNavMode!==void 0&& document.getElementById("brassmonkey").SetNavMode(typeof a==="undefined"?"":a);};
 
-bm.close = function(){
-	bm.getBrassMonkey().unload();
-};
-
 bm.setRegistryVersion = function (maj,min) {
 	bm.getBrassMonkey().setRegistryVersion(maj,min);
 }
@@ -432,4 +428,10 @@ bm.getFullscreen=function(){return window.parent.passingObj!==void 0&&window.par
 
 
 window.addEventListener?window.addEventListener("DOMContentLoaded",F,false):window.attachEvent("onload",F)
-		})();
+
+// Clean
+window.addEventListener('unload',function(){
+  bm.getBrassMonkey().unload();
+});
+
+})();
