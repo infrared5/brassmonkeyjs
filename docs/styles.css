@@ -1,0 +1,12 @@
+html{
+  font-family: Arial;
+}
+body{
+  width: 600px;
+  margin: 0px auto;
+}
+
+p{
+  line-height: 20px;
+  font-size: 14px;
+}

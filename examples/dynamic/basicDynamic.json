@@ -1,0 +1,29 @@
+{ "version":"0.1", "orientation":"landscape", "touchEnabled":"no", "accelerometerEnabled":"no", 
+"resources":[
+{ "id":"1", "type":"image", "uri":"../layouts/background.png"}
+, { "id":"2", "type":"image",  "uri":"SchemeButton.swf" }
+, { "id":"3", "type":"image",  "uri":"SchemeButtonDown.swf"}
+, { "id":"4", "type":"image",  "uri":"TestBG2.swf" }
+, { "id":"5", "type":"image",  "uri":"SchemeButtonAlt.swf" }
+, { "id":"6", "type":"image",  "uri":"SchemeButtonAltDown.swf" }
+],
+"layout":[
+{ "id":"1", "name":"background1", "page":"1", "type":"image", "hidden":"no", "top":"0", "left":"0", "width":"1", "height":"1",  "assets":[
+{"name":"up", "resourceRef":"1"}]},
+{ "id":"2", "name":"buttonOne", "page":"1", "type":"button", "hidden":"no", "top":"0.28421875", "left":"0.1528125", "width":"0.28541666666666665", "height":"0.4928125", "functionHandler":"buttonOne", "assets":[
+{"name":"up", "resourceRef":"2"},
+{"name":"down", "resourceRef":"3"}]},
+{ "id":"3", "name":"buttonTwo", "page":"1", "type":"button", "hidden":"no", "top":"0.28421875", "left":"0.5923958333333333", "width":"0.28541666666666665", "height":"0.4928125", "functionHandler":"buttonTwo", "assets":[
+{"name":"up", "resourceRef":"2"},
+{"name":"down", "resourceRef":"3"}]},
+{ "id":"4", "name":"background2", "page":"2", "type":"image", "hidden":"yes", "top":"0", "left":"0", "width":"1", "height":"1", "functionHandler":"up", "assets":[
+{"name":"up", "resourceRef":"4"}]},
+{ "id":"5", "name":"buttonOne", "page":"2", "type":"button", "hidden":"yes", "top":"0.27484375", "left":"0.14447916666666666", "width":"0.28541666666666665", "height":"0.4928125", "functionHandler":"buttonOne", "assets":[
+{"name":"up", "resourceRef":"2"},
+{"name":"down", "resourceRef":"3"}]},
+{ "id":"6", "name":"altButton", "page":"2", "type":"button", "hidden":"yes", "top":"0.32328125", "left":"0.615625", "width":"0.28479166666666667", "height":"0.37109375", "functionHandler":"altButton", "assets":[
+{"name":"up", "resourceRef":"5"},
+{"name":"down", "resourceRef":"6"}]},
+{ "id":"7", "name":"dynamicText1", "page":"2", "type":"text", "text":"This is 24pt font", "color":"006633", "textSize":"0.09765625", "hidden":"yes", "top":"0.08734375", "left":"0.39791666666666664", "width":"0.4979166666666667", "height":"0.11921875", "functionHandler":"null", "assets":[]},
+{ "id":"8", "name":"dynamicText2", "page":"2", "type":"text", "text":"This is 24pt font", "color":"006633", "textSize":"0.09765625", "hidden":"yes", "top":"0.08834375", "left":"0.42791666666666664", "width":"0.4979166666666667", "height":"0.11921875", "functionHandler":"null", "assets":[]}
+]}

@@ -1,0 +1,70 @@
+<html>
+<head>
+  <title>Dynamic - HTML5 SDK for Brass Monkey</title>
+  
+  <script type="text/javascript" src="../../brassmonkey.js"></script>
+
+  <script>
+    var mySession={};
+    bm.init({
+      bmAppId:"f056231599dd49a786216bb7aefb5b7d",
+      bmMaxPlayers:1,
+      name: "Joost!",
+      swfURL:"../../brassmonkey.swf"  
+    });
+    
+   	bm.onBrassMonkeyLoaded(function(a){
+     	// no design in config, load it here, else start BM.
+   		bm.loadDesign("basicDynamic.json",'schemeCallback');
+   	});
+   	
+   	schemeCallback = function (sName){
+   		bm.start();
+   	};
+ 	
+  	bm.onDeviceAvailable(function(a){
+  		console.log('top onDeviceAvailable'+ a.deviceName);
+  		a.controlMode=bm.MODE_GAMEPAD;
+  		a.attributes.someName=true;
+  		document.getElementById('log').innerHTML += '<p>A bm.onDeviceAvailable: "'+ a.deviceName+'" | "'+ a.deviceId+'"</p>';
+  		return a;
+  	});
+     
+    bm.onDeviceConnected(function(device){ 
+    	mySession.device=device;
+    	bm.setCallback(device.deviceId,bm.CALLBACK_SCHEME_BUTTON,'onButton' );
+      document.getElementById('log').innerHTML += '<p>A bm.onDeviceConnected: "'+ device.deviceName+'" | "'+ device.deviceId+'"</p>';
+    });
+    
+    bm.onDeviceDisconnected(function(device){
+      document.getElementById('log').innerHTML += '<p>A Device Disconnected: "'+device.deviceName+'" | "'+device.deviceId+'"</p>';
+    });
+    
+    bm.onShowSlot(function(color){
+      document.getElementById('slot-color').style.background = color;
+    });
+    
+    testOne= function (){   
+    	bm.setControlpadPage(	mySession.device.deviceId,2);
+    }
+    testTwo= function (){   
+    	bm.setControlText(	mySession.device.deviceId,"dynamicText1",mySession.device.deviceName,false);
+    	bm.setControlText(	mySession.device.deviceId,"dynamicText2",mySession.device.deviceName,true);
+    }
+    onButton=function (a){
+    	 document.getElementById('log').innerHTML +="<br/>onButton "+JSON.stringify(a);
+    }
+  </script>
+</head>
+<body style="margin:0px;background:white;">
+  <div id="slot-color" style="width:100px;height:100px;text-align:center;line-height:100px;font-family:Arial;">Slot Color</div>
+  <form>
+    <input type="button" value="Test 1" onclick="testOne()" />
+    <input type="button" value="Test 2" onclick="testTwo()" />
+  </form>
+  
+  <div id="output"></div>	
+  <div id="log"></div>
+</body>
+</html>
+

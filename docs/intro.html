@@ -1,0 +1,474 @@
+<html>
+<head>
+  <title>Developer Notes - Brass Monkey SDK</title>
+  <link rel="stylesheet" type="text/css" href="styles.css"/>
+  <script src="syntax.js"></script>
+</head>
+<body>
+
+<h1> More Shazam and Less Shazbot</h1>
+
+<p>
+So, you build games for the web? Do you want to ditch the keyboard and mouse? Do you want to create web games where users viewing the same screen join together as a party or as opponents? At Brass Monkey, we get excited about these ideas and so many more. We feel that anything you would want to control with a keyboard and mouse would be better done on a personal smart-device. The computer doesn't have to be that 20th century typewriter interface graced with the pointer-stick that is the mouse. Web games and even installable binary games no longer have to be a lessor experience, and a distraction from what some feel is the 'real work' of what computers were made for.
+</p>
+
+<p>						
+There was a point when console manufacturers recognized and stared incorporating modern
+computer GPU silicone.( nForce north-bridge anyone? ) The modern GPU's shared many
+programming hooks and the manufacturers created tools that helped game-developers bring their
+user-experiences to these 'fun-machines', these Dream casting Y-Cube-180's. In the end, they
+repackaged a hybrid PC, often incorporating unique architectures, but really just a PC doing
+a different type of 'work'. That is, the 'real work' of providing  entertainment and shared
+experiences to humans. You wouldn't want to work on a spread sheet using an X-Box and D-pad,
+but in 2001, any office worker would have killed for a Pentium-III powered dual channel DDR
+system with G-Force2MX and hardware decoded Dolby-5.1 built directly into the chip-set.
+That's all it was in the most basic sense. I was first in line to pick up the consumer
+version of that chip-set, although it was Athlon rather than Pentium, and I used it as my
+main personal computer until 2007. Anyway, the next thing you know, publishers have an SDK to
+move almost all of their existing graphics and effects over to the repackaged PC platforms.
+</p>
+	
+<p>					
+At Brass Monkey, we are pulling 'fun' back to the web by turning every smart-device into a
+console-controller and every computer screen into a console. We believe that impromptu LAN
+parties at coffee shops, living rooms, and anywhere else one can browse, will start springing
+up. We imagined this happening, and then prepared for it by building support for up to 64
+games running at any single location. And we gave the end-users complete control in finding
+the games of their choice.
+</p>
+		
+<p>				
+We put in extra effort to ensure that using Brass Monkey as a developer was as easy as
+possible while still supporting all the complex sensor features, LAN crowding, and future
+features planned. It breaks down into three steps, 'setup', 'initiation', and then
+'discovery' of your players, which is to detect and connect to smart-devices that have given
+your application the 'nod'.
+</p>
+
+<h2>Setup</h2>
+
+<p>The JavaScript api is the easiest of all to set up. Include the script in your HTML header.</p>
+<pre class="prettyprint lang-html">
+  &lt;script type="text/javascript" src="brassmonkey.js"&gt;&lt;/script&gt;
+</pre>
+
+<p>This creates a 'bm' object on the heap which is used to call the API. Initiate</p>
+						
+<p>As with some other complex web api objects, it must be initiated.</p>
+
+<h2>Initiate</h2>
+<p>As with some other complex web api objects, it must be initiated.</p>
+
+<pre class="prettyprint lang-js">
+bm.init({
+  bmAppId: "YourAppGUID",
+  name: "yowza - SDK Examples",
+  bmMaxPlayers:1
+});
+</pre>
+
+<p>
+This gets the object ready to receive control-design data and other post-initiation actions.
+The bm object will call you back after it has initiated if you add the handler.
+</p>
+
+<pre class="prettyprint lang-js">
+bm.onBrassMonkeyLoaded(function(a){
+  // Your code
+}) ;
+</pre>
+
+<p>But what to do?</p>
+
+<h2>Configure the Core and Start</h2>
+<p>
+Several things can be done before 'discovery' of your users begins. Brass Monkey is
+constantly growing and improving its features ans has set up version control for those who
+target specific features. The first parameter is the major version and the second parameter
+is the minor version. Refer to our feature matrix for the desired values, however 1.2 is
+recommended at this time because of the new control pad API's
+</p>
+
+<pre class="prettyprint lang-js">
+bm.setRegistryVersion(1,2);
+</pre>
+<p>
+Most important of all the core settings is what the user sees on the smart-device. What
+consoles and USB controllers have in common is that they never change from game to game.
+Developers have created rich navigation and control experiences using only a pair of D-Pads
+and an 'A/B'  buttons. Maybe you develop games for smart-devices already and have your own
+colorful take on the D-pad. Brass Monkey prefers that developers are given the freedom to
+design the controls and buttons. We currently do not have any pre-configured control-designs
+but we do have many examples. Unity provides a WYSIWYG editor for static controls and Flash
+Professional while not technically an 'editor' allows WYSIWYG with paging/multi views. At
+run-time, each frame of the movie clip becomes a view in the control-design. In JavaScript,
+we have not created a visual tool to build them yet but they can be created with simple json.
+This will be covered in detail later. The design also sets the initial request for touch and
+acceleration sensor events.
+</p>
+
+<p>Load a control-design:</p>
+
+<pre class="prettyprint lang-js">
+function schemeCallback(){
+}
+bm.loadDesign("basicDynamic.json",'schemeCallback'); 
+</pre>
+
+<p>
+You can load more than one design and create custom designs at any time to personalize the
+user experience. After the call-back, you would load another if desired. They are stored and
+referenced by integer index. After you have set up everything and are ready, start
+'discovery'.
+</p>
+
+<pre class="prettyprint lang-js">
+bm.start();
+</pre>
+
+<h2>Discovery</h2>
+
+<p>
+Discovery is a process we refer to when we talk about detecting and connecting to smart
+devices from the browser/console. Connection to the smart-device is initiated by the user.
+While it did pose a couple challenges to building the system, it allowed for multiple
+consoles to be present on the same LAN. Your user-experience/game is referred to as the
+'Host' and as mentioned before, there can be up to 64 hosts at any single LAN. It may or may
+not be important to know which id or 'slot' is assigned to your host, but it is very
+important to the end user since they initiate the game-session using a wireless device.
+</p>
+
+<pre class="prettyprint lang-js">
+bm.onShowSlot(function(color){ });
+</pre>
+
+<p>
+This function is called when the host is first assigned the slot, and also when a user taps
+their smart-device on the host list. The tap from the user signifies that they are trying to
+identify which screen they are looking at is the one they are going to connect to. In most
+cases there will only be one host to select from but 'just in case', Brass monkey ensured
+that the user would be in control of selection.
+</p>
+
+<h2>User life-cycle and when it matters</h2>
+<p>
+Just like all 'Web 2.0' applications, the user-reference provided to the host goes through a
+multitude of 'states'. You probably know that you'll create particular objects to work with
+users when they join, and destroy them when they depart the host. Or maybe you prefer other
+mechanisms to grind user references through an experience. There are three events to process.
+The first event is to set up the state that the device will open with.
+</p>
+
+<pre class="prettyprint lang-js">
+bm.onDeviceAvailable(function(device){ 
+  device.controlMode=bm.MODE_GAMEPAD;
+  device.attributes.someName=true; 
+  device.controlSchemeIndex=0;
+  return device;
+});
+</pre>
+
+<p>
+JavaScript calls this function with a reference to the user's device. The controlMode
+property determines which mode, MODE_GAMEPAD, MODE_KEYBOARD, MODE_NAVIGATION, or MODE_WAIT.
+You can also set an attribute or two to the device for later reference. ' controlSchemeIndex'
+is only needed if you have loaded more than a single control-pad design. The device then
+begins to load your design across the LAN using a P2P connection. After the design is
+processed comes the second event.
+</p>
+
+<pre class="prettyprint lang-js">
+bm.onDeviceConnected(function(device){
+  // Your code Here
+});
+</pre>
+
+<p>
+This event signals that the device is ready for scripting and play interaction. If the
+control-design included 'acceleration' and 'touch' enabled, the data will begin to fly at
+your host.
+</p>
+<p>
+The final event you will receive normally is the device disconnecting. It is possible that
+the user closes the browser at any time also which would signal game over.
+</p>
+
+<pre class="prettyprint lang-js">
+bm.onDeviceDisconnected(function(device){
+  // Your code Here
+});
+</pre>
+
+<p>
+Here you clean up objects that were made for the user or remove the users reference from your
+game engine. If you have looked at some of the JavaScript examples, you may have seen the
+call-backs for general invocations from the client devices. They show how to set up the call-
+backs on the bm 'session' as a whole, which gets you the particular event call-backs from all
+devices that are connected to your host. You can also set up call-backs against individual
+devices and even get a couple of call-backs not available against the 'session'. To register
+a call-back for a device call:
+</p>
+<pre class="prettyprint lang-js">
+function onButton(a){
+  // a.event
+  // a.value.name  name of button pressed
+  // a.value.state  'up' or 'down'
+};
+
+bm.onDeviceConnected(function(device){
+  bm.setCallback(device.deviceId,bm.CALLBACK_SCHEME_BUTTON,'onButton' );
+});
+</pre>
+
+<p>
+In addition to the event and value properties, in a targeted call-back you will find the
+referenced device properties. Altogether they amount to:
+</p>
+
+<h2>JSON Device properties:</h2>
+
+<pre class="prettyprint lang-js">
+// The current state of all buttons by name/state pairs.
+device.buttons; 
+// The control-pad design index assigned from above.
+device.controlSchemeIndex;
+// The GUID of the device. Use it a unique identifier.
+device.deviceId;
+// The current screen , text-input,game-pad, wait, or navigation
+device.controlMode;
+// The friendly name given to the smart-device by the owner.
+device.deviceName;
+// The current approximate text-input content on the device.
+device.textContent;
+// Transient session properties assigned by you.
+device.attributes;
+</pre>
+
+<p>The call-backs available are:</p>
+<pre class="prettyprint lang-js">
+// the user has press the 'enter' or 'submit' button/key
+bm.CALLBACK_TEXT_ENTER;
+// The user has selected to possibly exit your game.
+bm.CALLBACK_PAUSE;
+// The user has pressed or released a control-design button.
+bm.CALLBACK_SCHEME_BUTTON;
+// The user has pressed a navigation button in navigation mode.
+bm.CALLBACK_NAVIGATION;
+// The user has pressed a text key.
+bm.CALLBACK_KEYBOARD;
+</pre>
+
+<p>
+A note about text input. We at Brass Monkey missed a detail and failed to account for cursor
+position updates and auto correct settings. The next network protocol update will address
+this over-site. Also, note the difference between a CALLBACK_KEYBOARD and
+CALLBACK_TEXT_ENTER. The CALLBACK_TEXT_ENTER event is when you would process their input. It
+is triggered by the 'return'/'submit'/'new-line' key or hardware switch. The textContent
+property of the device object would contain the text as input linearly, not including cursor
+position. It would be good to display the text on the console screen either as they type it
+or when it is submitted to ensure that the host gets what the user intended. The typical
+usage is to put the device in to keyboard mode, and then back into game-pad mode, or previous
+mode at the CALLBACK_TEXT_ENTER event. The CALLBACK_TEXT_ENTER is dispatched whenever the
+'\n' character code is read by the host from the device while the CALLBACK_KEYBOARD is
+dispatched with every key press.
+</p>
+<p>
+At any time you can call the library for the device and inspect the properties outlined
+above.
+</p>
+<pre class="prettyprint lang-js">
+bm.getDevice(deviceId);
+</pre>
+<p>At any time, you can set transient attributes to a device reference.</p>
+<pre class="prettyprint lang-js">
+bm.setDeviceAttribute(deviceId,attributeName,value);
+</pre>
+<p>At any time, you can also read these back.</p>
+<pre class="prettyprint lang-js">
+bm.getDeviceAttributes(deviceId);
+</pre>
+<p>If you want to remove a device from the host session without user input, you can close it.</p>
+<pre class="prettyprint lang-js">
+bm.closeDevice(deviceId);
+</pre>
+
+<h2>Controls - What do they see in their hand?</h2>
+<p>
+The design of the control pad that is sent to the user devices is made up of png/jpg/swf
+based bitmaps up to ARGB 32-bit color depth. These images are placed on the device screen
+according to the rectangle provided. The control-design protocol specifies values between
+zero and one for left/right/height/width. If you had a background jpeg at 24bit depth to
+cover the entire screen, its values would be (0,0,1,1).  The over-all pixel size of the
+control-design is specified in the root of the design object, or in the header of designs
+serialized to XML and JSON. The over-all size of the design will be scaled to its maximum
+size on all devices while maintaining the intended aspect ratio. If your game uses touch
+events, then the touch-positions are also scaled to the design's intended values. We decided
+that by allowing multiple control-designs in a session and also scaling designs to the
+maximum available screen space, the choice to create higher-definition controls for tablets
+and pads or not, was left to the developer. We also recognized that adjusting screen
+coordinates values to the design dimensions kept the developer from having to catch and code
+for arbitrary screen sizes. For instance, in Tank vs Alien, we compute a 24 position d-pad
+wheel for turret aiming which is based on the touches within a its rectangle. The routine
+that processes the touch-positions was much simpler, knowing that the values we are looking
+for will fall in that rectangle.
+</p>
+<p>
+The control-designs can be made with the Unity IDE, the Flash Professional IDE, by hand in
+raw text, or even by remote services at run-time. Currently we have three types of components
+and we are dreaming up others. We have now, BMImage, BMButton, and BMText. We are looking at
+adding an HTML component that runs in the device web-kit to provide client side scripting
+support for control-design events. Spinners, rotators, and other fun stuff is on the horizon.
+</p>
+
+<h2>BMImage – v 0.9.0</h2>
+<p>
+The base control element is the BMImage. A single static texture that does not respond to
+tactile input. Mostly used for backgrounds, but also good for logos and accents.
+</p>
+<h2>BMButton – v 0.9.0</h2>
+<p>
+The BMButton is a BMImage control elements with two states. It uses two skins/textures and
+responds to user tactile input. When the user presses or releases the BMButton, the host can
+receive button call-backs with the name of button and the button state, 'up' or 'down'.
+</p>
+<h2>BMText – v 1.2.0</h2>
+<p>
+BMText allows you to place editable text on the controls. You can write hints or anything
+your user-story requires. Having editable text on the control-design itself can be a great
+benefit in many situations. The BMText is a single line, so to use multiple lines you would
+place several BMText components on the design until the maximum number of text lines desired
+was reached.
+</p>
+<h2>Changing the layout at run-time</h2>
+<p>
+Starting with application version 1.2, you can send changes to the layout of the control-
+design. The underlying protocol allows you to hide or move items but it does not provide for
+any other type of view organization or control over individual elements. The Flash and
+JavaScript endpoints have extended the specification by adding a 'page' and 'name' property
+to control elements. The control-design views are paged from the host to the devices by this
+property. While you can manage design views at run-time in many ways on your own, it takes an
+advanced familiarity with the internal protocol. The Flash and JS libs give you an easy way
+to organize your designs and how they are presented.
+</p>
+<h2>Layout</h2>
+<p>
+By default, the devices will start on page 1 of your control-design. To flip to page 2 call:
+</p>
+<pre class="prettyprint lang-js">
+bm.setControlpadPage(deviceId, pageNumber);
+</pre>
+<p>
+The device will be updated to show only the control-design elements marked page 2.
+</p>
+<h2>Text</h2>
+<p>
+BMText is changed at run-time by referencing the element name, the new text, and also signal
+to change 'now' or not. The Boolean signal to update the device 'now' is present so that you
+can either, progressively or all at once, update several text elements.
+</p>
+<pre class="prettyprint lang-js">
+bm.setControlText(deviceId,"dynamicText1",”this text appears”,true);
+</pre>
+<p>
+Make sure the text element referenced is on the current displayed page. If you use the Flash
+Professional IDE to create designs, make sure to name text elements uniquely on every frame.
+The IDE will not prevent you from placing text fields on different frames using the same
+instance name. Each TextField in each frame/page will need a unique name to support this
+paging system. Remember though, that nothing prevents you from developing additional ways to
+update the control-design layout independent of the page method.
+</p>
+<pre class="prettyprint lang-js">
+bm.updateControlPad(deviceId, raw-design-data, call-back);
+</pre>
+
+<h2>Best Practices and Advanced Concepts using dynamic control-designs</h2>
+<p>
+The number one 'best practice' is to send all resource to the client-device up front. You can
+generate new resources at run-time during the client session and send them over, but the
+speed at which devices process the resources is unpredictable. We hope that with dynamic text
+and layouts, the cases where resources are generated late will be significantly less.
+</p>
+<p>
+Brass Monkey does encourage generating resources at run-time during discovery. When a device
+requests a connection to your host, you will receive the deviceId and friendly name. You
+could whip up a background image that incorporated their device's name and send it in the
+initial control-design. Using the method below, the resources will need to be loaded and
+encoded prior to process, but the end result is incrementing the controlScheme count and the
+new device requesting the session can have this new index specified as its unique
+personalized design.
+</p>
+<pre class="prettyprint lang-js">
+bm.processDesign(json);
+</pre>
+<p>
+Here is how to load one or more resources and generate the serialized image needed. Pass a
+reference name, the resource uri, the size of the output image as drawn from the top left,
+and finally, whether to scale the loaded image before drawing to the device or not.
+</p>
+<pre class="prettyprint lang-js">
+bm.addResource( name, uri,width,height,scaleSourceBol);
+</pre>
+<p>
+After you have added all the resources you want to load, use this method, and pass a call-
+back function name that will get the entire list of encoded assets by name all at once. We
+support SWF, JPG's and PNG's.
+</p>
+<pre class="prettyprint lang-js">
+bm.loadResources(callBack);
+</pre>
+<p>
+The JSON is then formed with or without page extensions and passed to 'processDesign'.
+</p>
+<h2>Identifying your Users</h2>
+<p>
+Identifying users in a web game usually involves tying into the HTML session for log-in status, or looking at the present document context. While that is all still usable, that the web game can join with multiple players adds the need for a reliable reference. The device object presents the 'deviceId' property as our GUID reference. The transient attributes also help you keep track of your player states. The first step in getting your game access to a more robust tool set is to register your application with Brass Monkey. Contact developer.services@playbrassmonkey.com to receive your application GUID. With the GUID you can write cookies onto individual devices and read them back in future sessions.
+</p>
+<pre class="prettyprint lang-js">
+bm.setCookie(deviceId,name,value);
+</pre>
+<p>To read it back, call:</p>
+<pre class="prettyprint lang-js">
+bm.getCookie(deviceId,name,callBackName);
+</pre>
+<p>
+When cookies are read from the remote device, the values are copied to the local transient
+attributes property of the device object reference. The callback receives the attributes
+object in its entirety.
+</p>
+<p>
+Brass Monkey lets users register one or more smart-devices to the same user profile. If you
+want to store attributes for a user that are readable with every smart-device they have
+registered, we can provide you with additional API information through developer services.
+</p>
+<h2>Deploy it Anywhere</h2>
+<p>
+We would encourage you to deploy your application any where you choose. If you want to deploy
+at playbrassmonkey.com, contact developer services. While we are busy working every day to
+improve our system, we want you to know that adding and linking to new and exciting content
+is what we are all about. Until we automate some stuff and provide developers with easy pages
+to create and upload applications we are only too happy to respond to your requests.
+</p>
+<p>
+Another aspect of Brass monkey is the ability to run on its own private network. A personal
+arcade of sorts could be created with private content. There really is no limit.
+</p>
+<h2>The Future is so Bright</h2>
+<p>
+When I talk about putting Brass Monkey everywhere, I really mean it. Are you tired of hearing
+'there is an app for that' yet? Manufactures of products which integrate logic boards have
+been developing smart-device applications to control and monitor everything. Who wants 20
+apps to control 20 home appliances? Microsoft has proposed an open protocol to speak with
+these appliances and discover,(there's that word again), the 'properties' and 'services' that
+can be adjusted and read from. I'm just going to guess that it will be some ipv6 hybrid UDP
+powered WSDL akin to other home network discovery services, but the point is, Brass monkey is
+ready to fill the need for a dynamic controller that can be skinned and presented to an end
+user on their smart-devices, all from a host process. I'm sure that if the open standard for
+connecting to home applications and appliances is created and accepted, that we'll see Brass
+Monkey type dynamic controllers appear overnight. As for now? This author has been dreaming
+up ways to buzz people into my building with Brass Monkey, and has been using it as a remote
+control with Win-amp. Linking these host services to real hardware and other platforms is so
+much fun, and I come up with new ideas every day!
+</p>
+
+</body>
+</html>

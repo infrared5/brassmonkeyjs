@@ -62,16 +62,12 @@
 		  bm.onLog(function(str){
 		    console.log(str);
 		  });
-		    
-		  	bm.onDeviceAvailable(function(device){  		
-		  		device.controlMode=bm.MODE_GAMEPAD;
-		  		return device;
-		  	});
-		  	
-		  
-		  bm.onDeviceConnected(function(device){
-		    bm.setKeyboardMode();
-		  });
+	    
+	  	bm.onDeviceAvailable(function(device){  		
+	  		device.controlMode=bm.MODE_KEYBOARD;
+	  		return device;
+	  	});
+	  	
 		  bm.onNavigationString(function(deviceId,str){
         if(str=="backDown"){
           $('#search').val('').focus();
