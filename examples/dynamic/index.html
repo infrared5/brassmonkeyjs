@@ -7,10 +7,10 @@
   <script>
     var mySession={};
     bm.init({
-      bmAppId:"f056231599dd49a786216bb7aefb5b7d",
+      name: "Dynamic - SDK Examples",
       bmMaxPlayers:1,
-      name: "Joost!",
-      swfURL:"../../brassmonkey.swf"  
+      bmAppId:"f056231599dd49a786216bb7aefb5b7d",
+      swfURL:"../../swf/bin/brassmonkey.swf",
     });
     
    	bm.onBrassMonkeyLoaded(function(a){
@@ -62,7 +62,6 @@
     <input type="button" value="Test 1" onclick="testOne()" />
     <input type="button" value="Test 2" onclick="testTwo()" />
   </form>
-  
   <div id="output"></div>	
   <div id="log"></div>
 </body>

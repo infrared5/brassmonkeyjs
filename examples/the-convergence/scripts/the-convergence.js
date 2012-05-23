@@ -576,10 +576,10 @@ cr.behaviors = {};
           }];
           
       bm.init({
-    	swfURL:"../../brassmonkey.swf",
-        bmAppId:"dfbc9769ef641e415aac8ee86224c9fa",
+        name: "The Convergence",        
         bmMaxPlayers:1,
-        name: "The Convergence",
+        bmAppId:"dfbc9769ef641e415aac8ee86224c9fa",
+        swfURL:"../../swf/bin/brassmonkey.swf",
         design: {
           orientation: "landscape",
           touchEnabled: false,
