@@ -23,7 +23,7 @@ sys.stderr = PreventLogging()
 if sys.argv[1:]:
   port = int(sys.argv[1])
 else:
-  port = 8000
+  port = 8080
 server_address = ('127.0.0.1', port)
 
 HandlerClass.protocol_version = Protocol
@@ -45,5 +45,5 @@ print "  Starting Server (Press Ctrl+C to close)"
 sys.stderr.enabled = False
 
 sa = httpd.socket.getsockname()
-print "".join(["  Open http://localhost:",str(sa[1]),"/ in your browser."])
+print "".join(["  Open http://localhost:",str(port),"/ in your browser."])
 httpd.serve_forever()

@@ -1,0 +1,156 @@
+<html>
+<head>
+  <title>Reference - Brass Monkey SDK</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  
+  <link rel="stylesheet" type="text/css" href="styles.css"/>
+  <script src="syntax.js"></script>
+</head>
+<body>
+
+<h1>Functions</h1>
+
+<pre class="prettyprint lang-js">
+bm.init({
+  bmAppId: "YourAppGUID",
+  name: "yowza - SDK Examples",
+  bmMaxPlayers:1
+}); 
+</pre>
+
+<pre class="prettyprint lang-js">
+bm.onBrassMonkeyLoaded(function(a){
+  // Your code
+}) ;
+</pre>
+
+<pre class="prettyprint lang-js">
+bm.setRegistryVersion(1,2);
+</pre>
+
+<pre class="prettyprint lang-js">
+function schemeCallback(){
+}
+bm.loadDesign("basicDynamic.json",'schemeCallback'); 
+</pre>
+
+<pre class="prettyprint lang-js">
+bm.start();
+</pre>
+
+<pre class="prettyprint lang-js">
+bm.onShowSlot(function(color){ });
+</pre>
+
+<pre class="prettyprint lang-js">
+bm.onDeviceAvailable(function(device){ 
+  device.controlMode=bm.MODE_GAMEPAD;
+  device.attributes.someName=true; 
+  device.controlSchemeIndex=0;
+  return device;
+});
+</pre>
+
+<pre class="prettyprint lang-js">
+bm.onDeviceConnected(function(device){
+  // Your code Here
+});
+</pre>
+
+<pre class="prettyprint lang-js">
+bm.onDeviceDisconnected(function(device){
+  // Your code Here
+});
+</pre>
+
+<pre class="prettyprint lang-js">
+function onButton(a){
+  // a.event
+  // a.value.name  name of button pressed
+  // a.value.state  'up' or 'down'
+};
+
+bm.onDeviceConnected(function(device){
+  bm.setCallback(device.deviceId,bm.CALLBACK_SCHEME_BUTTON,'onButton' );
+});
+</pre>
+
+<pre class="prettyprint lang-js">
+// The current state of all buttons by name/state pairs.
+device.buttons; 
+// The control-pad design index assigned from above.
+device.controlSchemeIndex;
+// The GUID of the device. Use it a unique identifier.
+device.deviceId;
+// The current screen , text-input,game-pad, wait, or navigation
+device.controlMode;
+// The friendly name given to the smart-device by the owner.
+device.deviceName;
+// The current approximate text-input content on the device.
+device.textContent;
+// Transient session properties assigned by you.
+device.attributes;
+</pre>
+
+<p>The call-backs available are:</p>
+<pre class="prettyprint lang-js">
+// the user has press the 'enter' or 'submit' button/key
+bm.CALLBACK_TEXT_ENTER;
+// The user has selected to possibly exit your game.
+bm.CALLBACK_PAUSE;
+// The user has pressed or released a control-design button.
+bm.CALLBACK_SCHEME_BUTTON;
+// The user has pressed a navigation button in navigation mode.
+bm.CALLBACK_NAVIGATION;
+// The user has pressed a text key.
+bm.CALLBACK_KEYBOARD;
+</pre>
+
+<pre class="prettyprint lang-js">
+bm.getDevice(deviceId);
+</pre>
+
+<pre class="prettyprint lang-js">
+bm.setDeviceAttribute(deviceId,attributeName,value);
+</pre>
+
+<pre class="prettyprint lang-js">
+bm.getDeviceAttributes(deviceId)
+</pre>
+
+<pre class="prettyprint lang-js">
+bm.closeDevice(deviceId);
+</pre>
+
+<pre class="prettyprint lang-js">
+bm.setControlpadPage(deviceId, pageNumber);
+</pre>
+
+<pre class="prettyprint lang-js">
+bm.setControlText(deviceId,"dynamicText1",”this text appears”,true);
+</pre>
+
+<pre class="prettyprint lang-js">
+bm.updateControlPad(deviceId, raw-design-data, call-back);
+</pre>
+
+<pre class="prettyprint lang-js">
+bm.processDesign(json);
+</pre>
+
+<pre class="prettyprint lang-js">
+bm.addResource( name, uri,width,height,scaleSourceBol);
+</pre>
+
+<pre class="prettyprint lang-js">
+bm.loadResources(callBack);
+</pre>
+
+<pre class="prettyprint lang-js">
+bm.setCookie(deviceId,name,value);
+</pre>
+
+<pre class="prettyprint lang-js">
+bm.getCookie(deviceId,name,callBackName);
+</pre>
+

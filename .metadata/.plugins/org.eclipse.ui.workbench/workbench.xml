@@ -49,6 +49,7 @@
 <viewState LINK_NAVIGATOR_TO_EDITOR="0" fpeIsFlat="0" fpeSortBy="1" sorter="1">
 <fpeExpanded>
 <fpeElement fpePath="/swf"/>
+<fpeElement fpePath="/swf/%typeReferencedLibraries"/>
 <fpeElement fpePath="/swf/bin"/>
 <fpeElement fpePath="/swf/lib"/>
 </fpeExpanded>
