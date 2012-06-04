@@ -68,6 +68,7 @@ C()&&y(a,b,c,e)},removeSWF:function(a){g.w3&&B(a)},createCSS:function(a,b,c,f){g
           arguments[1]=="down"||
           arguments[1]=="back"||
           arguments[1]=="activate")&&
+          perDeviceAttributes[arguments[0]]!==undefined&&
           !perDeviceAttributes[arguments[0]].hackForOldNavEventsEnabled ){
           
 					for(var k=arguments[1],c=0;c<e.length;c++)
@@ -88,7 +89,10 @@ C()&&y(a,b,c,e)},removeSWF:function(a){g.w3&&B(a)},createCSS:function(a,b,c,f){g
 					arguments[1]=k+"Up";
 				}
 				else{
-				  perDeviceAttributes[arguments[0]].hackForOldNavEventsEnabled = true;
+				  // TODO: Remove this if wrapper. Made it to do with the pubnub hack/test
+				  if(perDeviceAttributes[arguments[0]]!==undefined){
+				    perDeviceAttributes[arguments[0]].hackForOldNavEventsEnabled = true;
+				  }
 				}
 			
 			for(c=0;c<e.length;c++)
