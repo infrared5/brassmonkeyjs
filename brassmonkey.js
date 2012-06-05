@@ -492,7 +492,9 @@ bm.onDeviceDisconnected(function(device){
 // Clean Up
 window.addEventListener?window.addEventListener("DOMContentLoaded",F,false):window.attachEvent("onload",F)
 window.addEventListener('unload',function(){
-  bm.getBrassMonkey().unload();
+  if(bm.getBrassMonkey().unload!==undefined){
+    bm.getBrassMonkey().unload();
+  }
 });
 
 })();
