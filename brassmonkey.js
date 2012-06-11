@@ -116,7 +116,7 @@ C()&&y(a,b,c,e)},removeSWF:function(a){g.w3&&B(a)},createCSS:function(a,b,c,f){g
 			var b=document.createElement("div");
 			b.id="brassmonkey-wrapper"+Math.floor(Math.random()*281474943156225).toString(16);
 			document.body.appendChild(b);			
-			b.style="position: fixed; width: 8px; height: 8px; bottom: 0px; left: 0px; overflow-x: hidden; overflow-y: hidden;";
+			//b.style="position: fixed; width: 8px; height: 8px; bottom: 0px; left: 0px; overflow-x: hidden; overflow-y: hidden;";
 			b.style.zIndex=1E4;b.style.position="fixed";b.style.width="8px";b.style.height="8px";b.style.left="0px";b.style.bottom="0px";
 			b.style.overflowX="hidden";b.style.overflowY="hidden";
 			var c=document.createElement("div");c.id="brassmonkey-wrapper"+Math.floor(Math.random()*281474943156225).toString(16);
@@ -489,12 +489,30 @@ bm.onDeviceDisconnected(function(device){
 });
 
 
+function getInternetExplorerVersion()
+// Returns the version of Internet Explorer or a -1
+// (indicating the use of another browser).
+{
+  var rv = -1; // Return value assumes failure.
+  if (navigator.appName == 'Microsoft Internet Explorer')
+  {
+    var ua = navigator.userAgent;
+    var re  = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})");
+    if (re.exec(ua) != null)
+      rv = parseFloat( RegExp.$1 );
+  }
+  return rv;
+}
+
 // Clean Up
 window.addEventListener?window.addEventListener("DOMContentLoaded",F,false):window.attachEvent("onload",F)
-window.addEventListener('unload',function(){
-  if(bm.getBrassMonkey().unload!==undefined){
+
+function onUnload(){
+  if( getInternetExplorerVersion()==-1 &&
+      typeof(bm.getBrassMonkey().unload) !== 'undefined'){
     bm.getBrassMonkey().unload();
   }
-});
+}
+window.addEventListener?window.addEventListener("unload",onUnload,false):window.attachEvent("unload",onUnload)
 
 })();
