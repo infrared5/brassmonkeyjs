@@ -78,13 +78,15 @@ C()&&y(a,b,c,e)},removeSWF:function(a){g.w3&&B(a)},createCSS:function(a,b,c,f){g
 							e[c].apply(bm,arguments)
 							}catch(m)
 							{
-								console.log("UnhandledException ("+m+") in "+bmHooks[j]+" Callback")
+								//console.log("UnhandledException ("+m+") in "+bmHooks[j]+" Callback")
 							}
 							arguments[1]=k+"Clicked";
 							
 							
 							try{
-								e[c].apply(bm,arguments)}catch(p){console.log("UnhandledException ("+p+") in "+bmHooks[j]+" Callback")}
+								e[c].apply(bm,arguments)}catch(p){
+								  //console.log("UnhandledException ("+p+") in "+bmHooks[j]+" Callback")
+                }
 					}
 					arguments[1]=k+"Up";
 				}
@@ -102,7 +104,7 @@ C()&&y(a,b,c,e)},removeSWF:function(a){g.w3&&B(a)},createCSS:function(a,b,c,f){g
 					e[c].apply(bm,arguments);
 				}
 				catch(z){
-					console.log("UnhandledException ("+z+") in "+bmHooks[j]+" Callback");
+					//console.log("UnhandledException ("+z+") in "+bmHooks[j]+" Callback");
 					};
 			};
 			
@@ -318,7 +320,7 @@ bm.start=function()
 bm.loadDesign = function (uri,callback) {
 
   var xobj = new XMLHttpRequest();
-  xobj.overrideMimeType("application/json");
+  //xobj.overrideMimeType("application/json");
   xobj.open('GET', uri, true);
  
   xobj.onreadystatechange = function () {     
