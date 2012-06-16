@@ -650,7 +650,6 @@ cr.behaviors = {};
 
       var gameStarted = false;
       function emulateKeyEvent(key,isDown){
-        //console.log(key+(isDown?' keyDown':' keyUp'));
         if(isDown){
           if(key=="flip"&&!gameStarted){
             globalRunTime.changelayout = globalLayouts[2];
@@ -755,7 +754,6 @@ cr.behaviors = {};
             this.types_by_index.push(type_inst);
             if (plugin.singleglobal) {
                 var instance = new plugin.Instance(type_inst);
-                console.log(type_inst);
                 instance.uid = this.next_uid;
                 this.next_uid++;
                 instance.iid = 0;
