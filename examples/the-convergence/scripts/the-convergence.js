@@ -538,127 +538,54 @@ cr.behaviors = {};
         this.extra = {};
         cr.seal(this);
         
-      // Brass Monkey Start
-      var layout = [{
-            type:       "image",
-            image:      0,
-            x:          0,
-            y:          0,
-            width:      480,
-            height:     320
-          }, {
-            type:       "button",
-            handler:    "left",
-            imageUp:    1,
-            imageDown:  2,
-            x:          0,
-            y:          113,
-            width:      103,
-            height:     103
-          }, {
-            type:       "button",
-            handler:    "right",
-            imageUp:    3,
-            imageDown:  4,
-            x:          167,
-            y:          113,
-            width:      103,
-            height:     103
-          }, {
-            type:       "button",
-            handler:    "flip",
-            imageUp:    5,
-            imageDown:  6,
-            x:          280,
-            y:          92,
-            width:      192,
-            height:     146
-          }];
-          
-      bm.init({
-        name: "The Convergence",        
-        bmMaxPlayers:1,
-        bmAppId:"dfbc9769ef641e415aac8ee86224c9fa",
-        swfURL:"../../swf/bin/brassmonkey.swf",
-        design: {
-          orientation: "landscape",
-          touchEnabled: false,
-          accelerometerEnabled: false,
-          images:[
-            'images/background.png',
-            'images/left.png',
-            'images/left-down.png',
-            'images/right.png',
-            'images/right-down.png',
-            'images/flip.png',
-            'images/flip-down.png'
-          ],
-          layout:layout
-        }
-      });
+      // Brass Monkey Custom Logic Start
+        // Make global functions that controller.js code can call into.
       
-   	bm.onDeviceAvailable(function(device){  		
-    		device.controlMode=bm.MODE_GAMEPAD;
-    		return device;
-   	});
-    	
-      bm.onShowSlot(function(color){
-        //document.getElementById('slot-color').style.background = color;
-      });
-      
-      // I couldn't quite unwind where the instance that has the keyMap is created.
+    	// I couldn't quite unwind where the instance that has the keyMap is created.
       // Instead I just create a global and set it where the instance onKeyDown/onKeyUp
       // handlers are created.
       // The global var is named 'emulatedKeyInstance'
-      function emulatedKeyUp(keyCode){
-        this.keyMap[keyCode] = false;
-        this.triggerKey = keyCode;
-        this.eventRan = false;
-        this.runtime.trigger(cr.plugins_.Keyboard.prototype.cnds.OnKeyReleased, this);
-        if (this.eventRan || this.usedKeys[keyCode]) {
-            this.usedKeys[keyCode] = true;
-        }
-      }
-      
-      function emulatedKeyDown(keyCode){
-        if (this.keyMap[keyCode]) {
-            return;
-        }
-        this.keyMap[keyCode] = true;
-        this.eventRan = this.runtime.trigger(cr.plugins_.Keyboard.prototype.cnds.OnAnyKey, this);
-        this.triggerKey = keyCode;
-        this.runtime.trigger(cr.plugins_.Keyboard.prototype.cnds.OnKey, this);
-        if (this.eventRan) {
-            this.usedKeys[keyCode] = true;
-        }
-      }
-      
-      bm.onDeviceConnected(function(device){
-        bm.enableTouch(device.deviceId,true,1.0/60.0);
-      });
-      
       var keyMapping = {
-            left: 37,
-            right: 39,
-            flip: 90
-          };
+        left: 37,
+        right: 39,
+        flip: 90
+      };
+      emulatedKeyUp = function(button){
       
-      bm.onInvocation(function(invoke, deviceId){
-        var keyDown = invoke.parameters[0].Value=="down"        
-        emulateKeyEvent(invoke.methodName,keyDown);
-      });
-
-      var gameStarted = false;
-      function emulateKeyEvent(key,isDown){
-        if(isDown){
-          if(key=="flip"&&!gameStarted){
-            globalRunTime.changelayout = globalLayouts[2];
-            gameStarted = true;
+        emulatedKeyInstance.keyMap[keyMapping[button]] = false;
+        emulatedKeyInstance.triggerKey = keyMapping[button];
+        emulatedKeyInstance.eventRan = false;
+        emulatedKeyInstance.runtime.trigger(cr.plugins_.Keyboard.prototype.cnds.OnKeyReleased, emulatedKeyInstance);
+        if (emulatedKeyInstance.eventRan || emulatedKeyInstance.usedKeys[keyMapping[button]]) {
+            emulatedKeyInstance.usedKeys[keyMapping[button]] = true;
+        }
+      }
+      
+      emulatedKeyDown = function(button){
+        if (emulatedKeyInstance.keyMap[keyMapping[button]]) {
             return;
-          }  
-          emulatedKeyDown.call(emulatedKeyInstance,keyMapping[key]);
+        }
+        emulatedKeyInstance.keyMap[keyMapping[button]] = true;
+        emulatedKeyInstance.eventRan = emulatedKeyInstance.runtime.trigger(cr.plugins_.Keyboard.prototype.cnds.OnAnyKey, emulatedKeyInstance);
+        emulatedKeyInstance.triggerKey = keyMapping[button];
+        emulatedKeyInstance.runtime.trigger(cr.plugins_.Keyboard.prototype.cnds.OnKey, emulatedKeyInstance);
+        if (emulatedKeyInstance.eventRan) {
+            emulatedKeyInstance.usedKeys[keyMapping[button]] = true;
+        }
+      }
+      
+      // Start the game if the game hasn't already been started
+      // return true if the game just got started otherwise
+      // always return false and do nothing if the game has
+      // already started      
+      var gameStarted = false;
+      startGame = function(){
+        if(gameStarted){
+          return false;
         } else {
-          emulatedKeyUp.call(emulatedKeyInstance,keyMapping[key]);
+          globalRunTime.changelayout = globalLayouts[2];
+          gameStarted = true;
+          return true;
         }
       }
       // Brass Monkey End

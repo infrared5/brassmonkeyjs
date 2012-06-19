@@ -250,7 +250,7 @@ function I()
 }
 
 
-bm={version:"0.3.0"};
+bm={version:"0.4.0"};
 bm.MODE_GAMEPAD=0;	
 bm.MODE_KEYBOARD=1;		
 bm.MODE_NAVIGATION=2;		

@@ -1,86 +1,58 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8" />
-  	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=IE8" />
-    <title>The Convergence Brass Monkey Mod - Brass Monkey</title>
-    
-    <script type="text/javascript" src="../../brassmonkey.js"></script>
-    
-  	<link rel="stylesheet" type="text/css" href="styles/main.css"/>
-	
-<script type="text/javascript">
-
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-9628132-5']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-
-</script>
-</head> 
- 
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=IE8" />
+  <title>The Convergence Brass Monkey Mod - Brass Monkey</title>
+  
+  <link rel="stylesheet" type="text/css" href="styles/main.css"/>	
+</head>  
 <body>
 	<!-- The canvas the project will render to.  If you change its ID, don't forget to change the
 	ID the runtime looks for in the jQuery ready event (above). -->
 	<div id="ContentWrapper">
-	<canvas id="c2canvas" width="960" height="640" oncontextmenu="return false;" onselectstart="return false;" >
-    <div class="wrapper">
-  		<div class="error-message">
-        <div class="error-message-wrapper">
-          <div class="left">
-            <img src="http://prod.playbrassmonkey.com/images/warningWhite.png">
-          </div>
-          <div class="right">  
-            <p>Your browser does not appear to support HTML5.  Try upgrading your browser to the latest version.</p>
+  	<canvas id="c2canvas" width="960" height="640" oncontextmenu="return false;" onselectstart="return false;" >
+      <div class="wrapper">
+    		<div class="error-message">
+          <div class="error-message-wrapper">
+            <div class="left">
+              <img src="http://prod.playbrassmonkey.com/images/warningWhite.png">
+            </div>
+            <div class="right">  
+              <p>Your browser does not appear to support HTML5.  Try upgrading your browser to the latest version.</p>
+            </div>
           </div>
         </div>
+        <div class="content">
+      		<h1 class="what-is-a-browser"><a href="http://www.whatbrowser.org" target="_top">What is a browser?</a></h1>
+          <div class="browsers">
+            <h2>Upgrade to the latest version of your favorite browser.</h2>
+        		<p><a href="http://www.microsoft.com/windows/internet-explorer/default.aspx" target="_top">Microsoft Internet Explorer</a></p>
+        		<p><a href="http://www.mozilla.com/firefox/" target="_top">Mozilla Firefox</a></p>
+        		<p><a href="http://www.google.com/chrome/" target="_top">Google Chrome</a></p>
+        		<p><a href="http://www.apple.com/safari/download/" target="_top">Apple Safari</a></p>
+        		<p><a href="http://www.google.com/chromeframe" target="_top">Google Chrome Frame for Internet Explorer</a></p>
+      		</div>		
+    		</div>
       </div>
-      <div class="content">
-        
-      	
-    		<h1 class="what-is-a-browser"><a href="http://www.whatbrowser.org" target="_top">What is a browser?</a></h1>
-        
-        <div class="browsers">
-          <h2>Upgrade to the latest version of your favorite browser.</h2>
-      		<p><a href="http://www.microsoft.com/windows/internet-explorer/default.aspx" target="_top">Microsoft Internet Explorer</a></p>
-      		<p><a href="http://www.mozilla.com/firefox/" target="_top">Mozilla Firefox</a></p>
-      		<p><a href="http://www.google.com/chrome/" target="_top">Google Chrome</a></p>
-      		<p><a href="http://www.apple.com/safari/download/" target="_top">Apple Safari</a></p>
-      		<p><a href="http://www.google.com/chromeframe" target="_top">Google Chrome Frame for Internet Explorer</a></p>
-    		</div>		
-    		
-  		</div>
-    </div>
-	</canvas>
-	
-    
-    </div>
-    
-    
+  	</canvas>
+  </div>
+      
 	<!-- Pages load faster with scripts at the bottom -->
-	
+	<script type="text/javascript" src="../../brassmonkey.js"></script>
 	<script src="scripts/jquery-1.6.3.min.js"></script>
+	<script src="scripts/controls.js"></script>
 
-
-	
-    <!-- The runtime script.  You can rename it, but don't forget to rename the reference here as well.
-    This file will have been minified and obfuscated if you enabled "Minify script" during export. -->
+  <!-- The runtime script.  You can rename it, but don't forget to rename the reference here as well. -->
+  <!-- This file will have been minified and obfuscated if you enabled "Minify script" during export. -->
 	<script src="scripts/the-convergence.js"></script>
-
-
-    <script>
-        // Start the Construct 2 project running on window load.
-        jQuery(document).ready(function ()
-        {
-            // Create new runtime using the c2canvas
-			cr.createRuntime("c2canvas");
-        });
-    </script>
+  <script>
+    // Start the Construct 2 project running on window load.
+    $(document).ready(function(){
+      // Create new runtime using the c2canvas
+      cr.createRuntime("c2canvas");
+    });
+  </script>
 </body> 
 </html> 
 <!-- Localized -->
