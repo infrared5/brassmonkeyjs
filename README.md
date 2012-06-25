@@ -17,7 +17,7 @@ Get the App
 
 [Install Brass Monkey via the App Store.](http://itunes.apple.com/us/app/brass-monkey/id455013514?ls=1&mt=8 "Brass Monkey on the App Store")
 
-Get the SDK (Includes demos. Will separate soon.)
+Get the SDK (Includes demos)
 -------------
 
 [Download the .ZIP.](https://github.com/brassmonkey/brassmonkeyjs/zipball/master "Download the SDK .ZIP")
