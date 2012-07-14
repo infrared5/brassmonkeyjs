@@ -4,3 +4,5 @@
 .metadata/.plugins/com.adobe.flexbuilder.codemodel/searchCache/
 .metadata/.plugins/com.adobe.flexbuilder.codemodel/SwcCache/
 .metadata/.plugins/org.eclipse.core.resources/.root
+
+.metadata/.plugins/com.adobe.flexbuilder.codemodel/projects/projectUnits/library_*.cache
