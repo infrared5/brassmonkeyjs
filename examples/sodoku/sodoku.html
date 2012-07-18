@@ -1,0 +1,150 @@
+<html>
+<head>
+  <title>Sodoku - HTML5 SDK for Brass Monkey</title>
+  
+  <script type="text/javascript" src="../../brassmonkey.js"></script>
+  <script type="text/javascript" src="sodoku.js"></script>
+  
+  <style>
+    #content{
+      margin: 0 auto;
+      width: 546px;
+      margin-top: 20px;
+    }
+    #board{
+      width: 546px;
+      height: 546px;
+    }
+    .sector{
+      width: 180px;
+      height: 180px;
+      border: thin solid #bfbfbf;
+      float:left;
+    }
+    .cell{
+      width: 58px;
+      height: 58px;
+      border: thin solid #efefef;
+      float: left;
+    }
+    .number{
+      width: 60px;
+      height: 60px;
+      position: absolute;
+      z-index: 2;
+      text-align: center;
+      line-height: 58px;
+      font-family: Arial;
+      font-size: 20px;
+      color: #0f0f0f;
+    }
+  </style>
+  
+  <script>
+    bm.init({
+    	name: "Sodoku - SDK Examples",
+      bmMaxPlayers:1,
+      swfURL:"../../swf/bin/brassmonkey.swf",
+      design: {
+        orientation: "portrait",
+        touchEnabled: false,
+        accelerometerEnabled: false,
+        images:[
+          '../shared/background.png'
+        ],
+        layout:[{
+          type:   "image",
+          image:  0,
+          x:      0,
+          y:      0,
+          width:  320,
+          height: 480
+        }]
+      }
+    });
+    
+  	bm.onDeviceAvailable(function(a){  		
+  		a.controlMode=bm.MODE_GAMEPAD;
+  		return a;
+  	});
+    
+    bm.onShowSlot(function(color){
+      document.getElementById('slot-color').style.background = color;
+    });
+
+    function startGame(){
+      //Generate a complete puzzle
+      grid = CU.Sudoku.generate();
+       
+      //Clear 60 cells from the puzzle
+      CU.Sudoku.cull(grid, 30);      
+      
+      var boardElem = document.getElementById('board');
+      var board = new Array(9);
+      function initGame(){
+        // 
+        for(var sectors=0;sectors<9;sectors++){
+          var sectorElem = document.createElement('div');
+          sectorElem.className="sector";
+          boardElem.appendChild(sectorElem);
+          
+          board[sectors] = new Array(9);
+          
+          for(var cell=0;cell<9;cell++){
+            var cellElem = document.createElement('div');
+            cellElem.className="cell";
+            sectorElem.appendChild(cellElem);
+            
+            board[sectors][cell] = cellElem;
+          }
+        }
+        
+        // Create number overlay elements
+        numbers = new Array(9);
+        for(var row=0;row<9;row++){
+          numbers[row] = new Array(9);
+          
+          for(var col=0;col<9;col++){
+            var numElem = document.createElement('div');
+            numElem.className = "number";
+            numElem.style.marginLeft = col*60+"px";
+            numElem.style.marginTop = row*60+"px";
+            
+            boardElem.appendChild(numElem);
+            
+            numbers[row][col] = numElem;
+          }
+        }
+      }
+      
+      function updateBoard(){
+        for(var row=0;row<9;row++){
+          for(var col=0;col<9;col++){
+            if(grid.rows[row][col]!=0){
+              numbers[row][col].innerHTML = grid.rows[row][col].toString();
+            } else {
+              numbers[row][col].innerHTML = "";
+            }
+          }
+        }
+      }
+      
+      initGame();
+      
+      updateBoard();
+    }
+    
+    
+    
+    window.addEventListener?window.addEventListener("DOMContentLoaded",startGame,false):window.attachEvent("onload",startGame)
+
+  </script>
+</head>
+<body style="margin:0px;background:white;">
+  <div id="slot-color" style="display:none;width:100px;height:100px;text-align:center;line-height:100px;font-family:Arial;">Slot Color</div>
+  <div id="content">
+    <div id="board"></div>
+  </div>
+</body>
+</html>
+
