@@ -15,7 +15,7 @@ bm.init({
   // Location of the brassmonkey.swf the SDK depends on.
   // Coming soon this dependency will be removed for platforms
   // like Mobile Safari that don't support flash.
-  swfURL:"../../swf/bin/brassmonkey.swf",
+  swfURL:"../../src/swf/bin/brassmonkey.swf",
   
   // Describe the controller's design/layout
   design: {

@@ -382,6 +382,15 @@ bm.onDeviceAvailable=function(a)
 	bm.da.push(a);
 };
 
+
+bm.measurePing=function(deviceId){
+  return bm.getBrassMonkey().measurePing(deviceId);
+}
+
+bm.onDeviceEchoInternal=function(time,device){
+  console.log(time);
+}
+
 bm.onDeviceAvailableInternal=function(a)
 {
 	//console.log('onDeviceAvailableInternal '+ a.deviceId);
