@@ -387,8 +387,8 @@ bm.measurePing=function(deviceId){
   return bm.getBrassMonkey().measurePing(deviceId);
 }
 
-bm.onDeviceEchoInternal=function(time,device){
-  console.log(time);
+bm.onDeviceEchoInternal=function(rtt,device){
+  //console.log("Round Trip Time ("+rtt+") Speed ("+Math.floor(rtt/2)+")");
 }
 
 bm.onDeviceAvailableInternal=function(a)
