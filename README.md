@@ -9,13 +9,9 @@ Installation
 
 Prerequisites
 -------------
-* iPhone, iPad, or an iPod Touch.
-* Modern browser.
-
-Get the App
--------------
-
-[Install Brass Monkey via the App Store.](http://itunes.apple.com/us/app/brass-monkey/id455013514?ls=1&mt=8 "Brass Monkey on the App Store")
+* An Android or iOS device.
+* The Brass Monkey App. (Available on the [App Store](http://itunes.apple.com/us/app/brass-monkey/id455013514?ls=1&mt=8 "Brass Monkey on the App Store") or [Google Play](https://play.google.com/store/apps/details?id=com.brassmonkey.controller&hl=en "Brass Monkey on Google Play"))
+* A modern browser.
 
 Get the SDK (Includes demos)
 -------------
