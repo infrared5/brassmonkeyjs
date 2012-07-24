@@ -39,5 +39,6 @@ Running the demos locally
 =============
 
 * Get the SDK as mentioned above.
-* Go into the SDK folder.
-* Open index.html in your browser.
+* Files must be hosted in order to work.
+* On Mac/Linux you can just run './server' from the brassmonkeyjs folder and then open http://localhost:8080/
+* If on Windows you'll have to put the brassmonkeyjs folder somewhere and then navigate to whereever index.html ends up.
