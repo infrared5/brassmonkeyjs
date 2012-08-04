@@ -499,6 +499,7 @@ bm.onDeviceConnected(function(device){
     hackForOldNavEventsEnabled: false
   };
 
+
 /*
   if(doPings){
     pingCBIntervals[device.deviceId] = setInterval(function(){

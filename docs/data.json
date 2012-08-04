@@ -1,0 +1,382 @@
+{
+    "project": {},
+    "files": {
+        "src/brassmonkey.js": {
+            "name": "src/brassmonkey.js",
+            "modules": {},
+            "classes": {
+                "BrassMonkey": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/device.js": {
+            "name": "src/device.js",
+            "modules": {},
+            "classes": {
+                "Device": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/events.js": {
+            "name": "src/events.js",
+            "modules": {},
+            "classes": {
+                "DeviceAvailableEvent": 1,
+                "DeviceConnectedEvent": 1,
+                "DeviceDisconnectedEvent": 1,
+                "ShowSlotColorEvent": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/extras.js": {
+            "name": "src/extras.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {},
+    "classes": {
+        "BrassMonkey": {
+            "name": "BrassMonkey",
+            "shortname": "BrassMonkey",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src/brassmonkey.js",
+            "line": 3,
+            "description": "The Brass Monkey SDK. This is a singleton accessed like so:\n\n    bm.init(…);\n    \nor\n\n    bm.init(...);",
+            "static": 1
+        },
+        "Device": {
+            "name": "Device",
+            "shortname": "Device",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src/device.js",
+            "line": 2,
+            "description": "Each connected device is represented by an instance of this class. \n\nCommunicating with a particular device is done through this class' methods."
+        },
+        "DeviceAvailableEvent": {
+            "name": "DeviceAvailableEvent",
+            "shortname": "DeviceAvailableEvent",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src/events.js",
+            "line": 3,
+            "description": "Event called when a mobile device first establishes a connection. \n\n**Note:**"
+        },
+        "DeviceConnectedEvent": {
+            "name": "DeviceConnectedEvent",
+            "shortname": "DeviceConnectedEvent",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src/events.js",
+            "line": 21,
+            "description": "Event called when a mobile device successfully established a connection."
+        },
+        "DeviceDisconnectedEvent": {
+            "name": "DeviceDisconnectedEvent",
+            "shortname": "DeviceDisconnectedEvent",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src/events.js",
+            "line": 38,
+            "description": "Event called when a mobile device is disconnected."
+        },
+        "ShowSlotColorEvent": {
+            "name": "ShowSlotColorEvent",
+            "shortname": "ShowSlotColorEvent",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src/events.js",
+            "line": 56,
+            "description": "Event called when the SDK has received it's assigned slot index/color.\n\nThis is the unique color that is displayed in top right of the console, in your game, and \non the device list in the controller app. It's used to help users disambiguate which\nconsole/game they want to connect to, if there is more than one on your network."
+        }
+    },
+    "classitems": [
+        {
+            "file": "src/brassmonkey.js",
+            "line": 18,
+            "description": "Version number of the SDK. \n\nFormat:\n\n    Major.Minor.Patch\n\nExample:\n\n    \"0.5.1\"\n    \nFollows the [Semantic Versioning Specification.](http://semver.org)",
+            "itemtype": "property",
+            "name": "version",
+            "type": "String",
+            "class": "BrassMonkey"
+        },
+        {
+            "file": "src/brassmonkey.js",
+            "line": 42,
+            "description": "Initialize Brass Monkey",
+            "itemtype": "method",
+            "name": "init",
+            "params": [
+                {
+                    "name": "options",
+                    "description": "Options \n  for initializing Brass Monkey.",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "name",
+                            "description": "The name of your game. This is what \n    is displayed on the phone when you pick what to connect to.\n    \n    Example: \"Contamination\"",
+                            "type": "String"
+                        },
+                        {
+                            "name": "appID",
+                            "description": "The unique identifier of your Game/App. You\n    must generate this through the developer admin interface.",
+                            "type": "String"
+                        },
+                        {
+                            "name": "maxPlayers",
+                            "description": "The number of players that can play your game.",
+                            "type": "Number",
+                            "optional": true,
+                            "optdefault": "1"
+                        },
+                        {
+                            "name": "swfURL",
+                            "description": "The location of the SWF file that implements \n    the SDK when there a browser doesn't support Websockets. \n    \n    If not provided the matching version on the Brass Monkey CDN is used.",
+                            "type": "URL",
+                            "optional": true
+                        }
+                    ]
+                }
+            ],
+            "class": "BrassMonkey"
+        },
+        {
+            "file": "src/brassmonkey.js",
+            "line": 289,
+            "description": "Enumerate Events here. I (Francois) tried to put these in events.js but couldn't get \nthem to properly associate with the BrassMonkey Class.",
+            "class": "BrassMonkey"
+        },
+        {
+            "file": "src/brassmonkey.js",
+            "line": 294,
+            "description": "Event called when a mobile device successfully established a connection.",
+            "itemtype": "event",
+            "name": "deviceavailable",
+            "params": [
+                {
+                    "name": "event",
+                    "description": "",
+                    "type": "DeviceAvailableEvent"
+                }
+            ],
+            "class": "BrassMonkey"
+        },
+        {
+            "file": "src/brassmonkey.js",
+            "line": 301,
+            "description": "Event called when a mobile device successfully established a connection.",
+            "itemtype": "event",
+            "name": "deviceconnected",
+            "params": [
+                {
+                    "name": "event",
+                    "description": "",
+                    "type": "DeviceConnectedEvent"
+                }
+            ],
+            "class": "BrassMonkey"
+        },
+        {
+            "file": "src/brassmonkey.js",
+            "line": 308,
+            "description": "Event called when a mobile device is disconnected.",
+            "itemtype": "event",
+            "name": "devicedisconnected",
+            "params": [
+                {
+                    "name": "event",
+                    "description": "",
+                    "type": "DeviceDisconnectedEvent"
+                }
+            ],
+            "class": "BrassMonkey"
+        },
+        {
+            "file": "src/brassmonkey.js",
+            "line": 315,
+            "description": "Event called when a mobile device is disconnected.",
+            "itemtype": "event",
+            "name": "devicedisconnected",
+            "params": [
+                {
+                    "name": "event",
+                    "description": "",
+                    "type": "DeviceDisconnectedEvent"
+                }
+            ],
+            "class": "BrassMonkey"
+        },
+        {
+            "file": "src/device.js",
+            "line": 11,
+            "description": "Display name of the user associated with this device.\n\nIf the user is logged in on their device this will be their profile name, otherwise it will be the name they gave their device.",
+            "itemtype": "property",
+            "name": "name",
+            "type": "String",
+            "class": "Device"
+        },
+        {
+            "file": "src/device.js",
+            "line": 21,
+            "description": "The unique identifier of this device.",
+            "itemtype": "property",
+            "name": "id",
+            "type": "String",
+            "class": "Device"
+        },
+        {
+            "file": "src/device.js",
+            "line": 39,
+            "description": "Enable/Disable touch events.\n\nTouch events are off by default to reduce network traffic and should only be enabled if you are doing touch based controls.",
+            "itemtype": "method",
+            "name": "enableTouch",
+            "params": [
+                {
+                    "name": "enable",
+                    "description": "If 'true' touches are enabled, if 'false' touches are disabled.",
+                    "type": "Bool"
+                },
+                {
+                    "name": "frequency",
+                    "description": "Frequency at which touch events are gathered and sent from the device. (Milliseconds)",
+                    "type": "Float",
+                    "optional": true
+                }
+            ],
+            "class": "Device"
+        },
+        {
+            "file": "src/device.js",
+            "line": 61,
+            "description": "Enable/Disable accelerometer events.\n\nAccelerometer events are off by default to reduce network traffic and should only be enabled if you are doing touch based controls.",
+            "itemtype": "method",
+            "name": "enableAccelerometer",
+            "params": [
+                {
+                    "name": "enable",
+                    "description": "If 'true' touches are enabled, if 'false' touches are disabled.",
+                    "type": "Bool"
+                },
+                {
+                    "name": "frequency",
+                    "description": "Frequency at which touch events are gathered and sent from the device. (Milliseconds)",
+                    "type": "Float",
+                    "optional": true
+                }
+            ],
+            "class": "Device"
+        },
+        {
+            "file": "src/device.js",
+            "line": 83,
+            "description": "Set which controller mode the device is in.",
+            "itemtype": "method",
+            "name": "setMode",
+            "params": [
+                {
+                    "name": "mode",
+                    "description": "Which mode do you want to set?\n\n  **\"gamepad\"** Show your custom controller layout.\n  \n  **\"keyboard\"** Show the built in keyboard input layout.\n  \n  **\"navigation\"** Show the built in navigation input layout.\n\n  **\"wait\"** Show the waiting/loading screen.",
+                    "type": "String"
+                }
+            ],
+            "class": "Device"
+        },
+        {
+            "file": "src/device.js",
+            "line": 128,
+            "description": "Get which controller mode the device is in.",
+            "itemtype": "method",
+            "name": "getMode",
+            "return": {
+                "description": "**\"gamepad\"**, **\"keyboard\"**, **\"navigation\"**, or **\"wait\"**.",
+                "type": "String"
+            },
+            "class": "Device"
+        },
+        {
+            "file": "src/events.js",
+            "line": 12,
+            "description": "Device Associated with this event.",
+            "itemtype": "property",
+            "name": "device",
+            "type": "{Device}",
+            "class": "DeviceAvailableEvent"
+        },
+        {
+            "file": "src/events.js",
+            "line": 29,
+            "description": "Device Associated with this event.",
+            "itemtype": "property",
+            "name": "device",
+            "type": "{Device}",
+            "class": "DeviceConnectedEvent"
+        },
+        {
+            "file": "src/events.js",
+            "line": 46,
+            "description": "Device Associated with this event.",
+            "itemtype": "property",
+            "name": "device",
+            "type": "{Device}",
+            "class": "DeviceDisconnectedEvent"
+        },
+        {
+            "file": "src/events.js",
+            "line": 75,
+            "description": "Device Associated with this event.",
+            "itemtype": "property",
+            "name": "device",
+            "type": "{Device}",
+            "class": "ShowSlotColorEvent"
+        },
+        {
+            "file": "src/events.js",
+            "line": 83,
+            "description": "Unique identifier to your network. (Each instance of Brass Monkey running get it's own slotIndex number)",
+            "itemtype": "property",
+            "name": "slotIndex",
+            "type": "{Number}",
+            "class": "ShowSlotColorEvent"
+        },
+        {
+            "file": "src/events.js",
+            "line": 94,
+            "description": "Color to display on the screen. (CSS Style Hexidecimal)\n\nExample:\n\n    \"#ff0000\"",
+            "itemtype": "property",
+            "name": "color",
+            "type": "{String}",
+            "class": "ShowSlotColorEvent"
+        },
+        {
+            "file": "src/extras.js",
+            "line": 3,
+            "description": "Code for integration of Brass Monkey into the Brass Monkey Console",
+            "class": ""
+        }
+    ]
+}

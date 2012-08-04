@@ -2,7 +2,10 @@
 <head>
   <title>Modes - HTML5 SDK for Brass Monkey</title>
   
-  <script type="text/javascript" src="../../brassmonkey.js"></script>
+  <!--  Include development implementation of brassmonkey.js. 
+        RECOMMENDED: Use the minified brassmonkey.js when deploying. -->
+  <script type="text/javascript" src="../../src/swfobject.js"></script>
+  <script type="text/javascript" src="../../src/brassmonkey.js"></script>
 
   <script>
     bm.init({
@@ -49,13 +52,13 @@
     });
     
     function onload(){
-      document.getElementById('gamepad').onclick = function(){
+      document.getElementById('gamepad').onmousedown = function(){
         bm.setGamepadMode();
       }
-      document.getElementById('navigation').onclick = function(){
+      document.getElementById('navigation').onmousedown = function(){
         bm.setNavMode();
       }
-      document.getElementById('keyboard').onclick = function(){
+      document.getElementById('keyboard').onmousedown = function(){
         bm.setKeyboardMode("","Input some text..." );
       }
     }
@@ -73,7 +76,7 @@
 <body style="margin:0px;background:white;" onload="onload();">
   <div id="slot-color" style="width:100px;height:100px;text-align:center;line-height:100px;font-family:Arial;">Slot Color</div>
   
-  <h1>Select a Controller Mode</h1>
+  <h1>Click on an image to change the controller mode.</h1>
   <img id="gamepad" src="gamepad.png"/>
   <img id="navigation" src="navigation.png"/>
   <img id="keyboard" src="keyboard.png"/>

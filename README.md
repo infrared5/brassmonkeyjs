@@ -27,7 +27,15 @@ or,
 
 Documentation
 =============
-Real Documentation coming soon. For now, see our recently made [HTML5 SDK Introduction Slides.](http://blog.playbrassmonkey.com/2012/01/18/introducing-the-brass-monkey-html5-sdk/ "HTML5 SDK Introduction Slides").
+
+Read the (documents online)[http://playbrassmonkey.com/developers/html5/docs/] or locally by opening /docs/index.html
+
+Building the docs
+-------------
+* (Requires Node.)[http://nodejs.org/#download]
+* (Install YUIDoc)[http://yui.github.com/yuidoc/]
+* Run './bin/build-docs.sh' (Mac/Linux only for now. I think we'll do cross platform eventually via using pure Node scripts.)
+
 
 Also checkout the demos for some example code.
 
