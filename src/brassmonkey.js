@@ -48,7 +48,7 @@ Initialize Brass Monkey
   @param {String} options.name The name of your game. This is what 
     is displayed on the phone when you pick what to connect to.
     
-    Example: "Contamination"
+    Example: "Monkey Golf"
   @param {String} options.appID The unique identifier of your Game/App. You
     must generate this through the developer admin interface.
     
