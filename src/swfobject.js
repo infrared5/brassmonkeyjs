@@ -1,7 +1,7 @@
 /*!	SWFObject v2.2 <http://code.google.com/p/swfobject/> 
 	is released under the MIT License <http://www.opensource.org/licenses/mit-license.php> 
 */
-(function(){
+(function(bm){
 
 // Provide swfobject implementation if one wasn't provided
 if(window["swfobject"]===undefined){
@@ -787,4 +787,4 @@ swfobject = function() {
 
 }
 
-})();
+})(BrassMonkey);

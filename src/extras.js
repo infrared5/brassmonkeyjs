@@ -1,8 +1,8 @@
-(function(){
+(function(bm){
 
-/**
+/*
 Code for integration of Brass Monkey into the Brass Monkey Console
-**/
+*/
 
 var pingCBInterval,
     perDeviceAttributes = {},
@@ -43,4 +43,4 @@ bm.getVisibility = function(){
   return visibility;
 }
 
-})();
+})(BrassMonkey);

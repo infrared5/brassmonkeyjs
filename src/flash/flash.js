@@ -1,5 +1,20 @@
 (function(){
 
+bm.FlashRT = function(){
+}
+
+
+bm.FlashRT.prototype.start = function(options){
+
+  // By default the brassmonkey.swf is loaded off of our CDN. That can be overriden
+  // to use another location such as a local version
+  bm.options.swfURL = options.swfURL ? options.swfURL : 
+    'http://s3.amazonaws.com/files.playbrassmonkey.com/sdks/js/v'+
+    bm.version.replace(/\./g,'-')+'/brassmonkey.swf';
+}
+
+
+
 var flashObjID = Math.floor(Math.random()*16777215*16777215).toString(16);
 bm.getFlashObj = function(){
   return document.getElementById(flashObjID);

@@ -124,11 +124,13 @@ The unique identifier of this device.
 **&#x2F;
 this.id = &quot;fad2fd2fda2f2f&quot;;
 
+&#x2F;&#x2F; Internal vars.
+
 this.touchEnabled = false;
-this.touchFrequency = 1&#x2F;10;
+this.touchInterval = 1&#x2F;10;
 
 this.accelerometerEnabled = false;
-this.accelerometerFrequency = 1&#x2F;10;
+this.accelerometerInterval = 1&#x2F;10;
 
 this.mode = &quot;gamepad&quot;;
 
@@ -145,11 +147,10 @@ Touch events are off by default to reduce network traffic and should only be ena
 
 **&#x2F;
 
-bm.Device.prototype.enableTouch = function(enable,frequency){
+bm.Device.prototype.enableTouch = function(enable){
   var self = this;
   
   this.touchEnabled = enable;
-  this.touchFrequency = frequency;
 
   setTimeout(function(){
     bm.getFlashObj().EnableTouch(self.id,enable, frequency);
@@ -167,7 +168,7 @@ Accelerometer events are off by default to reduce network traffic and should onl
 
 **&#x2F;
 
-bm.enableAccelerometer=function(enable, frequency){
+bm.Device.prototype.enableAccelerometer=function(enable, frequency){
   var self = this;
   
   this.accelerometerEnabled = enable;

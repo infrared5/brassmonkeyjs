@@ -99,45 +99,6 @@
 (function(){
 
 &#x2F;**
-The Brass Monkey SDK. This is a singleton accessed like so:
-
-    bm.init(…);
-    
-or
-
-    bm.init(...);
-
-@class BrassMonkey
-@static
-**&#x2F;
-
-bm = {};
-
-&#x2F;**
-Version number of the SDK. 
-
-Format:
-
-    Major.Minor.Patch
-
-Example:
-
-    &quot;0.5.1&quot;
-    
-Follows the [Semantic Versioning Specification.](http:&#x2F;&#x2F;semver.org)
-
-@property version 
-@type String
-**&#x2F;
-bm.version: &quot;0.5.0&quot;;
-
-&#x2F;&#x2F; Constants
-bm.MODE_GAMEPAD=0;	
-bm.MODE_KEYBOARD=1;		
-bm.MODE_NAVIGATION=2;		
-bm.MODE_WAIT=3;
-
-&#x2F;**
 Initialize Brass Monkey
 
 @method init
@@ -146,7 +107,7 @@ Initialize Brass Monkey
   @param {String} options.name The name of your game. This is what 
     is displayed on the phone when you pick what to connect to.
     
-    Example: &quot;Contamination&quot;
+    Example: &quot;Monkey Golf&quot;
   @param {String} options.appID The unique identifier of your Game&#x2F;App. You
     must generate this through the developer admin interface.
     
@@ -160,27 +121,25 @@ Initialize Brass Monkey
     If not provided the matching version on the Brass Monkey CDN is used.
 **&#x2F;
 bm.init = function(options){
-  &#x2F;&#x2F; TODO: Add defaults to these options for those not provided.
-  bm.options = options;
   
-  &#x2F;&#x2F; By default the brassmonkey.swf is loaded off of our CDN. That can be overriden
-  &#x2F;&#x2F; to use another location such as a local version
-  bm.options.swfURL = options.swfURL ? options.swfURL : 
-    &#x27;http:&#x2F;&#x2F;s3.amazonaws.com&#x2F;files.playbrassmonkey.com&#x2F;sdks&#x2F;js&#x2F;v&#x27;+
-    bm.version.replace(&#x2F;\.&#x2F;g,&#x27;-&#x27;)+&#x27;&#x2F;brassmonkey.swf&#x27;;
-  
+  &#x2F;&#x2F; Store options for convenient access later
+    &#x2F;&#x2F; TODO: Add defaults to these options for those not provided.
+  bm.options = options;  
+    &#x2F;&#x2F; If no images&#x2F;layout were provided we default them to being empty arrays.
+    &#x2F;&#x2F; This could be the case for when certain hosts like the website only
+    &#x2F;&#x2F; use the built in controllers (Keyboard Mode, Navigation Mode, and any future
+    &#x2F;&#x2F; ones) 
   bm.options.design.images =  options.design.images?options.design.images:[];
   bm.options.design.layout =  options.design.layout?options.design.layout:[];
   
-  bm.getParams = {};
-  bm.wereParams = false;
-  document.location.search.replace(&#x2F;\??(?:([^=]+)=([^&amp;]*)&amp;?)&#x2F;g, function () {
-    function decode(s) {
-      return decodeURIComponent(s.split(&quot;+&quot;).join(&quot; &quot;));
-    }
-    bm.getParams[decode(arguments[1])] = decode(arguments[2]);
-    bm.wereParams=true;
-  });
+  &#x2F;&#x2F; Choose the proper communication runtime based on the environment.
+  &#x2F;&#x2F; For now it&#x27;s basically WebSockets in Mobile Safari otherwise Flash
+  &#x2F;&#x2F; everywhere else.
+  if(bm.detectIOS()){
+    bm.runtime = new bm.WebSocketsImpl();
+  } else {
+    bm.runtime = new bm.FlashImpl();
+  }
 }
 
 &#x2F;&#x2F;--------------------------------------
@@ -384,10 +343,10 @@ function getInternetExplorerVersion(){
   return rv;
 }
 
-&#x2F;**---------------------------------------------------------------------------------------
+&#x2F;*---------------------------------------------------------------------------------------
 Enumerate Events here. I (Francois) tried to put these in events.js but couldn&#x27;t get 
 them to properly associate with the BrassMonkey Class.
----------------------------------------------------------------------------------------**&#x2F;
+---------------------------------------------------------------------------------------*&#x2F;
 
 &#x2F;**
 Event called when a mobile device successfully established a connection.

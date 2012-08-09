@@ -1,4 +1,4 @@
-(function(){
+(function(bm){
 
 // Create bm namespace
 bm = {};
@@ -585,4 +585,4 @@ function checkForIE()
   return ver;
 }
 
-})();
+})(BrassMonkey);

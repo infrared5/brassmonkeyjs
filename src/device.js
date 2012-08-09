@@ -1,4 +1,4 @@
-(function(){
+(function(bm){
 /**
 Each connected device is represented by an instance of this class. 
 
@@ -25,6 +25,8 @@ The unique identifier of this device.
 @type String
 **/
 this.id = "fad2fd2fda2f2f";
+
+// Internal vars.
 
 this.touchEnabled = false;
 this.touchInterval = 1/10;
@@ -135,4 +137,4 @@ bm.getMode = function(mode){
   return this.mode;
 };
 
-})();
+})(BrassMonkey);

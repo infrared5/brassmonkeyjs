@@ -1,7 +1,8 @@
 /*jshint forin:true, noarg:true, noempty:true, eqeqeq:true, bitwise:false, strict:true, undef:true, unused:true, curly:true, browser:true, sub:true, maxerr:50 */
 /*global WebSocket:false */
-(function(context) {
+(function(bm) {
 "use strict";
+
 // Enums
 var PACKET_DATA = 0;
 var PACKET_PING = 1;
@@ -98,7 +99,7 @@ var makeInvoke = function(methodName, params) {
 
 var start = function() {
 	console.log("start");
-	connections.push( new Connection("deviceId", "monkeys-ipod.local.", 9011));
+	connections.push( new Connection("deviceId", "10.0.0.2", 9011));
 };
 
 var stop = function() {
@@ -499,11 +500,22 @@ if(INCLUDE_UNUSED_ENCODERS) {
 	};
 }
 
+/*
+bm.decodeObject = decodeObject;
+bm.encodeObject = encodeObject;
+bm.start = start;
+bm.stop = stop;
+*/
 
-context['bm'] = context['bm'] || {};
-context['bm']['decodeObject'] = decodeObject;
-context['bm']['encodeObject'] = encodeObject;
-context['bm']['start'] = start;
-context['bm']['stop'] = stop;
+bm.WebSocketsRT = function(){
+}
 
-})(this);
+bm.WebSocketsRT.prototype.start = function(options){
+  start();
+}
+
+bm.WebSocketsRT.prototype.stop = function(){
+  stop();
+}
+
+})(BrassMonkey);
