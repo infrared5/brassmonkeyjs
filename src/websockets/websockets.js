@@ -187,9 +187,10 @@ Connection.prototype.handleInvoke = function(invoke) {
 			encodeType : ENCODE_BYTE_CHUNK,
 			setId: 'testXML',
 			startByte: 0,
-			chunkSize: 184,
-			totalSize: 184,
-			data: 'PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KQk1BcHBsaWNhdGlvblNjaGVtZSB2ZXJzaW9uPSIwLjEiIG9yaWVudGF0aW9uPSJwb3J0cmFpdCIgdG91Y2hFbmFibGVkPSJubyIgYWNjZWxlcm9tZXRlckVuYWJsZWQ9Im5vIj4KPFJlc291cmNlcy8+PExheW91dC8+PC9CTUFwcGxpY2F0aW9uU2NoZW1lPg==' 
+			chunkSize: globalSchemaByteCount,
+			totalSize: globalSchemaByteCount,
+			data: globalSchema
+			//'PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KQk1BcHBsaWNhdGlvblNjaGVtZSB2ZXJzaW9uPSIwLjEiIG9yaWVudGF0aW9uPSJwb3J0cmFpdCIgdG91Y2hFbmFibGVkPSJubyIgYWNjZWxlcm9tZXRlckVuYWJsZWQ9Im5vIj4KPFJlc291cmNlcy8+PExheW91dC8+PC9CTUFwcGxpY2F0aW9uU2NoZW1lPg==' 
 		}
 	});
 };
@@ -515,8 +516,19 @@ bm.stop = stop;
 bm.WebSocketsRT = function(){
 }
 
-bm.WebSocketsRT.prototype.start = function(options){
-  start();
+
+var globalSchema,globalSchemaByteCount;
+bm.WebSocketsRT.prototype.start = function(){
+  // Load all of the images passed in before starting up the rest
+  // of the system.
+  // TODO: Can we do work in parallel with this?
+  bm.loadImages(bm.options.design.images,function(imageData){
+    var xml = bm.generateControllerXML(imageData);
+    console.log(xml);
+    globalSchema = Base64.encode(xml);
+    globalSchemaByteCount = xml.length;
+    start();
+  });
 }
 
 bm.WebSocketsRT.prototype.stop = function(){

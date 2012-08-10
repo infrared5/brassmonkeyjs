@@ -34,13 +34,15 @@ bm.start = function(options){
   //bm.options.design.images =  options.design.images?options.design.images:[];
   //bm.options.design.layout =  options.design.layout?options.design.layout:[];
   
+  bm.devices = [];
+  
   // Choose the proper communication runtime based on the environment.
   // For now it's basically WebSockets in Mobile Safari otherwise Flash
   // everywhere else.
   if(true){//bm.detectIOS()){
-    bm.runtime = new bm.WebSocketsImpl();
+    bm.runtime = new bm.WebSocketsRT();
   } else {
-    bm.runtime = new bm.FlashImpl();
+    bm.runtime = new bm.FlashRT();
   }
   
   bm.runtime.start();

@@ -5,6 +5,8 @@
   <title>WebSocket Test</title>
 
   <script language="javascript" type="text/javascript" src="../core.js" ></script>
+  <script language="javascript" type="text/javascript" src="../base64.js" ></script>
+  <script language="javascript" type="text/javascript" src="../resources.js" ></script>
   <script language="javascript" type="text/javascript" src="../brassmonkey.js" ></script>
   <script language="javascript" type="text/javascript" src="websockets.js" ></script>
 
@@ -15,7 +17,41 @@
     
     function testWebSocket(){
       bm.stop();
-      bm.start();
+      bm.start({
+        
+        name: "Websockets Test",
+        maxPlayers: 1,
+        
+        //appId:"62e822bc0e6b9f22fc158763591845be",
+        
+        design: {
+          orientation: "portrait",
+          touchEnabled: false,
+          accelerometerEnabled: false,
+          images:[
+            '../../examples/shared/background.png',
+            '../../examples/buttons/button-up.png',
+            '../../examples/buttons/button-down.png'
+          ],
+          layout:[{
+            type:   "image",
+            image:  0,
+            x:      0,
+            y:      0,
+            width:  320,
+            height: 480
+          }, {
+            type:       "button",
+            handler:    "push",
+            imageUp:    1,
+            imageDown:  2,
+            x:          (320-160)/2-3,
+            y:          (480-160)/2,
+            width:      160,
+            height:     160
+          }]
+        }
+      });
     }
   
     function onOpen(evt){
