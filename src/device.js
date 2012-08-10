@@ -8,35 +8,43 @@ Communicating with a particular device is done through this class' methods.
 **/
 
 bm.Device = function(){
-/**
-Display name of the user associated with this device.
-
-If the user is logged in on their device this will be their profile name, otherwise it will be the name they gave their device. 
-
-@property name 
-@type String
-**/
-this.name = "Name";
-
-/**
-The unique identifier of this device.
-
-@property id 
-@type String
-**/
-this.id = "fad2fd2fda2f2f";
-
-// Internal vars.
-
-this.touchEnabled = false;
-this.touchInterval = 1/10;
-
-this.accelerometerEnabled = false;
-this.accelerometerInterval = 1/10;
-
-this.mode = "gamepad";
-
+  bm.EventEmitter.call(this);
+  
+  /**
+  Display name of the user associated with this device.
+  
+  If the user is logged in on their device this will be their profile name, otherwise it will be the name they gave their device. 
+  
+  @property name 
+  @type String
+  **/
+  this.name = "Name";
+  
+  /**
+  The unique identifier of this device.
+  
+  @property id 
+  @type String
+  **/
+  this.id = "fad2fd2fda2f2f";
+  
+  // Internal vars.
+  
+  this.touchEnabled = false;
+  this.touchInterval = 1/10;
+  
+  this.accelerometerEnabled = false;
+  this.accelerometerInterval = 1/10;
+  
+  this.mode = "gamepad";
 }
+
+// TODO: Make some inheritance utilities
+bm.Device.prototype.on = bm.EventEmitter.prototype.on;
+bm.Device.prototype.addEventListener = bm.EventEmitter.prototype.addEventListener;
+bm.Device.prototype.off = bm.EventEmitter.prototype.off;
+bm.Device.prototype.removeEventListener = bm.EventEmitter.prototype.removeEventListener;
+bm.Device.prototype.trigger = bm.EventEmitter.prototype.trigger;
 
 /**
 Enable/Disable touch events.
@@ -96,7 +104,7 @@ Set which controller mode the device is in.
   **"wait"** Show the waiting/loading screen. 
 
 **/
-bm.setMode = function(mode){
+bm.Device.prototype.setMode = function(mode){
   if(this.mode==mode){
     return;// Ignore if not different
   }
@@ -105,22 +113,22 @@ bm.setMode = function(mode){
   switch(mode){
     case "gamepad":
       if( bm.getFlashObj()!==undefined && bm.getFlashObj().SetGamepadMode!==undefined){
-        bm.getFlashObj().SetGamepadMode(deviceId!==undefined?deviceId:"");
+        bm.getFlashObj().SetGamepadMode(this.mode);
       }
       break;
     case "keyboard":
       if( bm.getFlashObj()!==undefined && bm.getFlashObj().SetKeyboardMode!==undefined){
-        bm.getFlashObj().SetKeyboardMode(deviceId!==undefined?deviceId:"",text!==undefined?text:"");
+        bm.getFlashObj().SetKeyboardMode(this.mode);
       }
       break;
     case "navigation":
       if( bm.getFlashObj()!==undefined && bm.getFlashObj().SetNavMode!==undefined){
-        bm.getFlashObj().SetNavMode(deviceId!==undefined?deviceId:"");
+        bm.getFlashObj().SetNavMode(this.mode);
       }    
       break;
     case "wait":
       if( bm.getFlashObj()!==undefined && bm.getFlashObj().setWaitMode!==undefined){
-        bm.getFlashObj().setWaitMode(deviceId!==undefined?deviceId:"");
+        bm.getFlashObj().setWaitMode(this.mode);
       }    
       break;
   }  
@@ -133,8 +141,15 @@ Get which controller mode the device is in.
 @return {String} **"gamepad"**, **"keyboard"**, **"navigation"**, or **"wait"**.
 
 **/
-bm.getMode = function(mode){
+bm.Device.prototype.getMode = function(mode){
   return this.mode;
 };
+
+var testDevice = new bm.Device();
+testDevice.on("bye",function(event){
+  alert(event.message);
+});
+
+testDevice.trigger("bye",{message:"bye"});
 
 })(BrassMonkey);
