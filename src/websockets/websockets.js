@@ -1,5 +1,5 @@
 /*jshint forin:true, noarg:true, noempty:true, eqeqeq:true, bitwise:false, strict:true, undef:true, unused:true, curly:true, browser:true, sub:true, maxerr:50 */
-/*global WebSocket:false */
+/*global WebSocket:false, console:false */
 (function(context) {
 "use strict";
 // Enums
@@ -203,6 +203,8 @@ Connection.prototype.sendPacket = function(packet) {
 	packet.deviceType = localDevice.type;
 	packet.channel = packet.channel || CHANNEL_BROADCAST;
 	packet.type = packet.type || PACKET_DATA;
+	packet.rtt = 0;
+	packet.timestamp = 0;
 	console.log("WROTE PACKET: " + JSON.stringify(packet));
 	var encodedPacket = encodePacket(packet);
 	this.socket.send(JSON.stringify(encodedPacket));
