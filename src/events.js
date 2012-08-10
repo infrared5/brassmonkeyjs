@@ -1,4 +1,4 @@
-(function(){
+(function(bm){
 
 /**
 Event called when a mobile device first establishes a connection. 
@@ -106,4 +106,4 @@ Example:
   this.color = slotColors[this.index];
 }
 
-})();
+})(BrassMonkey);

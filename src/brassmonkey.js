@@ -1,48 +1,9 @@
-(function(){
+(function(bm){
 
 /**
-The Brass Monkey SDK. This is a singleton accessed like so:
+Startup Brass Monkey
 
-    bm.init(…);
-    
-or
-
-    bm.init(...);
-
-@class BrassMonkey
-@static
-**/
-
-bm = {};
-
-/**
-Version number of the SDK. 
-
-Format:
-
-    Major.Minor.Patch
-
-Example:
-
-    "0.5.1"
-    
-Follows the [Semantic Versioning Specification.](http://semver.org)
-
-@property version 
-@type String
-**/
-bm.version: "0.5.0";
-
-// Constants
-bm.MODE_GAMEPAD=0;	
-bm.MODE_KEYBOARD=1;		
-bm.MODE_NAVIGATION=2;		
-bm.MODE_WAIT=3;
-
-/**
-Initialize Brass Monkey
-
-@method init
+@method start
 @param {Object} options Options 
   for initializing Brass Monkey.
   @param {String} options.name The name of your game. This is what 
@@ -61,28 +22,34 @@ Initialize Brass Monkey
     
     If not provided the matching version on the Brass Monkey CDN is used.
 **/
-bm.init = function(options){
-  // TODO: Add defaults to these options for those not provided.
-  bm.options = options;
+bm.start = function(options){
   
-  // By default the brassmonkey.swf is loaded off of our CDN. That can be overriden
-  // to use another location such as a local version
-  bm.options.swfURL = options.swfURL ? options.swfURL : 
-    'http://s3.amazonaws.com/files.playbrassmonkey.com/sdks/js/v'+
-    bm.version.replace(/\./g,'-')+'/brassmonkey.swf';
+  // Store options for convenient access later
+    // TODO: Add defaults to these options for those not provided.
+  bm.options = options;  
+    // If no images/layout were provided we default them to being empty arrays.
+    // This could be the case for when certain hosts like the website only
+    // use the built in controllers (Keyboard Mode, Navigation Mode, and any future
+    // ones) 
+  //bm.options.design.images =  options.design.images?options.design.images:[];
+  //bm.options.design.layout =  options.design.layout?options.design.layout:[];
   
-  bm.options.design.images =  options.design.images?options.design.images:[];
-  bm.options.design.layout =  options.design.layout?options.design.layout:[];
+  // Choose the proper communication runtime based on the environment.
+  // For now it's basically WebSockets in Mobile Safari otherwise Flash
+  // everywhere else.
+  if(true){//bm.detectIOS()){
+    bm.runtime = new bm.WebSocketsImpl();
+  } else {
+    bm.runtime = new bm.FlashImpl();
+  }
   
-  bm.getParams = {};
-  bm.wereParams = false;
-  document.location.search.replace(/\??(?:([^=]+)=([^&]*)&?)/g, function () {
-    function decode(s) {
-      return decodeURIComponent(s.split("+").join(" "));
-    }
-    bm.getParams[decode(arguments[1])] = decode(arguments[2]);
-    bm.wereParams=true;
-  });
+  bm.runtime.start();
+}
+
+bm.stop = function(){
+  if(bm.runtime!==undefined){
+    bm.runtime.stop();
+  }
 }
 
 //--------------------------------------
@@ -286,10 +253,10 @@ function getInternetExplorerVersion(){
   return rv;
 }
 
-/**---------------------------------------------------------------------------------------
+/*---------------------------------------------------------------------------------------
 Enumerate Events here. I (Francois) tried to put these in events.js but couldn't get 
 them to properly associate with the BrassMonkey Class.
----------------------------------------------------------------------------------------**/
+---------------------------------------------------------------------------------------*/
 
 /**
 Event called when a mobile device successfully established a connection.
@@ -321,4 +288,4 @@ Event called when a mobile device is disconnected.
 
 
 
-})();
+})(BrassMonkey);

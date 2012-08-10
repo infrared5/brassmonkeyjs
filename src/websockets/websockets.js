@@ -1,7 +1,8 @@
 /*jshint forin:true, noarg:true, noempty:true, eqeqeq:true, bitwise:false, strict:true, undef:true, unused:true, curly:true, browser:true, sub:true, maxerr:50 */
-/*global WebSocket:false, console:false */
-(function(context) {
+/*global WebSocket:false */
+(function(bm) {
 "use strict";
+
 // Enums
 var PACKET_DATA = 0;
 var PACKET_PING = 1;
@@ -98,7 +99,7 @@ var makeInvoke = function(methodName, params) {
 
 var start = function() {
 	console.log("start");
-	connections.push( new Connection("deviceId", "monkeys-ipod.local.", 9011));
+	connections.push( new Connection("deviceId", "10.0.0.2", 9011));
 };
 
 var stop = function() {
@@ -501,11 +502,27 @@ if(INCLUDE_UNUSED_ENCODERS) {
 	};
 }
 
+/*
+FRANCOIS: Commented these out as I wasn't sure when these would be used external to this file.
+          Add it back in if it will be. Otherwise remove later please.
+bm.decodeObject = decodeObject;
+bm.encodeObject = encodeObject;
 
-context['bm'] = context['bm'] || {};
-context['bm']['decodeObject'] = decodeObject;
-context['bm']['encodeObject'] = encodeObject;
-context['bm']['start'] = start;
-context['bm']['stop'] = stop;
+FRANCOIS: This file won't define bm.start but a run time that will be called by bm.start/bm.stop
+            
+bm.start = start;
+bm.stop = stop;
+*/
 
-})(this);
+bm.WebSocketsRT = function(){
+}
+
+bm.WebSocketsRT.prototype.start = function(options){
+  start();
+}
+
+bm.WebSocketsRT.prototype.stop = function(){
+  stop();
+}
+
+})(BrassMonkey);

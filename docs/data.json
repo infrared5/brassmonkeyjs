@@ -4,6 +4,13 @@
         "src/brassmonkey.js": {
             "name": "src/brassmonkey.js",
             "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/core.js": {
+            "name": "src/core.js",
+            "modules": {},
             "classes": {
                 "BrassMonkey": 1
             },
@@ -30,13 +37,6 @@
             },
             "fors": {},
             "namespaces": {}
-        },
-        "src/extras.js": {
-            "name": "src/extras.js",
-            "modules": {},
-            "classes": {},
-            "fors": {},
-            "namespaces": {}
         }
     },
     "modules": {},
@@ -49,9 +49,9 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
-            "file": "src/brassmonkey.js",
-            "line": 3,
-            "description": "The Brass Monkey SDK. This is a singleton accessed like so:\n\n    bm.init(…);\n    \nor\n\n    bm.init(...);",
+            "file": "src/core.js",
+            "line": 2,
+            "description": "The Brass Monkey SDK. This is a singleton accessed like so:\n\n    bm.init(...);\n    \nor\n\n    var version = bm.version;",
             "static": 1
         },
         "Device": {
@@ -118,16 +118,7 @@
     "classitems": [
         {
             "file": "src/brassmonkey.js",
-            "line": 18,
-            "description": "Version number of the SDK. \n\nFormat:\n\n    Major.Minor.Patch\n\nExample:\n\n    \"0.5.1\"\n    \nFollows the [Semantic Versioning Specification.](http://semver.org)",
-            "itemtype": "property",
-            "name": "version",
-            "type": "String",
-            "class": "BrassMonkey"
-        },
-        {
-            "file": "src/brassmonkey.js",
-            "line": 42,
+            "line": 3,
             "description": "Initialize Brass Monkey",
             "itemtype": "method",
             "name": "init",
@@ -139,7 +130,7 @@
                     "props": [
                         {
                             "name": "name",
-                            "description": "The name of your game. This is what \n    is displayed on the phone when you pick what to connect to.\n    \n    Example: \"Contamination\"",
+                            "description": "The name of your game. This is what \n    is displayed on the phone when you pick what to connect to.\n    \n    Example: \"Monkey Golf\"",
                             "type": "String"
                         },
                         {
@@ -167,13 +158,7 @@
         },
         {
             "file": "src/brassmonkey.js",
-            "line": 289,
-            "description": "Enumerate Events here. I (Francois) tried to put these in events.js but couldn't get \nthem to properly associate with the BrassMonkey Class.",
-            "class": "BrassMonkey"
-        },
-        {
-            "file": "src/brassmonkey.js",
-            "line": 294,
+            "line": 253,
             "description": "Event called when a mobile device successfully established a connection.",
             "itemtype": "event",
             "name": "deviceavailable",
@@ -188,7 +173,7 @@
         },
         {
             "file": "src/brassmonkey.js",
-            "line": 301,
+            "line": 260,
             "description": "Event called when a mobile device successfully established a connection.",
             "itemtype": "event",
             "name": "deviceconnected",
@@ -203,7 +188,7 @@
         },
         {
             "file": "src/brassmonkey.js",
-            "line": 308,
+            "line": 267,
             "description": "Event called when a mobile device is disconnected.",
             "itemtype": "event",
             "name": "devicedisconnected",
@@ -218,7 +203,7 @@
         },
         {
             "file": "src/brassmonkey.js",
-            "line": 315,
+            "line": 274,
             "description": "Event called when a mobile device is disconnected.",
             "itemtype": "event",
             "name": "devicedisconnected",
@@ -229,6 +214,15 @@
                     "type": "DeviceDisconnectedEvent"
                 }
             ],
+            "class": "BrassMonkey"
+        },
+        {
+            "file": "src/core.js",
+            "line": 17,
+            "description": "Version number of the SDK. \n\nFormat:\n\n    Major.Minor.Patch\n\nExample:\n\n    \"0.5.1\"\n    \nFollows the [Semantic Versioning Specification.](http://semver.org)",
+            "itemtype": "property",
+            "name": "version",
+            "type": "String",
             "class": "BrassMonkey"
         },
         {
@@ -251,7 +245,7 @@
         },
         {
             "file": "src/device.js",
-            "line": 39,
+            "line": 41,
             "description": "Enable/Disable touch events.\n\nTouch events are off by default to reduce network traffic and should only be enabled if you are doing touch based controls.",
             "itemtype": "method",
             "name": "enableTouch",
@@ -272,7 +266,7 @@
         },
         {
             "file": "src/device.js",
-            "line": 61,
+            "line": 62,
             "description": "Enable/Disable accelerometer events.\n\nAccelerometer events are off by default to reduce network traffic and should only be enabled if you are doing touch based controls.",
             "itemtype": "method",
             "name": "enableAccelerometer",
@@ -293,7 +287,7 @@
         },
         {
             "file": "src/device.js",
-            "line": 83,
+            "line": 84,
             "description": "Set which controller mode the device is in.",
             "itemtype": "method",
             "name": "setMode",
@@ -308,7 +302,7 @@
         },
         {
             "file": "src/device.js",
-            "line": 128,
+            "line": 129,
             "description": "Get which controller mode the device is in.",
             "itemtype": "method",
             "name": "getMode",
@@ -371,12 +365,6 @@
             "name": "color",
             "type": "{String}",
             "class": "ShowSlotColorEvent"
-        },
-        {
-            "file": "src/extras.js",
-            "line": 3,
-            "description": "Code for integration of Brass Monkey into the Brass Monkey Console",
-            "class": ""
         }
     ]
 }
