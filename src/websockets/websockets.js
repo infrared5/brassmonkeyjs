@@ -205,6 +205,8 @@ Connection.prototype.sendPacket = function(packet) {
 	packet.deviceType = localDevice.type;
 	packet.channel = packet.channel || CHANNEL_BROADCAST;
 	packet.type = packet.type || PACKET_DATA;
+	packet.rtt = 0;
+	packet.timestamp = 0;
 	console.log("WROTE PACKET: " + JSON.stringify(packet));
 	var encodedPacket = encodePacket(packet);
 	this.socket.send(JSON.stringify(encodedPacket));
