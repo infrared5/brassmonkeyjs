@@ -179,20 +179,13 @@ Connection.prototype.handleInvoke = function(invoke) {
 		}
 	};
 
-	Connection.prototype.sendControlScheme = function() {
-	// TODO: real control scheme, and base64
-	this.sendPacket({
-		channel : CHANNEL_BYTE,
-		message : {
-			encodeType : ENCODE_BYTE_CHUNK,
-			setId: 'testXML',
-			startByte: 0,
-			chunkSize: globalSchemaByteCount,
-			totalSize: globalSchemaByteCount,
-			data: globalSchema
-			//'PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KQk1BcHBsaWNhdGlvblNjaGVtZSB2ZXJzaW9uPSIwLjEiIG9yaWVudGF0aW9uPSJwb3J0cmFpdCIgdG91Y2hFbmFibGVkPSJubyIgYWNjZWxlcm9tZXRlckVuYWJsZWQ9Im5vIj4KPFJlc291cmNlcy8+PExheW91dC8+PC9CTUFwcGxpY2F0aW9uU2NoZW1lPg==' 
-		}
-	});
+Connection.prototype.sendControlScheme = function() {
+	for(var i = 0; i < controlSchemeChunks.length; ++i) {
+		this.sendPacket({
+			channel : CHANNEL_BYTE,
+			message : controlSchemeChunks[i]
+		});
+	}
 };
 
 Connection.prototype.sendInvoke = function(method, params) {
@@ -518,17 +511,45 @@ bm.stop = stop;
 bm.WebSocketsRT = function(){
 }
 
+var controlSchemeChunks;
+var generateByteChunks = function(xml) {
+	var MAX_CHUNK_SIZE = 1024*32,
+		chunks = [],
+		xmlLength = xml.length,
+		nextChar = 0,
+		totalBytes = 0;
 
-var globalSchema,globalSchemaByteCount;
+	for(nextChar = 0; nextChar < xmlLength; nextChar += MAX_CHUNK_SIZE) {
+		var result = Base64.encode(xml.substr(nextChar, MAX_CHUNK_SIZE)),
+			chunkSize = result[0],
+			encoded = result[1];
+
+		chunks.push({
+			encodeType : ENCODE_BYTE_CHUNK,
+			setId: 'testXML',
+			startByte: totalBytes,
+			chunkSize: chunkSize,
+			data: encoded
+		});
+
+		totalBytes += chunkSize;
+	}
+
+	for(var i = 0; i < chunks.length; ++i) {
+		chunks[i].totalSize = totalBytes;
+	}
+
+	return chunks;
+}
+
+
 bm.WebSocketsRT.prototype.start = function(){
   // Load all of the images passed in before starting up the rest
   // of the system.
   // TODO: Can we do work in parallel with this?
   bm.loadImages(bm.options.design.images,function(imageData){
     var xml = bm.generateControllerXML(imageData);
-    console.log(xml);
-    globalSchema = Base64.encode(xml);
-    globalSchemaByteCount = xml.length;
+    controlSchemeChunks = generateByteChunks(xml);
     start();
   });
 }

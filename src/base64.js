@@ -24,18 +24,18 @@ OTHER DEALINGS IN THE SOFTWARE.
 */
 function StringBuffer()
 { 
-    this.buffer = []; 
+    this.buffer = [];
 } 
 
 StringBuffer.prototype.append = function append(string)
 { 
-    this.buffer.push(string); 
-    return this; 
+    this.buffer.push(string);
+    return this;
 }; 
 
 StringBuffer.prototype.toString = function toString()
 { 
-    return this.buffer.join(""); 
+    return this.buffer.join("");
 }; 
 
 var Base64 =
@@ -74,7 +74,7 @@ var Base64 =
             output.append(this.codex.charAt(enc1) + this.codex.charAt(enc2) + this.codex.charAt(enc3) + this.codex.charAt(enc4));
         }
 
-        return output.toString();
+        return [enumerator.byteCount, output.toString()];
     },
 
     decode : function (input)
@@ -117,6 +117,7 @@ function Utf8EncodeEnumerator(input)
     this._input = input;
     this._index = -1;
     this._buffer = [];
+    this.byteCount = 0;
 }
 
 Utf8EncodeEnumerator.prototype =
@@ -150,17 +151,20 @@ Utf8EncodeEnumerator.prototype =
             if (charCode < 128)
             {
                 this.current = charCode;
+                this.byteCount += 1;
             }
             else if ((charCode > 127) && (charCode < 2048))
             {
                 this.current = (charCode >> 6) | 192;
                 this._buffer.push((charCode & 63) | 128);
+                this.byteCount += 2;
             }
             else
             {
                 this.current = (charCode >> 12) | 224;
                 this._buffer.push(((charCode >> 6) & 63) | 128);
                 this._buffer.push((charCode & 63) | 128);
+                this.byteCount += 3;
             }
 
             return true;
