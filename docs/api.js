@@ -1,12 +1,13 @@
 YUI.add("yuidoc-meta", function(Y) {
    Y.YUIDoc = { meta: {
     "classes": [
-        "BrassMonkey",
-        "Device",
-        "DeviceAvailableEvent",
-        "DeviceConnectedEvent",
-        "DeviceDisconnectedEvent",
-        "ShowSlotColorEvent"
+        "bm",
+        "bm.Device",
+        "bm.DeviceAvailableEvent",
+        "bm.DeviceConnectedEvent",
+        "bm.DeviceDisconnectedEvent",
+        "bm.EventEmitter",
+        "bm.ShowSlotColorEvent"
     ],
     "modules": [],
     "allModules": []

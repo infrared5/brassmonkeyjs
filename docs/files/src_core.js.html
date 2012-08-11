@@ -41,17 +41,19 @@
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
             
-                <li><a href="..&#x2F;classes/BrassMonkey.html">BrassMonkey</a></li>
+                <li><a href="..&#x2F;classes/bm.html">bm</a></li>
             
-                <li><a href="..&#x2F;classes/Device.html">Device</a></li>
+                <li><a href="..&#x2F;classes/bm.Device.html">bm.Device</a></li>
             
-                <li><a href="..&#x2F;classes/DeviceAvailableEvent.html">DeviceAvailableEvent</a></li>
+                <li><a href="..&#x2F;classes/bm.DeviceAvailableEvent.html">bm.DeviceAvailableEvent</a></li>
             
-                <li><a href="..&#x2F;classes/DeviceConnectedEvent.html">DeviceConnectedEvent</a></li>
+                <li><a href="..&#x2F;classes/bm.DeviceConnectedEvent.html">bm.DeviceConnectedEvent</a></li>
             
-                <li><a href="..&#x2F;classes/DeviceDisconnectedEvent.html">DeviceDisconnectedEvent</a></li>
+                <li><a href="..&#x2F;classes/bm.DeviceDisconnectedEvent.html">bm.DeviceDisconnectedEvent</a></li>
             
-                <li><a href="..&#x2F;classes/ShowSlotColorEvent.html">ShowSlotColorEvent</a></li>
+                <li><a href="..&#x2F;classes/bm.EventEmitter.html">bm.EventEmitter</a></li>
+            
+                <li><a href="..&#x2F;classes/bm.ShowSlotColorEvent.html">bm.ShowSlotColorEvent</a></li>
             
             </ul>
 
@@ -97,6 +99,161 @@
 <div class="file">
     <pre class="code prettyprint linenums">
 (function(){
+
+&#x2F;* Simple JavaScript Inheritance
+ * By John Resig http:&#x2F;&#x2F;ejohn.org&#x2F;
+ * MIT Licensed.
+ *&#x2F;
+&#x2F;&#x2F; Inspired by base2 and Prototype
+var initializing = false, fnTest = &#x2F;xyz&#x2F;.test(function(){xyz;}) ? &#x2F;\b_super\b&#x2F; : &#x2F;.*&#x2F;;
+&#x2F;&#x2F; The base Class implementation (does nothing)
+function Class(){};
+
+&#x2F;&#x2F; Create a new Class that inherits from this class
+Class.extend = function(prop) {
+  var _super = this.prototype;
+  
+  &#x2F;&#x2F; Instantiate a base class (but only create the instance,
+  &#x2F;&#x2F; don&#x27;t run the init constructor)
+  initializing = true;
+  var prototype = new this();
+  initializing = false;
+  
+  &#x2F;&#x2F; Copy the properties over onto the new prototype
+  for (var name in prop) {
+    &#x2F;&#x2F; Check if we&#x27;re overwriting an existing function
+    prototype[name] = typeof prop[name] == &quot;function&quot; &amp;&amp; 
+      typeof _super[name] == &quot;function&quot; &amp;&amp; fnTest.test(prop[name]) ?
+      (function(name, fn){
+        return function() {
+          var tmp = this._super;
+          
+          &#x2F;&#x2F; Add a new ._super() method that is the same method
+          &#x2F;&#x2F; but on the super-class
+          this._super = _super[name];
+          
+          &#x2F;&#x2F; The method only need to be bound temporarily, so we
+          &#x2F;&#x2F; remove it when we&#x27;re done executing
+          var ret = fn.apply(this, arguments);        
+          this._super = tmp;
+          
+          return ret;
+        };
+      })(name, prop[name]) :
+      prop[name];
+  }
+  
+  &#x2F;&#x2F; The dummy class constructor
+  function Class() {
+    &#x2F;&#x2F; All construction is actually done in the init method
+    if ( !initializing &amp;&amp; this.init )
+      this.init.apply(this, arguments);
+  }
+  
+  &#x2F;&#x2F; Populate our constructed prototype object
+  Class.prototype = prototype;
+  
+  &#x2F;&#x2F; Enforce the constructor to be what we expect
+  Class.prototype.constructor = Class;
+
+  &#x2F;&#x2F; And make this class extendable
+  Class.extend = arguments.callee;
+  
+  return Class;
+};
+
+
+&#x2F;**
+EventEmitter implements an interface for registering, unregistering, and triggering events.
+
+@class bm.EventEmitter
+**&#x2F;
+EventEmitter = Class.extend({
+  init:function(){
+    this.callbacks = {};
+  },
+  &#x2F;**
+  Register a callback for a particular event.
+  
+  @method addEventListener
+  @param {String} eventType Which event to listen to.
+  @param {Function} fn Function to be called back when the event occurs.
+  
+  **&#x2F;
+
+  addEventListener: function(eventType,fn){
+    if (typeof fn !== &#x27;function&#x27;){
+      throw new Error(&#x27;.on() only accepts instances of Function&#x27;);
+    }
+  
+    &#x2F;&#x2F; Make an array for this particular eventName
+    if(this.callbacks[eventType]===undefined){
+      this.callbacks[eventType] = [];
+    }
+  
+    &#x2F;&#x2F; TODO: Is there any cheap way to detect duplicates.
+    this.callbacks[eventType].push(fn);  
+  },
+
+  &#x2F;**
+  Alias for {EventEmitter.addEventListener}
+  
+  @method on
+  **&#x2F;
+  on:function(eventType,fn){
+    this.addEventListener(eventType,fn);
+  },
+
+  &#x2F;**
+  Unregister a callback for a particular event.
+  
+  @method removeEventListener
+  @param {String} eventType Which event to stop listening to.
+  @param {Function} fn Function to be removed.
+  
+  **&#x2F;
+  
+  removeEventListener: function(eventType,fn){
+    &#x2F;&#x2F; Remove the callback from the list of listeners for the
+    &#x2F;&#x2F; respective eventType
+    if(this.callbacks[eventType]!==undefined){
+      var i,callbacks = this.callbacks[eventType];
+      for(var i = 0; i&lt;callbacks.length;i++){
+        if(callbacks[i]==fn){
+          callbacks.splice(i,1);
+          return;
+        }
+      }
+    }
+  },
+  
+  &#x2F;**
+  Alias for {EventEmitter.removeEventListener}
+  
+  @method off
+  **&#x2F;
+  off: function(eventType,fn){
+    this.off(eventType,fn);
+  },
+  
+  &#x2F;**
+  Trigger an event. (Calls all the callbacks that are listening for the eventType)
+  
+  @method trigger
+  @param {String} eventType Which event to trigger.
+  @param {Event} event Event that will be passed to all registered listeners.
+  
+  **&#x2F;
+  trigger: function(eventType,event){
+    if(this.callbacks[eventType]!==undefined){
+      var i,callbacks = this.callbacks[eventType];
+      for(var i = 0; i&lt;callbacks.length;i++){
+        callbacks[i](event);
+      }
+    }
+  }
+});
+
 &#x2F;**
 The Brass Monkey SDK. This is a singleton accessed like so:
 
@@ -106,36 +263,118 @@ or
 
     var version = bm.version;
 
-@class BrassMonkey
+@class bm
+@extends bm.EventEmitter
 @static
 **&#x2F;
 
-bm = {};
+&#x2F;&#x2F; Create the BrassMonkey global object. (Give it a short alias of &#x27;bm&#x27; also)
+&#x2F;&#x2F; TODO:  Make a function similar to jQuery.noConflict(). I&#x27;ve already had
+&#x2F;&#x2F;        issues with collisions on a global bm. object when working with Game Maker
+&#x2F;&#x2F;        generated game projects.
 
-&#x2F;**
-Version number of the SDK. 
-
-Format:
-
-    Major.Minor.Patch
-
-Example:
-
-    &quot;0.5.1&quot;
+var BrassMonkeyClass = EventEmitter.extend({
+  init:function(){
+    this._super();
+    &#x2F;**
+    Version number of the SDK. 
     
-Follows the [Semantic Versioning Specification.](http:&#x2F;&#x2F;semver.org)
+    Format:
+    
+        Major.Minor.Patch
+    
+    Example:
+    
+        &quot;0.5.1&quot;
+        
+    Follows the [Semantic Versioning Specification.](http:&#x2F;&#x2F;semver.org)
+    
+    @property version 
+    @type String
+    **&#x2F;
+    this.version = &quot;0.5.0&quot;;
+    
+    
+    this.devices = [];
+  },
+ &#x2F;**
+  Startup Brass Monkey
+  
+  @method start
+  @param {Object} options Options 
+    for initializing Brass Monkey.
+    @param {String} options.name The name of your game. This is what 
+      is displayed on the phone when you pick what to connect to.
+      
+      Example: &quot;Monkey Golf&quot;
+    @param {String} options.appID The unique identifier of your Game&#x2F;App. You
+      must generate this through the developer admin interface.
+      
+    @param {Number} [options.maxPlayers=1]
+      The number of players that can play your game.
+      
+    @param {URL} [options.swfURL]
+      The location of the SWF file that implements 
+      the SDK when there a browser doesn&#x27;t support Websockets. 
+      
+      If not provided the matching version on the Brass Monkey CDN is used.
+  **&#x2F;
+  start: function(options){
+    
+    &#x2F;&#x2F; Store options for convenient access later
+      &#x2F;&#x2F; TODO: Add defaults to these options for those not provided.
+    this.options = options;  
+      &#x2F;&#x2F; If no images&#x2F;layout were provided we default them to being empty arrays.
+      &#x2F;&#x2F; This could be the case for when certain hosts like the website only
+      &#x2F;&#x2F; use the built in controllers (Keyboard Mode, Navigation Mode, and any future
+      &#x2F;&#x2F; ones) 
+    &#x2F;&#x2F;bm.options.design.images =  options.design.images?options.design.images:[];
+    &#x2F;&#x2F;bm.options.design.layout =  options.design.layout?options.design.layout:[];
+    
+    
+    
+    &#x2F;&#x2F; Choose the proper communication runtime based on the environment.
+    &#x2F;&#x2F; For now it&#x27;s basically WebSockets in Mobile Safari otherwise Flash
+    &#x2F;&#x2F; everywhere else.
+    if(true){&#x2F;&#x2F;bm.detectIOS()){
+      this.runtime = new bm.WebSocketsRT();
+    } else {
+      this.runtime = new bm.FlashRT();
+    }
+    
+    this.runtime.start();
+  },
+  
+  &#x2F;**
+  Shutdown Brass Monkey
+  
+  @method stop
+  **&#x2F;
+  stop: function(){
+    if(bm.runtime!==undefined){
+      bm.runtime.stop();
+    }
+  }
+});
 
-@property version 
-@type String
-**&#x2F;
-bm.version: &quot;0.5.0&quot;;
+&#x2F;&#x2F; Create singleton instance of BrassMonkey
+bm = BrassMonkey = new BrassMonkeyClass();
+
+&#x2F;&#x2F; Add EventEmitter to the BrassMonkey namespace
+bm.EventEmitter = EventEmitter;
+
+bm.on(&#x27;hi&#x27;,function(event){
+  alert(event.message);
+});
+bm.trigger(&#x27;hi&#x27;,{message:&quot;hi&quot;});
 
 &#x2F;&#x2F; Constants
+&#x2F;*
 bm.MODE_GAMEPAD=0;	
 bm.MODE_KEYBOARD=1;		
 bm.MODE_NAVIGATION=2;		
 bm.MODE_WAIT=3;
-
+*&#x2F;
 
 })();
     </pre>

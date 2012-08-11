@@ -5,7 +5,7 @@ Event called when a mobile device first establishes a connection.
 
 **Note:** 
 
-@class DeviceAvailableEvent
+@class bm.DeviceAvailableEvent
 **/
 
 bm.DeviceAvailableEvent = function(device){
@@ -13,7 +13,7 @@ bm.DeviceAvailableEvent = function(device){
 Device Associated with this event.
 
 @property device 
-@type {Device}
+@type {bm.Device}
 **/
   this.device = device;
 }
@@ -21,7 +21,7 @@ Device Associated with this event.
 /**
 Event called when a mobile device successfully established a connection.
 
-@class DeviceConnectedEvent
+@class bm.DeviceConnectedEvent
 **/
 
 
@@ -30,7 +30,7 @@ bm.DeviceConnectedEvent = function(device){
 Device Associated with this event.
 
 @property device 
-@type {Device}
+@type {bm.Device}
 **/
   this.device = device;
 }
@@ -38,7 +38,7 @@ Device Associated with this event.
 /**
 Event called when a mobile device is disconnected.
 
-@class DeviceDisconnectedEvent
+@class bm.DeviceDisconnectedEvent
 **/
 
 
@@ -47,7 +47,7 @@ bm.DeviceDisconnectedEvent = function(device){
 Device Associated with this event.
 
 @property device 
-@type {Device}
+@type {bm.Device}
 **/
   this.device = device;
 }
@@ -60,7 +60,7 @@ This is the unique color that is displayed in top right of the console, in your 
 on the device list in the controller app. It's used to help users disambiguate which
 console/game they want to connect to, if there is more than one on your network.
 
-@class ShowSlotColorEvent
+@class bm.ShowSlotColorEvent
 **/
 
   // Lookup table for converting slot index numbers into an agreed upon matching color.
@@ -76,7 +76,7 @@ bm.ShowSlotColorEvent = function(device){
 Device Associated with this event.
 
 @property device 
-@type {Device}
+@type {bm.Device}
 
 **/
   this.device = device;

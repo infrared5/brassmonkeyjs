@@ -12,7 +12,8 @@
             "name": "src/core.js",
             "modules": {},
             "classes": {
-                "BrassMonkey": 1
+                "bm.EventEmitter": 1,
+                "bm": 1
             },
             "fors": {},
             "namespaces": {}
@@ -21,7 +22,7 @@
             "name": "src/device.js",
             "modules": {},
             "classes": {
-                "Device": 1
+                "bm.Device": 1
             },
             "fors": {},
             "namespaces": {}
@@ -30,10 +31,10 @@
             "name": "src/events.js",
             "modules": {},
             "classes": {
-                "DeviceAvailableEvent": 1,
-                "DeviceConnectedEvent": 1,
-                "DeviceDisconnectedEvent": 1,
-                "ShowSlotColorEvent": 1
+                "bm.DeviceAvailableEvent": 1,
+                "bm.DeviceConnectedEvent": 1,
+                "bm.DeviceDisconnectedEvent": 1,
+                "bm.ShowSlotColorEvent": 1
             },
             "fors": {},
             "namespaces": {}
@@ -41,22 +42,35 @@
     },
     "modules": {},
     "classes": {
-        "BrassMonkey": {
-            "name": "BrassMonkey",
-            "shortname": "BrassMonkey",
+        "bm.EventEmitter": {
+            "name": "bm.EventEmitter",
+            "shortname": "bm.EventEmitter",
             "classitems": [],
             "plugins": [],
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
             "file": "src/core.js",
-            "line": 2,
+            "line": 66,
+            "description": "EventEmitter implements an interface for registering, unregistering, and triggering events."
+        },
+        "bm": {
+            "name": "bm",
+            "shortname": "bm",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src/core.js",
+            "line": 157,
             "description": "The Brass Monkey SDK. This is a singleton accessed like so:\n\n    bm.init(...);\n    \nor\n\n    var version = bm.version;",
+            "extends": "bm.EventEmitter",
             "static": 1
         },
-        "Device": {
-            "name": "Device",
-            "shortname": "Device",
+        "bm.Device": {
+            "name": "bm.Device",
+            "shortname": "bm.Device",
             "classitems": [],
             "plugins": [],
             "extensions": [],
@@ -64,11 +78,12 @@
             "extension_for": [],
             "file": "src/device.js",
             "line": 2,
-            "description": "Each connected device is represented by an instance of this class. \n\nCommunicating with a particular device is done through this class' methods."
+            "description": "Each connected device is represented by an instance of this class. \n\nCommunicating with a particular device is done through this class' methods.",
+            "extends": "bm.EventEmitter"
         },
-        "DeviceAvailableEvent": {
-            "name": "DeviceAvailableEvent",
-            "shortname": "DeviceAvailableEvent",
+        "bm.DeviceAvailableEvent": {
+            "name": "bm.DeviceAvailableEvent",
+            "shortname": "bm.DeviceAvailableEvent",
             "classitems": [],
             "plugins": [],
             "extensions": [],
@@ -78,9 +93,9 @@
             "line": 3,
             "description": "Event called when a mobile device first establishes a connection. \n\n**Note:**"
         },
-        "DeviceConnectedEvent": {
-            "name": "DeviceConnectedEvent",
-            "shortname": "DeviceConnectedEvent",
+        "bm.DeviceConnectedEvent": {
+            "name": "bm.DeviceConnectedEvent",
+            "shortname": "bm.DeviceConnectedEvent",
             "classitems": [],
             "plugins": [],
             "extensions": [],
@@ -90,9 +105,9 @@
             "line": 21,
             "description": "Event called when a mobile device successfully established a connection."
         },
-        "DeviceDisconnectedEvent": {
-            "name": "DeviceDisconnectedEvent",
-            "shortname": "DeviceDisconnectedEvent",
+        "bm.DeviceDisconnectedEvent": {
+            "name": "bm.DeviceDisconnectedEvent",
+            "shortname": "bm.DeviceDisconnectedEvent",
             "classitems": [],
             "plugins": [],
             "extensions": [],
@@ -102,9 +117,9 @@
             "line": 38,
             "description": "Event called when a mobile device is disconnected."
         },
-        "ShowSlotColorEvent": {
-            "name": "ShowSlotColorEvent",
-            "shortname": "ShowSlotColorEvent",
+        "bm.ShowSlotColorEvent": {
+            "name": "bm.ShowSlotColorEvent",
+            "shortname": "bm.ShowSlotColorEvent",
             "classitems": [],
             "plugins": [],
             "extensions": [],
@@ -118,10 +133,155 @@
     "classitems": [
         {
             "file": "src/brassmonkey.js",
-            "line": 3,
-            "description": "Initialize Brass Monkey",
+            "line": 209,
+            "description": "Event called when a mobile device successfully established a connection.",
+            "itemtype": "event",
+            "name": "deviceavailable",
+            "params": [
+                {
+                    "name": "event",
+                    "description": "",
+                    "type": "DeviceAvailableEvent"
+                }
+            ],
+            "class": "bm.EventEmitter"
+        },
+        {
+            "file": "src/brassmonkey.js",
+            "line": 216,
+            "description": "Event called when a mobile device successfully established a connection.",
+            "itemtype": "event",
+            "name": "deviceconnected",
+            "params": [
+                {
+                    "name": "event",
+                    "description": "",
+                    "type": "DeviceConnectedEvent"
+                }
+            ],
+            "class": "bm.EventEmitter"
+        },
+        {
+            "file": "src/brassmonkey.js",
+            "line": 223,
+            "description": "Event called when a mobile device is disconnected.",
+            "itemtype": "event",
+            "name": "devicedisconnected",
+            "params": [
+                {
+                    "name": "event",
+                    "description": "",
+                    "type": "DeviceDisconnectedEvent"
+                }
+            ],
+            "class": "bm.EventEmitter"
+        },
+        {
+            "file": "src/brassmonkey.js",
+            "line": 230,
+            "description": "Event called when a mobile device is disconnected.",
+            "itemtype": "event",
+            "name": "devicedisconnected",
+            "params": [
+                {
+                    "name": "event",
+                    "description": "",
+                    "type": "DeviceDisconnectedEvent"
+                }
+            ],
+            "class": "bm.EventEmitter"
+        },
+        {
+            "file": "src/core.js",
+            "line": 75,
+            "description": "Register a callback for a particular event.",
             "itemtype": "method",
-            "name": "init",
+            "name": "addEventListener",
+            "params": [
+                {
+                    "name": "eventType",
+                    "description": "Which event to listen to.",
+                    "type": "String"
+                },
+                {
+                    "name": "fn",
+                    "description": "Function to be called back when the event occurs.",
+                    "type": "Function"
+                }
+            ],
+            "class": "bm.EventEmitter"
+        },
+        {
+            "file": "src/core.js",
+            "line": 98,
+            "description": "Alias for {EventEmitter.addEventListener}",
+            "itemtype": "method",
+            "name": "on",
+            "class": "bm.EventEmitter"
+        },
+        {
+            "file": "src/core.js",
+            "line": 107,
+            "description": "Unregister a callback for a particular event.",
+            "itemtype": "method",
+            "name": "removeEventListener",
+            "params": [
+                {
+                    "name": "eventType",
+                    "description": "Which event to stop listening to.",
+                    "type": "String"
+                },
+                {
+                    "name": "fn",
+                    "description": "Function to be removed.",
+                    "type": "Function"
+                }
+            ],
+            "class": "bm.EventEmitter"
+        },
+        {
+            "file": "src/core.js",
+            "line": 130,
+            "description": "Alias for {EventEmitter.removeEventListener}",
+            "itemtype": "method",
+            "name": "off",
+            "class": "bm.EventEmitter"
+        },
+        {
+            "file": "src/core.js",
+            "line": 139,
+            "description": "Trigger an event. (Calls all the callbacks that are listening for the eventType)",
+            "itemtype": "method",
+            "name": "trigger",
+            "params": [
+                {
+                    "name": "eventType",
+                    "description": "Which event to trigger.",
+                    "type": "String"
+                },
+                {
+                    "name": "event",
+                    "description": "Event that will be passed to all registered listeners.",
+                    "type": "Event"
+                }
+            ],
+            "class": "bm.EventEmitter"
+        },
+        {
+            "file": "src/core.js",
+            "line": 179,
+            "description": "Version number of the SDK. \n\nFormat:\n\n    Major.Minor.Patch\n\nExample:\n\n    \"0.5.1\"\n    \nFollows the [Semantic Versioning Specification.](http://semver.org)",
+            "itemtype": "property",
+            "name": "version",
+            "type": "String",
+            "class": "bm"
+        },
+        {
+            "file": "src/core.js",
+            "line": 200,
+            "description": "Startup Brass Monkey",
+            "itemtype": "method",
+            "name": "start",
             "params": [
                 {
                     "name": "options",
@@ -154,98 +314,37 @@
                     ]
                 }
             ],
-            "class": "BrassMonkey"
-        },
-        {
-            "file": "src/brassmonkey.js",
-            "line": 253,
-            "description": "Event called when a mobile device successfully established a connection.",
-            "itemtype": "event",
-            "name": "deviceavailable",
-            "params": [
-                {
-                    "name": "event",
-                    "description": "",
-                    "type": "DeviceAvailableEvent"
-                }
-            ],
-            "class": "BrassMonkey"
-        },
-        {
-            "file": "src/brassmonkey.js",
-            "line": 260,
-            "description": "Event called when a mobile device successfully established a connection.",
-            "itemtype": "event",
-            "name": "deviceconnected",
-            "params": [
-                {
-                    "name": "event",
-                    "description": "",
-                    "type": "DeviceConnectedEvent"
-                }
-            ],
-            "class": "BrassMonkey"
-        },
-        {
-            "file": "src/brassmonkey.js",
-            "line": 267,
-            "description": "Event called when a mobile device is disconnected.",
-            "itemtype": "event",
-            "name": "devicedisconnected",
-            "params": [
-                {
-                    "name": "event",
-                    "description": "",
-                    "type": "DeviceDisconnectedEvent"
-                }
-            ],
-            "class": "BrassMonkey"
-        },
-        {
-            "file": "src/brassmonkey.js",
-            "line": 274,
-            "description": "Event called when a mobile device is disconnected.",
-            "itemtype": "event",
-            "name": "devicedisconnected",
-            "params": [
-                {
-                    "name": "event",
-                    "description": "",
-                    "type": "DeviceDisconnectedEvent"
-                }
-            ],
-            "class": "BrassMonkey"
+            "class": "bm"
         },
         {
             "file": "src/core.js",
-            "line": 17,
-            "description": "Version number of the SDK. \n\nFormat:\n\n    Major.Minor.Patch\n\nExample:\n\n    \"0.5.1\"\n    \nFollows the [Semantic Versioning Specification.](http://semver.org)",
-            "itemtype": "property",
-            "name": "version",
-            "type": "String",
-            "class": "BrassMonkey"
+            "line": 248,
+            "description": "Shutdown Brass Monkey",
+            "itemtype": "method",
+            "name": "stop",
+            "class": "bm"
         },
         {
             "file": "src/device.js",
-            "line": 11,
+            "line": 15,
             "description": "Display name of the user associated with this device.\n\nIf the user is logged in on their device this will be their profile name, otherwise it will be the name they gave their device.",
             "itemtype": "property",
             "name": "name",
             "type": "String",
-            "class": "Device"
+            "class": "bm.Device"
         },
         {
             "file": "src/device.js",
-            "line": 21,
+            "line": 25,
             "description": "The unique identifier of this device.",
             "itemtype": "property",
             "name": "id",
             "type": "String",
-            "class": "Device"
+            "class": "bm.Device"
         },
         {
             "file": "src/device.js",
-            "line": 41,
+            "line": 45,
             "description": "Enable/Disable touch events.\n\nTouch events are off by default to reduce network traffic and should only be enabled if you are doing touch based controls.",
             "itemtype": "method",
             "name": "enableTouch",
@@ -262,11 +361,11 @@
                     "optional": true
                 }
             ],
-            "class": "Device"
+            "class": "bm.Device"
         },
         {
             "file": "src/device.js",
-            "line": 62,
+            "line": 65,
             "description": "Enable/Disable accelerometer events.\n\nAccelerometer events are off by default to reduce network traffic and should only be enabled if you are doing touch based controls.",
             "itemtype": "method",
             "name": "enableAccelerometer",
@@ -283,11 +382,11 @@
                     "optional": true
                 }
             ],
-            "class": "Device"
+            "class": "bm.Device"
         },
         {
             "file": "src/device.js",
-            "line": 84,
+            "line": 87,
             "description": "Set which controller mode the device is in.",
             "itemtype": "method",
             "name": "setMode",
@@ -298,11 +397,11 @@
                     "type": "String"
                 }
             ],
-            "class": "Device"
+            "class": "bm.Device"
         },
         {
             "file": "src/device.js",
-            "line": 129,
+            "line": 132,
             "description": "Get which controller mode the device is in.",
             "itemtype": "method",
             "name": "getMode",
@@ -310,7 +409,7 @@
                 "description": "**\"gamepad\"**, **\"keyboard\"**, **\"navigation\"**, or **\"wait\"**.",
                 "type": "String"
             },
-            "class": "Device"
+            "class": "bm.Device"
         },
         {
             "file": "src/events.js",
@@ -318,8 +417,8 @@
             "description": "Device Associated with this event.",
             "itemtype": "property",
             "name": "device",
-            "type": "{Device}",
-            "class": "DeviceAvailableEvent"
+            "type": "{bm.Device}",
+            "class": "bm.DeviceAvailableEvent"
         },
         {
             "file": "src/events.js",
@@ -327,8 +426,8 @@
             "description": "Device Associated with this event.",
             "itemtype": "property",
             "name": "device",
-            "type": "{Device}",
-            "class": "DeviceConnectedEvent"
+            "type": "{bm.Device}",
+            "class": "bm.DeviceConnectedEvent"
         },
         {
             "file": "src/events.js",
@@ -336,8 +435,8 @@
             "description": "Device Associated with this event.",
             "itemtype": "property",
             "name": "device",
-            "type": "{Device}",
-            "class": "DeviceDisconnectedEvent"
+            "type": "{bm.Device}",
+            "class": "bm.DeviceDisconnectedEvent"
         },
         {
             "file": "src/events.js",
@@ -345,8 +444,8 @@
             "description": "Device Associated with this event.",
             "itemtype": "property",
             "name": "device",
-            "type": "{Device}",
-            "class": "ShowSlotColorEvent"
+            "type": "{bm.Device}",
+            "class": "bm.ShowSlotColorEvent"
         },
         {
             "file": "src/events.js",
@@ -355,7 +454,7 @@
             "itemtype": "property",
             "name": "slotIndex",
             "type": "{Number}",
-            "class": "ShowSlotColorEvent"
+            "class": "bm.ShowSlotColorEvent"
         },
         {
             "file": "src/events.js",
@@ -364,7 +463,7 @@
             "itemtype": "property",
             "name": "color",
             "type": "{String}",
-            "class": "ShowSlotColorEvent"
+            "class": "bm.ShowSlotColorEvent"
         }
     ]
 }

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>BrassMonkey</title>
+    <title>bm.EventEmitter</title>
     <link rel="stylesheet" href="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;3.5.1&#x2F;build&#x2F;cssgrids&#x2F;cssgrids-min.css">
     <link rel="stylesheet" href="..&#x2F;assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="..&#x2F;assets/css/main.css" id="site_styles">
@@ -41,17 +41,19 @@
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
             
-                <li><a href="..&#x2F;classes/BrassMonkey.html">BrassMonkey</a></li>
+                <li><a href="..&#x2F;classes/bm.html">bm</a></li>
             
-                <li><a href="..&#x2F;classes/Device.html">Device</a></li>
+                <li><a href="..&#x2F;classes/bm.Device.html">bm.Device</a></li>
             
-                <li><a href="..&#x2F;classes/DeviceAvailableEvent.html">DeviceAvailableEvent</a></li>
+                <li><a href="..&#x2F;classes/bm.DeviceAvailableEvent.html">bm.DeviceAvailableEvent</a></li>
             
-                <li><a href="..&#x2F;classes/DeviceConnectedEvent.html">DeviceConnectedEvent</a></li>
+                <li><a href="..&#x2F;classes/bm.DeviceConnectedEvent.html">bm.DeviceConnectedEvent</a></li>
             
-                <li><a href="..&#x2F;classes/DeviceDisconnectedEvent.html">DeviceDisconnectedEvent</a></li>
+                <li><a href="..&#x2F;classes/bm.DeviceDisconnectedEvent.html">bm.DeviceDisconnectedEvent</a></li>
             
-                <li><a href="..&#x2F;classes/ShowSlotColorEvent.html">ShowSlotColorEvent</a></li>
+                <li><a href="..&#x2F;classes/bm.EventEmitter.html">bm.EventEmitter</a></li>
+            
+                <li><a href="..&#x2F;classes/bm.ShowSlotColorEvent.html">bm.ShowSlotColorEvent</a></li>
             
             </ul>
 
@@ -92,7 +94,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>BrassMonkey Class</h1>
+                        <h1>bm.EventEmitter Class</h1>
 <div class="box meta">
     
 
@@ -100,7 +102,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="..&#x2F;files&#x2F;src_core.js.html#l2"><code>src&#x2F;core.js:2</code></a>
+            Defined in: <a href="..&#x2F;files&#x2F;src_core.js.html#l66"><code>src&#x2F;core.js:66</code></a>
         </div>
     
 
@@ -112,15 +114,7 @@
 
 
 <div class="box intro">
-    <p>The Brass Monkey SDK. This is a singleton accessed like so:</p>
-
-<pre class="code"><code class="prettyprint">bm.init(...);
-</code></pre>
-
-<p>or</p>
-
-<pre class="code"><code class="prettyprint">var version = bm.version;
-</code></pre>
+    <p>EventEmitter implements an interface for registering, unregistering, and triggering events.</p>
 </div>
 
 
@@ -132,8 +126,6 @@
         
             <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
         
-        
-            <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
         
         
         
@@ -152,7 +144,35 @@
                     <ul class="index-list methods">
                         
                             <li class="index-item method">
-                                <a href="#method_init">init</a>
+                                <a href="#method_addEventListener">addEventListener</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_off">off</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_on">on</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_removeEventListener">removeEventListener</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_trigger">trigger</a>
 
                                 
                                 
@@ -162,21 +182,6 @@
                 </div>
             
 
-            
-                <div class="index-section properties">
-                    <h3>Properties</h3>
-
-                    <ul class="index-list properties">
-                        
-                            <li class="index-item property">
-                                <a href="#property_version">version</a>
-
-                                
-                                
-                            </li>
-                        
-                    </ul>
-                </div>
             
 
             
@@ -225,8 +230,8 @@
                 <h2 class="off-left">Methods</h2>
 
                 
-                    <div id="method_init" class="method item">
-    <h3 class="name"><code>init</code></h3>
+                    <div id="method_addEventListener" class="method item">
+    <h3 class="name"><code>addEventListener</code></h3>
 
     
         <div class="args">
@@ -234,7 +239,13 @@
             
                 <li class="arg">
                     
-                        <code>options</code>
+                        <code>eventType</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>fn</code>
                     
                 </li>
             
@@ -267,7 +278,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;src_brassmonkey.js.html#l3"><code>src&#x2F;brassmonkey.js:3</code></a>
+        <a href="..&#x2F;files&#x2F;src_core.js.html#l75"><code>src&#x2F;core.js:75</code></a>
         
         </p>
 
@@ -278,7 +289,7 @@
     </div>
 
     <div class="description">
-        <p>Initialize Brass Monkey</p>
+        <p>Register a callback for a particular event.</p>
     </div>
 
     
@@ -289,84 +300,31 @@
             
                 <li class="param">
                     
-                        <code class="param-name">options</code>
-                        <span class="type">Object</span>
+                        <code class="param-name">eventType</code>
+                        <span class="type">String</span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>Options 
-  for initializing Brass Monkey.</p>
+                        <p>Which event to listen to.</p>
                     </div>
 
                     
-                        <ul class="params-list">
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name">name</code>
-                                    <span class="type">String</span>
-                                
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">fn</code>
+                        <span class="type">Function</span>
+                    
 
-                                <div class="param-description">
-                                    <p>The name of your game. This is what 
-    is displayed on the phone when you pick what to connect to.</p>
+                    
 
-<pre><code>Example: "Monkey Golf"
-</code></pre>
-                                </div>
+                    <div class="param-description">
+                        <p>Function to be called back when the event occurs.</p>
+                    </div>
 
-                                
-                            </li>
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name">appID</code>
-                                    <span class="type">String</span>
-                                
-
-                                <div class="param-description">
-                                    <p>The unique identifier of your Game/App. You
-    must generate this through the developer admin interface.</p>
-                                </div>
-
-                                
-                            </li>
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name optional">[maxPlayers=1]</code>
-                                    <span class="type">Number</span>
-                                    <span class="flag optional" title="This parameter is optional.">optional</span>
-                                
-
-                                <div class="param-description">
-                                    <p>The number of players that can play your game.</p>
-                                </div>
-
-                                
-                            </li>
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name optional">[swfURL]</code>
-                                    <span class="type">URL</span>
-                                    <span class="flag optional" title="This parameter is optional.">optional</span>
-                                
-
-                                <div class="param-description">
-                                    <p>The location of the SWF file that implements 
-    the SDK when there a browser doesn't support Websockets. </p>
-
-<pre><code>If not provided the matching version on the Brass Monkey CDN is used.
-</code></pre>
-                                </div>
-
-                                
-                            </li>
-                            
-                        </ul>
                     
                 </li>
             
@@ -380,17 +338,18 @@
 </div>
 
                 
-            </div>
-        
+                    <div id="method_off" class="method item">
+    <h3 class="name"><code>off</code></h3>
 
-        
-            <div id="properties" class="api-class-tabpanel">
-                <h2 class="off-left">Properties</h2>
+    
+        <span class="paren">()</span>
+    
 
-                
-                    <div id="property_version" class="property item">
-    <h3 class="name"><code>version</code></h3>
-    <span class="type">String</span>
+    
+
+    
+
+    
 
     
 
@@ -411,9 +370,10 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;src_core.js.html#l17"><code>src&#x2F;core.js:17</code></a>
+        <a href="..&#x2F;files&#x2F;src_core.js.html#l130"><code>src&#x2F;core.js:130</code></a>
         
         </p>
+
 
         
 
@@ -421,19 +381,7 @@
     </div>
 
     <div class="description">
-        <p>Version number of the SDK. </p>
-
-<p>Format:</p>
-
-<pre class="code"><code class="prettyprint">Major.Minor.Patch
-</code></pre>
-
-<p>Example:</p>
-
-<pre class="code"><code class="prettyprint">"0.5.1"
-</code></pre>
-
-<p>Follows the <a href="http://semver.org">Semantic Versioning Specification.</a></p>
+        <p>Alias for {EventEmitter.removeEventListener}</p>
     </div>
 
     
@@ -444,7 +392,279 @@
 </div>
 
                 
+                    <div id="method_on" class="method item">
+    <h3 class="name"><code>on</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;src_core.js.html#l98"><code>src&#x2F;core.js:98</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Alias for {EventEmitter.addEventListener}</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_removeEventListener" class="method item">
+    <h3 class="name"><code>removeEventListener</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>eventType</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>fn</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;src_core.js.html#l107"><code>src&#x2F;core.js:107</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Unregister a callback for a particular event.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">eventType</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Which event to stop listening to.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">fn</code>
+                        <span class="type">Function</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Function to be removed.</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_trigger" class="method item">
+    <h3 class="name"><code>trigger</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>eventType</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>event</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;src_core.js.html#l139"><code>src&#x2F;core.js:139</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Trigger an event. (Calls all the callbacks that are listening for the eventType)</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">eventType</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Which event to trigger.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">event</code>
+                        <span class="type">Event</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Event that will be passed to all registered listeners.</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
             </div>
+        
+
         
 
         
@@ -477,7 +697,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;src_brassmonkey.js.html#l253"><code>src&#x2F;brassmonkey.js:253</code></a>
+        <a href="..&#x2F;files&#x2F;src_brassmonkey.js.html#l209"><code>src&#x2F;brassmonkey.js:209</code></a>
         
         </p>
 
@@ -499,7 +719,7 @@
                 <li class="param">
                     
                         <code class="param-name">event</code>
-                        <span class="type"><a href="../classes/DeviceAvailableEvent.html" class="crosslink">DeviceAvailableEvent</a></span>
+                        <span class="type">DeviceAvailableEvent</span>
                     
 
                     
@@ -543,7 +763,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;src_brassmonkey.js.html#l260"><code>src&#x2F;brassmonkey.js:260</code></a>
+        <a href="..&#x2F;files&#x2F;src_brassmonkey.js.html#l216"><code>src&#x2F;brassmonkey.js:216</code></a>
         
         </p>
 
@@ -565,7 +785,7 @@
                 <li class="param">
                     
                         <code class="param-name">event</code>
-                        <span class="type"><a href="../classes/DeviceConnectedEvent.html" class="crosslink">DeviceConnectedEvent</a></span>
+                        <span class="type">DeviceConnectedEvent</span>
                     
 
                     
@@ -609,7 +829,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;src_brassmonkey.js.html#l267"><code>src&#x2F;brassmonkey.js:267</code></a>
+        <a href="..&#x2F;files&#x2F;src_brassmonkey.js.html#l223"><code>src&#x2F;brassmonkey.js:223</code></a>
         
         </p>
 
@@ -631,7 +851,7 @@
                 <li class="param">
                     
                         <code class="param-name">event</code>
-                        <span class="type"><a href="../classes/DeviceDisconnectedEvent.html" class="crosslink">DeviceDisconnectedEvent</a></span>
+                        <span class="type">DeviceDisconnectedEvent</span>
                     
 
                     
@@ -675,7 +895,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;src_brassmonkey.js.html#l274"><code>src&#x2F;brassmonkey.js:274</code></a>
+        <a href="..&#x2F;files&#x2F;src_brassmonkey.js.html#l230"><code>src&#x2F;brassmonkey.js:230</code></a>
         
         </p>
 
@@ -697,7 +917,7 @@
                 <li class="param">
                     
                         <code class="param-name">event</code>
-                        <span class="type"><a href="../classes/DeviceDisconnectedEvent.html" class="crosslink">DeviceDisconnectedEvent</a></span>
+                        <span class="type">DeviceDisconnectedEvent</span>
                     
 
                     

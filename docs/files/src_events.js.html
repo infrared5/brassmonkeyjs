@@ -41,17 +41,19 @@
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
             
-                <li><a href="..&#x2F;classes/BrassMonkey.html">BrassMonkey</a></li>
+                <li><a href="..&#x2F;classes/bm.html">bm</a></li>
             
-                <li><a href="..&#x2F;classes/Device.html">Device</a></li>
+                <li><a href="..&#x2F;classes/bm.Device.html">bm.Device</a></li>
             
-                <li><a href="..&#x2F;classes/DeviceAvailableEvent.html">DeviceAvailableEvent</a></li>
+                <li><a href="..&#x2F;classes/bm.DeviceAvailableEvent.html">bm.DeviceAvailableEvent</a></li>
             
-                <li><a href="..&#x2F;classes/DeviceConnectedEvent.html">DeviceConnectedEvent</a></li>
+                <li><a href="..&#x2F;classes/bm.DeviceConnectedEvent.html">bm.DeviceConnectedEvent</a></li>
             
-                <li><a href="..&#x2F;classes/DeviceDisconnectedEvent.html">DeviceDisconnectedEvent</a></li>
+                <li><a href="..&#x2F;classes/bm.DeviceDisconnectedEvent.html">bm.DeviceDisconnectedEvent</a></li>
             
-                <li><a href="..&#x2F;classes/ShowSlotColorEvent.html">ShowSlotColorEvent</a></li>
+                <li><a href="..&#x2F;classes/bm.EventEmitter.html">bm.EventEmitter</a></li>
+            
+                <li><a href="..&#x2F;classes/bm.ShowSlotColorEvent.html">bm.ShowSlotColorEvent</a></li>
             
             </ul>
 
@@ -96,14 +98,14 @@
 
 <div class="file">
     <pre class="code prettyprint linenums">
-(function(){
+(function(bm){
 
 &#x2F;**
 Event called when a mobile device first establishes a connection. 
 
 **Note:** 
 
-@class DeviceAvailableEvent
+@class bm.DeviceAvailableEvent
 **&#x2F;
 
 bm.DeviceAvailableEvent = function(device){
@@ -111,7 +113,7 @@ bm.DeviceAvailableEvent = function(device){
 Device Associated with this event.
 
 @property device 
-@type {Device}
+@type {bm.Device}
 **&#x2F;
   this.device = device;
 }
@@ -119,7 +121,7 @@ Device Associated with this event.
 &#x2F;**
 Event called when a mobile device successfully established a connection.
 
-@class DeviceConnectedEvent
+@class bm.DeviceConnectedEvent
 **&#x2F;
 
 
@@ -128,7 +130,7 @@ bm.DeviceConnectedEvent = function(device){
 Device Associated with this event.
 
 @property device 
-@type {Device}
+@type {bm.Device}
 **&#x2F;
   this.device = device;
 }
@@ -136,7 +138,7 @@ Device Associated with this event.
 &#x2F;**
 Event called when a mobile device is disconnected.
 
-@class DeviceDisconnectedEvent
+@class bm.DeviceDisconnectedEvent
 **&#x2F;
 
 
@@ -145,7 +147,7 @@ bm.DeviceDisconnectedEvent = function(device){
 Device Associated with this event.
 
 @property device 
-@type {Device}
+@type {bm.Device}
 **&#x2F;
   this.device = device;
 }
@@ -158,7 +160,7 @@ This is the unique color that is displayed in top right of the console, in your 
 on the device list in the controller app. It&#x27;s used to help users disambiguate which
 console&#x2F;game they want to connect to, if there is more than one on your network.
 
-@class ShowSlotColorEvent
+@class bm.ShowSlotColorEvent
 **&#x2F;
 
   &#x2F;&#x2F; Lookup table for converting slot index numbers into an agreed upon matching color.
@@ -174,7 +176,7 @@ bm.ShowSlotColorEvent = function(device){
 Device Associated with this event.
 
 @property device 
-@type {Device}
+@type {bm.Device}
 
 **&#x2F;
   this.device = device;
@@ -204,7 +206,7 @@ Example:
   this.color = slotColors[this.index];
 }
 
-})();
+})(BrassMonkey);
     </pre>
 </div>
 

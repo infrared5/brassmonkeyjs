@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>ShowSlotColorEvent</title>
+    <title>bm.DeviceDisconnectedEvent</title>
     <link rel="stylesheet" href="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;3.5.1&#x2F;build&#x2F;cssgrids&#x2F;cssgrids-min.css">
     <link rel="stylesheet" href="..&#x2F;assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="..&#x2F;assets/css/main.css" id="site_styles">
@@ -41,17 +41,19 @@
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
             
-                <li><a href="..&#x2F;classes/BrassMonkey.html">BrassMonkey</a></li>
+                <li><a href="..&#x2F;classes/bm.html">bm</a></li>
             
-                <li><a href="..&#x2F;classes/Device.html">Device</a></li>
+                <li><a href="..&#x2F;classes/bm.Device.html">bm.Device</a></li>
             
-                <li><a href="..&#x2F;classes/DeviceAvailableEvent.html">DeviceAvailableEvent</a></li>
+                <li><a href="..&#x2F;classes/bm.DeviceAvailableEvent.html">bm.DeviceAvailableEvent</a></li>
             
-                <li><a href="..&#x2F;classes/DeviceConnectedEvent.html">DeviceConnectedEvent</a></li>
+                <li><a href="..&#x2F;classes/bm.DeviceConnectedEvent.html">bm.DeviceConnectedEvent</a></li>
             
-                <li><a href="..&#x2F;classes/DeviceDisconnectedEvent.html">DeviceDisconnectedEvent</a></li>
+                <li><a href="..&#x2F;classes/bm.DeviceDisconnectedEvent.html">bm.DeviceDisconnectedEvent</a></li>
             
-                <li><a href="..&#x2F;classes/ShowSlotColorEvent.html">ShowSlotColorEvent</a></li>
+                <li><a href="..&#x2F;classes/bm.EventEmitter.html">bm.EventEmitter</a></li>
+            
+                <li><a href="..&#x2F;classes/bm.ShowSlotColorEvent.html">bm.ShowSlotColorEvent</a></li>
             
             </ul>
 
@@ -92,7 +94,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>ShowSlotColorEvent Class</h1>
+                        <h1>bm.DeviceDisconnectedEvent Class</h1>
 <div class="box meta">
     
 
@@ -100,7 +102,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="..&#x2F;files&#x2F;src_events.js.html#l56"><code>src&#x2F;events.js:56</code></a>
+            Defined in: <a href="..&#x2F;files&#x2F;src_events.js.html#l38"><code>src&#x2F;events.js:38</code></a>
         </div>
     
 
@@ -112,11 +114,7 @@
 
 
 <div class="box intro">
-    <p>Event called when the SDK has received it's assigned slot index/color.</p>
-
-<p>This is the unique color that is displayed in top right of the console, in your game, and 
-on the device list in the controller app. It's used to help users disambiguate which
-console/game they want to connect to, if there is more than one on your network.</p>
+    <p>Event called when a mobile device is disconnected.</p>
 </div>
 
 
@@ -146,21 +144,7 @@ console/game they want to connect to, if there is more than one on your network.
                     <ul class="index-list properties">
                         
                             <li class="index-item property">
-                                <a href="#property_color">color</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property">
                                 <a href="#property_device">device</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property">
-                                <a href="#property_slotIndex">slotIndex</a>
 
                                 
                                 
@@ -182,58 +166,9 @@ console/game they want to connect to, if there is more than one on your network.
                 <h2 class="off-left">Properties</h2>
 
                 
-                    <div id="property_color" class="property item">
-    <h3 class="name"><code>color</code></h3>
-    <span class="type">String</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="..&#x2F;files&#x2F;src_events.js.html#l94"><code>src&#x2F;events.js:94</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Color to display on the screen. (CSS Style Hexidecimal)</p>
-
-<p>Example:</p>
-
-<pre class="code"><code class="prettyprint">"#ff0000"
-</code></pre>
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
                     <div id="property_device" class="property item">
     <h3 class="name"><code>device</code></h3>
-    <span class="type"><a href="../classes/Device.html" class="crosslink">Device</a></span>
+    <span class="type"><a href="../classes/bm.Device.html" class="crosslink">bm.Device</a></span>
 
     
 
@@ -254,7 +189,7 @@ console/game they want to connect to, if there is more than one on your network.
             
         
         
-        <a href="..&#x2F;files&#x2F;src_events.js.html#l75"><code>src&#x2F;events.js:75</code></a>
+        <a href="..&#x2F;files&#x2F;src_events.js.html#l46"><code>src&#x2F;events.js:46</code></a>
         
         </p>
 
@@ -265,50 +200,6 @@ console/game they want to connect to, if there is more than one on your network.
 
     <div class="description">
         <p>Device Associated with this event.</p>
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_slotIndex" class="property item">
-    <h3 class="name"><code>slotIndex</code></h3>
-    <span class="type">Number</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="..&#x2F;files&#x2F;src_events.js.html#l83"><code>src&#x2F;events.js:83</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Unique identifier to your network. (Each instance of Brass Monkey running get it's own slotIndex number)</p>
     </div>
 
     

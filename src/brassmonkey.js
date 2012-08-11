@@ -1,59 +1,5 @@
 (function(bm){
 
-/**
-Startup Brass Monkey
-
-@method start
-@param {Object} options Options 
-  for initializing Brass Monkey.
-  @param {String} options.name The name of your game. This is what 
-    is displayed on the phone when you pick what to connect to.
-    
-    Example: "Monkey Golf"
-  @param {String} options.appID The unique identifier of your Game/App. You
-    must generate this through the developer admin interface.
-    
-  @param {Number} [options.maxPlayers=1]
-    The number of players that can play your game.
-    
-  @param {URL} [options.swfURL]
-    The location of the SWF file that implements 
-    the SDK when there a browser doesn't support Websockets. 
-    
-    If not provided the matching version on the Brass Monkey CDN is used.
-**/
-bm.start = function(options){
-  
-  // Store options for convenient access later
-    // TODO: Add defaults to these options for those not provided.
-  bm.options = options;  
-    // If no images/layout were provided we default them to being empty arrays.
-    // This could be the case for when certain hosts like the website only
-    // use the built in controllers (Keyboard Mode, Navigation Mode, and any future
-    // ones) 
-  //bm.options.design.images =  options.design.images?options.design.images:[];
-  //bm.options.design.layout =  options.design.layout?options.design.layout:[];
-  
-  bm.devices = [];
-  
-  // Choose the proper communication runtime based on the environment.
-  // For now it's basically WebSockets in Mobile Safari otherwise Flash
-  // everywhere else.
-  if(true){//bm.detectIOS()){
-    bm.runtime = new bm.WebSocketsRT();
-  } else {
-    bm.runtime = new bm.FlashRT();
-  }
-  
-  bm.runtime.start();
-}
-
-bm.stop = function(){
-  if(bm.runtime!==undefined){
-    bm.runtime.stop();
-  }
-}
-
 //--------------------------------------
 // Public API
 //-------------------------------------- 

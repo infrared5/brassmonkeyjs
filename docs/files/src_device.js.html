@@ -41,17 +41,19 @@
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
             
-                <li><a href="..&#x2F;classes/BrassMonkey.html">BrassMonkey</a></li>
+                <li><a href="..&#x2F;classes/bm.html">bm</a></li>
             
-                <li><a href="..&#x2F;classes/Device.html">Device</a></li>
+                <li><a href="..&#x2F;classes/bm.Device.html">bm.Device</a></li>
             
-                <li><a href="..&#x2F;classes/DeviceAvailableEvent.html">DeviceAvailableEvent</a></li>
+                <li><a href="..&#x2F;classes/bm.DeviceAvailableEvent.html">bm.DeviceAvailableEvent</a></li>
             
-                <li><a href="..&#x2F;classes/DeviceConnectedEvent.html">DeviceConnectedEvent</a></li>
+                <li><a href="..&#x2F;classes/bm.DeviceConnectedEvent.html">bm.DeviceConnectedEvent</a></li>
             
-                <li><a href="..&#x2F;classes/DeviceDisconnectedEvent.html">DeviceDisconnectedEvent</a></li>
+                <li><a href="..&#x2F;classes/bm.DeviceDisconnectedEvent.html">bm.DeviceDisconnectedEvent</a></li>
             
-                <li><a href="..&#x2F;classes/ShowSlotColorEvent.html">ShowSlotColorEvent</a></li>
+                <li><a href="..&#x2F;classes/bm.EventEmitter.html">bm.EventEmitter</a></li>
+            
+                <li><a href="..&#x2F;classes/bm.ShowSlotColorEvent.html">bm.ShowSlotColorEvent</a></li>
             
             </ul>
 
@@ -96,146 +98,158 @@
 
 <div class="file">
     <pre class="code prettyprint linenums">
-(function(){
+(function(bm){
 &#x2F;**
 Each connected device is represented by an instance of this class. 
 
 Communicating with a particular device is done through this class&#x27; methods.
 
-@class Device 
+@class bm.Device 
+@extends bm.EventEmitter
 **&#x2F;
 
-bm.Device = function(){
-&#x2F;**
-Display name of the user associated with this device.
-
-If the user is logged in on their device this will be their profile name, otherwise it will be the name they gave their device. 
-
-@property name 
-@type String
-**&#x2F;
-this.name = &quot;Name&quot;;
-
-&#x2F;**
-The unique identifier of this device.
-
-@property id 
-@type String
-**&#x2F;
-this.id = &quot;fad2fd2fda2f2f&quot;;
-
-&#x2F;&#x2F; Internal vars.
-
-this.touchEnabled = false;
-this.touchInterval = 1&#x2F;10;
-
-this.accelerometerEnabled = false;
-this.accelerometerInterval = 1&#x2F;10;
-
-this.mode = &quot;gamepad&quot;;
-
-}
-
-&#x2F;**
-Enable&#x2F;Disable touch events.
-
-Touch events are off by default to reduce network traffic and should only be enabled if you are doing touch based controls. 
-
-@method enableTouch
-@param {Bool} enable If &#x27;true&#x27; touches are enabled, if &#x27;false&#x27; touches are disabled.
-@param {Float} [frequency] Frequency at which touch events are gathered and sent from the device. (Milliseconds)
-
-**&#x2F;
-
-bm.Device.prototype.enableTouch = function(enable){
-  var self = this;
+bm.Device = bm.EventEmitter.extend({
+  init:function(){
+    this._super();
+    
+    &#x2F;**
+    Display name of the user associated with this device.
+    
+    If the user is logged in on their device this will be their profile name, otherwise it will be the name they gave their device. 
+    
+    @property name 
+    @type String
+    **&#x2F;
+    this.name = &quot;Name&quot;;
+    
+    &#x2F;**
+    The unique identifier of this device.
+    
+    @property id 
+    @type String
+    **&#x2F;
+    this.id = &quot;fad2fd2fda2f2f&quot;;
+    
+    
+    &#x2F;&#x2F; Internal State
+    
+    
+    this.touchEnabled = false;
+    this.touchInterval = 1&#x2F;10;
+    
+    this.accelerometerEnabled = false;
+    this.accelerometerInterval = 1&#x2F;10;
+    
+    this.mode = &quot;gamepad&quot;;
+  },
+  &#x2F;**
+  Enable&#x2F;Disable touch events.
   
-  this.touchEnabled = enable;
-
-  setTimeout(function(){
-    bm.getFlashObj().EnableTouch(self.id,enable, frequency);
-  },2E3)
-};
-
-&#x2F;**
-Enable&#x2F;Disable accelerometer events.
-
-Accelerometer events are off by default to reduce network traffic and should only be enabled if you are doing touch based controls. 
-
-@method enableAccelerometer
-@param {Bool} enable If &#x27;true&#x27; touches are enabled, if &#x27;false&#x27; touches are disabled.
-@param {Float} [frequency] Frequency at which touch events are gathered and sent from the device. (Milliseconds)
-
-**&#x2F;
-
-bm.Device.prototype.enableAccelerometer=function(enable, frequency){
-  var self = this;
+  Touch events are off by default to reduce network traffic and should only be enabled if you are doing touch based controls. 
   
-  this.accelerometerEnabled = enable;
-  this.accelerometerFrequency = frequency;
-
-  setTimeout(function(){
-    bm.getFlashObj().EnableAccelerometer(self.id,enable, frequency);
-  },2E3)
-};
-
-&#x2F;**
-Set which controller mode the device is in.
-
-@method setMode
-@param {String} mode Which mode do you want to set?
-
-  **&quot;gamepad&quot;** Show your custom controller layout.
+  @method enableTouch
+  @param {Bool} enable If &#x27;true&#x27; touches are enabled, if &#x27;false&#x27; touches are disabled.
+  @param {Float} [frequency] Frequency at which touch events are gathered and sent from the device. (Milliseconds)
   
-  **&quot;keyboard&quot;** Show the built in keyboard input layout.
+  **&#x2F;
   
-  **&quot;navigation&quot;** Show the built in navigation input layout.
-
-  **&quot;wait&quot;** Show the waiting&#x2F;loading screen. 
-
-**&#x2F;
-bm.setMode = function(mode){
-  if(this.mode==mode){
-    return;&#x2F;&#x2F; Ignore if not different
+  enableTouch: function(enable){
+    var self = this;
+    
+    this.touchEnabled = enable;
+  
+    setTimeout(function(){
+      bm.getFlashObj().EnableTouch(self.id,enable, frequency);
+    },2E3)
+  },
+  &#x2F;**
+  Enable&#x2F;Disable accelerometer events.
+  
+  Accelerometer events are off by default to reduce network traffic and should only be enabled if you are doing touch based controls. 
+  
+  @method enableAccelerometer
+  @param {Bool} enable If &#x27;true&#x27; touches are enabled, if &#x27;false&#x27; touches are disabled.
+  @param {Float} [frequency] Frequency at which touch events are gathered and sent from the device. (Milliseconds)
+  
+  **&#x2F;
+  
+  enableAccelerometer: function(enable, frequency){
+    var self = this;
+    
+    this.accelerometerEnabled = enable;
+    this.accelerometerFrequency = frequency;
+  
+    setTimeout(function(){
+      bm.getFlashObj().EnableAccelerometer(self.id,enable, frequency);
+    },2E3)
+  },
+  
+  &#x2F;**
+  Set which controller mode the device is in.
+  
+  @method setMode
+  @param {String} mode Which mode do you want to set?
+  
+    **&quot;gamepad&quot;** Show your custom controller layout.
+    
+    **&quot;keyboard&quot;** Show the built in keyboard input layout.
+    
+    **&quot;navigation&quot;** Show the built in navigation input layout.
+  
+    **&quot;wait&quot;** Show the waiting&#x2F;loading screen. 
+  
+  **&#x2F;
+  setMode: function(mode){
+    if(this.mode==mode){
+      return;&#x2F;&#x2F; Ignore if not different
+    }
+    
+    this.mode = mode;
+    switch(mode){
+      case &quot;gamepad&quot;:
+        if( bm.getFlashObj()!==undefined &amp;&amp; bm.getFlashObj().SetGamepadMode!==undefined){
+          bm.getFlashObj().SetGamepadMode(this.mode);
+        }
+        break;
+      case &quot;keyboard&quot;:
+        if( bm.getFlashObj()!==undefined &amp;&amp; bm.getFlashObj().SetKeyboardMode!==undefined){
+          bm.getFlashObj().SetKeyboardMode(this.mode);
+        }
+        break;
+      case &quot;navigation&quot;:
+        if( bm.getFlashObj()!==undefined &amp;&amp; bm.getFlashObj().SetNavMode!==undefined){
+          bm.getFlashObj().SetNavMode(this.mode);
+        }    
+        break;
+      case &quot;wait&quot;:
+        if( bm.getFlashObj()!==undefined &amp;&amp; bm.getFlashObj().setWaitMode!==undefined){
+          bm.getFlashObj().setWaitMode(this.mode);
+        }    
+        break;
+    }  
+  },
+  
+  &#x2F;**
+  Get which controller mode the device is in.
+  
+  @method getMode
+  @return {String} **&quot;gamepad&quot;**, **&quot;keyboard&quot;**, **&quot;navigation&quot;**, or **&quot;wait&quot;**.
+  
+  **&#x2F;
+  getMode: function(mode){
+    return this.mode;
   }
   
-  this.mode = mode;
-  switch(mode){
-    case &quot;gamepad&quot;:
-      if( bm.getFlashObj()!==undefined &amp;&amp; bm.getFlashObj().SetGamepadMode!==undefined){
-        bm.getFlashObj().SetGamepadMode(deviceId!==undefined?deviceId:&quot;&quot;);
-      }
-      break;
-    case &quot;keyboard&quot;:
-      if( bm.getFlashObj()!==undefined &amp;&amp; bm.getFlashObj().SetKeyboardMode!==undefined){
-        bm.getFlashObj().SetKeyboardMode(deviceId!==undefined?deviceId:&quot;&quot;,text!==undefined?text:&quot;&quot;);
-      }
-      break;
-    case &quot;navigation&quot;:
-      if( bm.getFlashObj()!==undefined &amp;&amp; bm.getFlashObj().SetNavMode!==undefined){
-        bm.getFlashObj().SetNavMode(deviceId!==undefined?deviceId:&quot;&quot;);
-      }    
-      break;
-    case &quot;wait&quot;:
-      if( bm.getFlashObj()!==undefined &amp;&amp; bm.getFlashObj().setWaitMode!==undefined){
-        bm.getFlashObj().setWaitMode(deviceId!==undefined?deviceId:&quot;&quot;);
-      }    
-      break;
-  }  
-};
+});
 
-&#x2F;**
-Get which controller mode the device is in.
+var testDevice = new bm.Device();
+testDevice.on(&quot;bye&quot;,function(event){
+  alert(event.message);
+});
 
-@method getMode
-@return {String} **&quot;gamepad&quot;**, **&quot;keyboard&quot;**, **&quot;navigation&quot;**, or **&quot;wait&quot;**.
+testDevice.trigger(&quot;bye&quot;,{message:&quot;bye&quot;});
 
-**&#x2F;
-bm.getMode = function(mode){
-  return this.mode;
-};
-
-})();
+})(BrassMonkey);
     </pre>
 </div>
 
