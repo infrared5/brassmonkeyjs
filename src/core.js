@@ -195,7 +195,7 @@ var BrassMonkeyClass = EventEmitter.extend({
     this.version = "0.5.0";
     
     
-    this.devices = [];
+    this.devices = {};
   },
  /**
   Startup Brass Monkey
@@ -254,7 +254,29 @@ var BrassMonkeyClass = EventEmitter.extend({
     if(bm.runtime!==undefined){
       bm.runtime.stop();
     }
+  },
+  
+  /**
+  Shutdown Brass Monkey. 
+  
+  This will close all open network connections and disconnect all controllers.
+  
+  @method stop
+  **/
+  log: function(str){
+    console.log(str);
+  },
+  
+  addDevice: function(device){
+    this.devices[device.id] = device;
+    
+    this.trigger('deviceconnected', new DeviceConnectedEvent(device));
+  },
+  
+  getDevice: function(id){
+    return this.devices[id];
   }
+  
 });
 
 // Create singleton instance of BrassMonkey

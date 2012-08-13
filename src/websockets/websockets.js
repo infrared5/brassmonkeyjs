@@ -98,7 +98,7 @@ var makeInvoke = function(methodName, params) {
 };
 
 var start = function(ipAddress) {
-	console.log("start");
+	bm.log("start");
 	connections.push( new Connection("deviceId", ipAddress, 9011));
 };
 
@@ -108,7 +108,7 @@ var stop = function() {
 		connections[i].close();
 	}
 	connections.length = 0;
-	console.log("stop");
+	bm.log("stop");
 };
 
 var Connection = function(deviceId, host, port) {
@@ -119,23 +119,23 @@ var Connection = function(deviceId, host, port) {
 	var self = this;
 	this.socket.onerror = function(/*error*/) {
 		removeConnection(self.deviceId);
-		console.log("error");
+		bm.log("error");
 	};
 	this.socket.onclose = function(/*closeEvent*/) {
 		removeConnection(self.deviceId);
-		console.log("DISCONNECTED");
+		bm.log("DISCONNECTED");
 	};
 	this.socket.onmessage = bind(this.onVersion, this);
 	this.socket.onopen = function() {
 		var handshake = [packedVersion, packedVersion];
 		self.socket.send(JSON.stringify(handshake));
-		console.log("CONNECTED");
+		bm.log("CONNECTED");
 	};
 };
 
 Connection.prototype.onVersion = function(message) {
 	var json = JSON.parse(message.data);
-	console.log("GOT VERSION");
+	bm.log("GOT VERSION");
 
 	// TODO: verify version
 	this.sendPacket({
@@ -156,7 +156,7 @@ Connection.prototype.onMessage = function(message) {
 	var json = JSON.parse(message.data);
 	var packet = decodePacket(json);
 
-	console.log("GOT MESSAGE: " + JSON.stringify(packet));
+	bm.log("GOT MESSAGE: " + JSON.stringify(packet));
 
 	if(CHANNEL_MESSAGE === packet.channel) {
 		this.handleInvoke(packet.message);
@@ -200,7 +200,7 @@ Connection.prototype.sendPacket = function(packet) {
 	packet.type = packet.type || PACKET_DATA;
 	packet.rtt = 0;
 	packet.timestamp = 0;
-	console.log("WROTE PACKET: " + JSON.stringify(packet));
+	bm.log("WROTE PACKET: " + JSON.stringify(packet));
 	var encodedPacket = encodePacket(packet);
 	this.socket.send(JSON.stringify(encodedPacket));
 };
@@ -600,6 +600,7 @@ function createDebugControls(){
     var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
     document.cookie=c_name + "=" + c_value;
   }
+  
   function getCookie(c_name){
     var i,x,y,ARRcookies=document.cookie.split(";");
     for (i=0;i<ARRcookies.length;i++){
@@ -612,8 +613,7 @@ function createDebugControls(){
     }
   }
 }
-
-// Wait till the DOM is ready then initialize everything
+// 
 if (window.addEventListener) {
   window.addEventListener('DOMContentLoaded', createDebugControls, false);
 } else {
@@ -621,8 +621,6 @@ if (window.addEventListener) {
 }
 
 bm.WebSocketsRT.prototype.start = function(){
-  
-
   
 }
 
