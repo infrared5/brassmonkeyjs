@@ -182,6 +182,20 @@ var Connection = bm.Device.extend({
 				this.sendInvoke("SetControlMode", [['i',modeIndex]]);
 			}
 		}
+	},
+
+	enableGyroscope : function (enabled) {
+		if(enabled !== this.gyroEnabled) {
+			this.gyroEnabled = enabled;
+			this.sendInvoke("enableGyro", [['B', enabled]]);
+		}
+	},
+
+	setGyroscopeInterval : function(interval) {
+		if(interval !== this.gyroInterval) {
+			this.gyroInterval = interval;
+			this.sendInvoke("setGyroInterval", [['f',interval]]);
+		}
 	}
 
 });
@@ -204,14 +218,13 @@ var generateSensorMethods = function(name) {
 	cp[intervalMethod] = function(interval) {
 		if(interval !== this[intervalField]) {
 			this[intervalField] = interval;
-			this.sendInvoke(intervalMethod, [["f",interval]]);
+			this.sendInvoke(intervalMethod, [['f',interval]]);
 		}
 	}
 }
 
 generateSensorMethods('touch');
 generateSensorMethods('accelerometer');
-generateSensorMethods('gyro');
 generateSensorMethods('orientation');
 
 cp.onMessage = function(message) {
