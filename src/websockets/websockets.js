@@ -97,9 +97,9 @@ var makeInvoke = function(methodName, params) {
 	};
 };
 
-var start = function() {
+var start = function(ipAddress) {
 	console.log("start");
-	connections.push( new Connection("deviceId", "10.0.0.2", 9011));
+	connections.push( new Connection("deviceId", ipAddress, 9011));
 };
 
 var stop = function() {
@@ -543,15 +543,87 @@ var generateByteChunks = function(xml) {
 }
 
 
+
+function createDebugControls(){
+  // Create a DOM element to hold the elements of the controller layout
+  var ui = document.createElement('div');
+  document.body.insertBefore(ui,document.body.firstChild);
+  
+  ui.style.width = "173px";
+  ui.style.height = "23px";
+  ui.style.position = "absolute";
+  ui.style.overflow = "hidden";
+  ui.style.border = "thin solid grey";
+  ui.style.backgroundColor = "white";
+  
+  // Create Start Button
+  var startButton = document.createElement('input');
+  startButton.setAttribute("type", "button");
+  startButton.setAttribute("value", "Start");
+  startButton.setAttribute("name", "start");
+  
+  startButton.onclick = function(){
+    // Store IP address
+    setCookie("ipaddress",ipAddress.value);
+  
+    // Load all of the controller images and then generate
+    // the base64 encoded version of their data for sending 
+    // to the controller app devices as they connect.
+    // TODO: Can we do work in parallel with this?
+    bm.loadImages(bm.options.design.images,function(imageData){
+      var xml = bm.generateControllerXML(imageData);
+      controlSchemeChunks = generateByteChunks(xml);
+      start(ipAddress.value);
+    });
+  }
+  ui.appendChild(startButton);
+  
+  // Create input field for the device IP Address
+  var ipAddress = document.createElement('input');
+  
+  ipAddress.setAttribute("type", "text");
+  ipAddress.setAttribute("name", "");
+  
+  // Load the previously entered IP address
+  var previousIP = getCookie("ipaddress");
+  if(previousIP){
+    ipAddress.setAttribute("value", previousIP);
+  } else {
+    ipAddress.setAttribute("value", "<ipaddress>");
+  }
+  ui.appendChild(ipAddress);
+  
+  function setCookie(c_name,value){
+    var exdays = 365,
+        exdate=new Date();
+    exdate.setDate(exdate.getDate() + exdays);
+    var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
+    document.cookie=c_name + "=" + c_value;
+  }
+  function getCookie(c_name){
+    var i,x,y,ARRcookies=document.cookie.split(";");
+    for (i=0;i<ARRcookies.length;i++){
+      x=ARRcookies[i].substr(0,ARRcookies[i].indexOf("="));
+      y=ARRcookies[i].substr(ARRcookies[i].indexOf("=")+1);
+      x=x.replace(/^\s+|\s+$/g,"");
+      if (x==c_name){
+        return unescape(y);
+      }
+    }
+  }
+}
+
+// Wait till the DOM is ready then initialize everything
+if (window.addEventListener) {
+  window.addEventListener('DOMContentLoaded', createDebugControls, false);
+} else {
+  window.attachEvent('onload', createDebugControls);
+}
+
 bm.WebSocketsRT.prototype.start = function(){
-  // Load all of the images passed in before starting up the rest
-  // of the system.
-  // TODO: Can we do work in parallel with this?
-  bm.loadImages(bm.options.design.images,function(imageData){
-    var xml = bm.generateControllerXML(imageData);
-    controlSchemeChunks = generateByteChunks(xml);
-    start();
-  });
+  
+
+  
 }
 
 bm.WebSocketsRT.prototype.stop = function(){

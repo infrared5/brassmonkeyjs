@@ -30,10 +30,7 @@ bm.Device = bm.EventEmitter.extend({
     **/
     this.id = "fad2fd2fda2f2f";
     
-    
     // Internal State
-    
-    
     this.touchEnabled = false;
     this.touchInterval = 1/10;
     
@@ -141,12 +138,5 @@ bm.Device = bm.EventEmitter.extend({
   }
   
 });
-
-var testDevice = new bm.Device();
-testDevice.on("bye",function(event){
-  alert(event.message);
-});
-
-testDevice.trigger("bye",{message:"bye"});
 
 })(BrassMonkey);

@@ -263,11 +263,6 @@ bm = BrassMonkey = new BrassMonkeyClass();
 // Add EventEmitter to the BrassMonkey namespace
 bm.EventEmitter = EventEmitter;
 
-bm.on('hi',function(event){
-  alert(event.message);
-});
-bm.trigger('hi',{message:"hi"});
-
 // Constants
 /*
 bm.MODE_GAMEPAD=0;	
