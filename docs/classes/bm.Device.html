@@ -166,6 +166,20 @@
                             </li>
                         
                             <li class="index-item method">
+                                <a href="#method_enableGyroscope">enableGyroscope</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_enableOrientation">enableOrientation</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
                                 <a href="#method_enableTouch">enableTouch</a>
 
                                 
@@ -201,7 +215,35 @@
                             </li>
                         
                             <li class="index-item method">
+                                <a href="#method_setAccelerometerInterval">setAccelerometerInterval</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_setGyroscopeInterval">setGyroscopeInterval</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
                                 <a href="#method_setMode">setMode</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_setOrientationInterval">setOrientationInterval</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_setTouchInterval">setTouchInterval</a>
 
                                 
                                 
@@ -399,9 +441,92 @@
                     
                 </li>
             
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;src_device.js.html#l67"><code>src&#x2F;device.js:67</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Enable/Disable accelerometer events.</p>
+
+<p>Accelerometer events are off by default to reduce network traffic and should only be enabled if you are doing accelerometer based controls.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">enable</code>
+                        <span class="type">Bool</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>If 'true' accelerometer events are enabled, if 'false' accelerometer events are disabled.</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_enableGyroscope" class="method item">
+    <h3 class="name"><code>enableGyroscope</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
                 <li class="arg">
                     
-                        <code class="optional">[frequency]</code>
+                        <code>enable</code>
                     
                 </li>
             
@@ -434,7 +559,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;src_device.js.html#l65"><code>src&#x2F;device.js:65</code></a>
+        <a href="..&#x2F;files&#x2F;src_device.js.html#l86"><code>src&#x2F;device.js:86</code></a>
         
         </p>
 
@@ -445,9 +570,9 @@
     </div>
 
     <div class="description">
-        <p>Enable/Disable accelerometer events.</p>
+        <p>Enable/Disable gyroscope events.</p>
 
-<p>Accelerometer events are off by default to reduce network traffic and should only be enabled if you are doing touch based controls.</p>
+<p>Gyroscope events are off by default to reduce network traffic and should only be enabled if you are doing gyroscope based controls.</p>
     </div>
 
     
@@ -465,23 +590,96 @@
                     
 
                     <div class="param-description">
-                        <p>If 'true' touches are enabled, if 'false' touches are disabled.</p>
+                        <p>If 'true' gyroscope events are enabled, if 'false' gyroscope events are disabled.</p>
                     </div>
 
                     
                 </li>
             
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_enableOrientation" class="method item">
+    <h3 class="name"><code>enableOrientation</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>enable</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;src_device.js.html#l105"><code>src&#x2F;device.js:105</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Enable/Disable orientation events.</p>
+
+<p>Touch events are off by default to reduce network traffic and should only be enabled if you are doing touch based controls.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
                 <li class="param">
                     
-                        <code class="param-name optional">[frequency]</code>
-                        <span class="type">Float</span>
-                        <span class="flag optional" title="This parameter is optional.">optional</span>
+                        <code class="param-name">enable</code>
+                        <span class="type">Bool</span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>Frequency at which touch events are gathered and sent from the device. (Milliseconds)</p>
+                        <p>If 'true' orientation events are enabled, if 'false' orientation events are disabled.</p>
                     </div>
 
                     
@@ -510,12 +708,6 @@
                     
                 </li>
             
-                <li class="arg">
-                    
-                        <code class="optional">[frequency]</code>
-                    
-                </li>
-            
             </ul><span class="paren">)</span>
         </div>
     
@@ -545,7 +737,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;src_device.js.html#l45"><code>src&#x2F;device.js:45</code></a>
+        <a href="..&#x2F;files&#x2F;src_device.js.html#l48"><code>src&#x2F;device.js:48</code></a>
         
         </p>
 
@@ -577,22 +769,6 @@
 
                     <div class="param-description">
                         <p>If 'true' touches are enabled, if 'false' touches are disabled.</p>
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name optional">[frequency]</code>
-                        <span class="type">Float</span>
-                        <span class="flag optional" title="This parameter is optional.">optional</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>Frequency at which touch events are gathered and sent from the device. (Milliseconds)</p>
                     </div>
 
                     
@@ -644,7 +820,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;src_device.js.html#l132"><code>src&#x2F;device.js:132</code></a>
+        <a href="..&#x2F;files&#x2F;src_device.js.html#l141"><code>src&#x2F;device.js:141</code></a>
         
         </p>
 
@@ -886,6 +1062,180 @@
 </div>
 
                 
+                    <div id="method_setAccelerometerInterval" class="method item">
+    <h3 class="name"><code>setAccelerometerInterval</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>interval</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;src_device.js.html#l77"><code>src&#x2F;device.js:77</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Set the interval at which acclerometer events are sent from the controller app.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">interval</code>
+                        <span class="type">Float</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The interval in seconds at which accelerometer events will be sent.</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_setGyroscopeInterval" class="method item">
+    <h3 class="name"><code>setGyroscopeInterval</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>interval</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;src_device.js.html#l96"><code>src&#x2F;device.js:96</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Set the interval at which gyroscope events are sent from the controller app.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">interval</code>
+                        <span class="type">Float</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The interval in seconds at which gyroscope events will be sent.</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
                     <div id="method_setMode" class="method item">
     <h3 class="name"><code>setMode</code></h3>
 
@@ -928,7 +1278,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;src_device.js.html#l87"><code>src&#x2F;device.js:87</code></a>
+        <a href="..&#x2F;files&#x2F;src_device.js.html#l125"><code>src&#x2F;device.js:125</code></a>
         
         </p>
 
@@ -966,6 +1316,180 @@
 <p><strong>"navigation"</strong> Show the built in navigation input layout.</p>
 
 <p><strong>"wait"</strong> Show the waiting/loading screen.</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_setOrientationInterval" class="method item">
+    <h3 class="name"><code>setOrientationInterval</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>interval</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;src_device.js.html#l115"><code>src&#x2F;device.js:115</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Set the interval at which touch events are sent from the controller app.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">interval</code>
+                        <span class="type">Float</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The interval in seconds at which orientation events will be sent.</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_setTouchInterval" class="method item">
+    <h3 class="name"><code>setTouchInterval</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>interval</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;src_device.js.html#l58"><code>src&#x2F;device.js:58</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Set the interval at which touch events are sent from the controller app.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">interval</code>
+                        <span class="type">Float</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The interval in seconds at which touch events will be sent.</p>
                     </div>
 
                     

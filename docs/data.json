@@ -325,6 +325,14 @@
             "class": "bm"
         },
         {
+            "file": "src/core.js",
+            "line": 259,
+            "description": "Shutdown Brass Monkey. \n\nThis will close all open network connections and disconnect all controllers.",
+            "itemtype": "method",
+            "name": "stop",
+            "class": "bm"
+        },
+        {
             "file": "src/device.js",
             "line": 15,
             "description": "Display name of the user associated with this device.\n\nIf the user is logged in on their device this will be their profile name, otherwise it will be the name they gave their device.",
@@ -344,7 +352,7 @@
         },
         {
             "file": "src/device.js",
-            "line": 45,
+            "line": 48,
             "description": "Enable/Disable touch events.\n\nTouch events are off by default to reduce network traffic and should only be enabled if you are doing touch based controls.",
             "itemtype": "method",
             "name": "enableTouch",
@@ -353,40 +361,118 @@
                     "name": "enable",
                     "description": "If 'true' touches are enabled, if 'false' touches are disabled.",
                     "type": "Bool"
-                },
-                {
-                    "name": "frequency",
-                    "description": "Frequency at which touch events are gathered and sent from the device. (Milliseconds)",
-                    "type": "Float",
-                    "optional": true
                 }
             ],
             "class": "bm.Device"
         },
         {
             "file": "src/device.js",
-            "line": 65,
-            "description": "Enable/Disable accelerometer events.\n\nAccelerometer events are off by default to reduce network traffic and should only be enabled if you are doing touch based controls.",
+            "line": 58,
+            "description": "Set the interval at which touch events are sent from the controller app.",
+            "itemtype": "method",
+            "name": "setTouchInterval",
+            "params": [
+                {
+                    "name": "interval",
+                    "description": "The interval in seconds at which touch events will be sent.",
+                    "type": "Float"
+                }
+            ],
+            "class": "bm.Device"
+        },
+        {
+            "file": "src/device.js",
+            "line": 67,
+            "description": "Enable/Disable accelerometer events.\n\nAccelerometer events are off by default to reduce network traffic and should only be enabled if you are doing accelerometer based controls.",
             "itemtype": "method",
             "name": "enableAccelerometer",
             "params": [
                 {
                     "name": "enable",
-                    "description": "If 'true' touches are enabled, if 'false' touches are disabled.",
+                    "description": "If 'true' accelerometer events are enabled, if 'false' accelerometer events are disabled.",
                     "type": "Bool"
-                },
-                {
-                    "name": "frequency",
-                    "description": "Frequency at which touch events are gathered and sent from the device. (Milliseconds)",
-                    "type": "Float",
-                    "optional": true
                 }
             ],
             "class": "bm.Device"
         },
         {
             "file": "src/device.js",
-            "line": 87,
+            "line": 77,
+            "description": "Set the interval at which acclerometer events are sent from the controller app.",
+            "itemtype": "method",
+            "name": "setAccelerometerInterval",
+            "params": [
+                {
+                    "name": "interval",
+                    "description": "The interval in seconds at which accelerometer events will be sent.",
+                    "type": "Float"
+                }
+            ],
+            "class": "bm.Device"
+        },
+        {
+            "file": "src/device.js",
+            "line": 86,
+            "description": "Enable/Disable gyroscope events.\n\nGyroscope events are off by default to reduce network traffic and should only be enabled if you are doing gyroscope based controls.",
+            "itemtype": "method",
+            "name": "enableGyroscope",
+            "params": [
+                {
+                    "name": "enable",
+                    "description": "If 'true' gyroscope events are enabled, if 'false' gyroscope events are disabled.",
+                    "type": "Bool"
+                }
+            ],
+            "class": "bm.Device"
+        },
+        {
+            "file": "src/device.js",
+            "line": 96,
+            "description": "Set the interval at which gyroscope events are sent from the controller app.",
+            "itemtype": "method",
+            "name": "setGyroscopeInterval",
+            "params": [
+                {
+                    "name": "interval",
+                    "description": "The interval in seconds at which gyroscope events will be sent.",
+                    "type": "Float"
+                }
+            ],
+            "class": "bm.Device"
+        },
+        {
+            "file": "src/device.js",
+            "line": 105,
+            "description": "Enable/Disable orientation events.\n\nTouch events are off by default to reduce network traffic and should only be enabled if you are doing touch based controls.",
+            "itemtype": "method",
+            "name": "enableOrientation",
+            "params": [
+                {
+                    "name": "enable",
+                    "description": "If 'true' orientation events are enabled, if 'false' orientation events are disabled.",
+                    "type": "Bool"
+                }
+            ],
+            "class": "bm.Device"
+        },
+        {
+            "file": "src/device.js",
+            "line": 115,
+            "description": "Set the interval at which touch events are sent from the controller app.",
+            "itemtype": "method",
+            "name": "setOrientationInterval",
+            "params": [
+                {
+                    "name": "interval",
+                    "description": "The interval in seconds at which orientation events will be sent.",
+                    "type": "Float"
+                }
+            ],
+            "class": "bm.Device"
+        },
+        {
+            "file": "src/device.js",
+            "line": 125,
             "description": "Set which controller mode the device is in.",
             "itemtype": "method",
             "name": "setMode",
@@ -401,7 +487,7 @@
         },
         {
             "file": "src/device.js",
-            "line": 132,
+            "line": 141,
             "description": "Get which controller mode the device is in.",
             "itemtype": "method",
             "name": "getMode",

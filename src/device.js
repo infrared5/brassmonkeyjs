@@ -32,10 +32,16 @@ bm.Device = bm.EventEmitter.extend({
     
     // Internal State
     this.touchEnabled = false;
-    this.touchInterval = 1/10;
+    this.touchInterval = 1/10.0;
     
     this.accelerometerEnabled = false;
-    this.accelerometerInterval = 1/10;
+    this.accelerometerInterval = 1/10.0;
+    
+    this.gyroEnabled = false;
+    this.gyroInterval = 1/10.0;
+    
+    this.orientationEnabled = false;
+    this.orientationInterval = 1/10.0;
     
     this.mode = "gamepad";
   },
@@ -46,40 +52,75 @@ bm.Device = bm.EventEmitter.extend({
   
   @method enableTouch
   @param {Bool} enable If 'true' touches are enabled, if 'false' touches are disabled.
-  @param {Float} [frequency] Frequency at which touch events are gathered and sent from the device. (Milliseconds)
   
   **/
   
-  enableTouch: function(enable){
-    var self = this;
-    
-    this.touchEnabled = enable;
+  /**
+  Set the interval at which touch events are sent from the controller app.
   
-    setTimeout(function(){
-      bm.getFlashObj().EnableTouch(self.id,enable, frequency);
-    },2E3)
-  },
+  
+  @method setTouchInterval
+  @param {Float} interval The interval in seconds at which touch events will be sent. 
+  
+  **/
+  
   /**
   Enable/Disable accelerometer events.
   
-  Accelerometer events are off by default to reduce network traffic and should only be enabled if you are doing touch based controls. 
+  Accelerometer events are off by default to reduce network traffic and should only be enabled if you are doing accelerometer based controls. 
   
   @method enableAccelerometer
-  @param {Bool} enable If 'true' touches are enabled, if 'false' touches are disabled.
-  @param {Float} [frequency] Frequency at which touch events are gathered and sent from the device. (Milliseconds)
+  @param {Bool} enable If 'true' accelerometer events are enabled, if 'false' accelerometer events are disabled.
   
   **/
   
-  enableAccelerometer: function(enable, frequency){
-    var self = this;
-    
-    this.accelerometerEnabled = enable;
-    this.accelerometerFrequency = frequency;
+  /**
+  Set the interval at which acclerometer events are sent from the controller app.
   
-    setTimeout(function(){
-      bm.getFlashObj().EnableAccelerometer(self.id,enable, frequency);
-    },2E3)
-  },
+  
+  @method setAccelerometerInterval
+  @param {Float} interval The interval in seconds at which accelerometer events will be sent. 
+  
+  **/
+  
+  /**
+  Enable/Disable gyroscope events.
+  
+  Gyroscope events are off by default to reduce network traffic and should only be enabled if you are doing gyroscope based controls. 
+  
+  @method enableGyroscope
+  @param {Bool} enable If 'true' gyroscope events are enabled, if 'false' gyroscope events are disabled.
+  
+  **/
+  
+  /**
+  Set the interval at which gyroscope events are sent from the controller app.
+  
+  
+  @method setGyroscopeInterval
+  @param {Float} interval The interval in seconds at which gyroscope events will be sent. 
+  
+  **/
+  
+  /**
+  Enable/Disable orientation events.
+  
+  Touch events are off by default to reduce network traffic and should only be enabled if you are doing touch based controls. 
+  
+  @method enableOrientation
+  @param {Bool} enable If 'true' orientation events are enabled, if 'false' orientation events are disabled.
+  
+  **/
+  
+  /**
+  Set the interval at which touch events are sent from the controller app.
+  
+  
+  @method setOrientationInterval
+  @param {Float} interval The interval in seconds at which orientation events will be sent. 
+  
+  **/
+  
   
   /**
   Set which controller mode the device is in.
@@ -96,35 +137,6 @@ bm.Device = bm.EventEmitter.extend({
     **"wait"** Show the waiting/loading screen. 
   
   **/
-  setMode: function(mode){
-    if(this.mode==mode){
-      return;// Ignore if not different
-    }
-    
-    this.mode = mode;
-    switch(mode){
-      case "gamepad":
-        if( bm.getFlashObj()!==undefined && bm.getFlashObj().SetGamepadMode!==undefined){
-          bm.getFlashObj().SetGamepadMode(this.mode);
-        }
-        break;
-      case "keyboard":
-        if( bm.getFlashObj()!==undefined && bm.getFlashObj().SetKeyboardMode!==undefined){
-          bm.getFlashObj().SetKeyboardMode(this.mode);
-        }
-        break;
-      case "navigation":
-        if( bm.getFlashObj()!==undefined && bm.getFlashObj().SetNavMode!==undefined){
-          bm.getFlashObj().SetNavMode(this.mode);
-        }    
-        break;
-      case "wait":
-        if( bm.getFlashObj()!==undefined && bm.getFlashObj().setWaitMode!==undefined){
-          bm.getFlashObj().setWaitMode(this.mode);
-        }    
-        break;
-    }  
-  },
   
   /**
   Get which controller mode the device is in.

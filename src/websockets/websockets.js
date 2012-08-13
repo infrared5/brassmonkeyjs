@@ -581,6 +581,7 @@ function createDebugControls(){
   // Create input field for the device IP Address
   var ipAddress = document.createElement('input');
   
+  ipAddress.style.width = "120px";
   ipAddress.setAttribute("type", "text");
   ipAddress.setAttribute("name", "");
   

@@ -295,7 +295,7 @@ var BrassMonkeyClass = EventEmitter.extend({
     this.version = &quot;0.5.0&quot;;
     
     
-    this.devices = [];
+    this.devices = {};
   },
  &#x2F;**
   Startup Brass Monkey
@@ -354,7 +354,29 @@ var BrassMonkeyClass = EventEmitter.extend({
     if(bm.runtime!==undefined){
       bm.runtime.stop();
     }
+  },
+  
+  &#x2F;**
+  Shutdown Brass Monkey. 
+  
+  This will close all open network connections and disconnect all controllers.
+  
+  @method stop
+  **&#x2F;
+  log: function(str){
+    console.log(str);
+  },
+  
+  addDevice: function(device){
+    this.devices[device.id] = device;
+    
+    this.trigger(&#x27;deviceconnected&#x27;, new DeviceConnectedEvent(device));
+  },
+  
+  getDevice: function(id){
+    return this.devices[id];
   }
+  
 });
 
 &#x2F;&#x2F; Create singleton instance of BrassMonkey
@@ -362,11 +384,6 @@ bm = BrassMonkey = new BrassMonkeyClass();
 
 &#x2F;&#x2F; Add EventEmitter to the BrassMonkey namespace
 bm.EventEmitter = EventEmitter;
-
-bm.on(&#x27;hi&#x27;,function(event){
-  alert(event.message);
-});
-bm.trigger(&#x27;hi&#x27;,{message:&quot;hi&quot;});
 
 &#x2F;&#x2F; Constants
 &#x2F;*
