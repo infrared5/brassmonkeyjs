@@ -49,8 +49,12 @@ var ENCODE_TAGGED_ARRAY = 21;
 var ENCODE_GYRO = 22;
 var ENCODE_ORIENTATION = 23;
 
-
-
+var controlModes = {
+	gamepad : 0,
+	keyboard : 1,
+	navigation : 2,
+	wait : 3
+};
 
 
 var connections = [];
@@ -111,7 +115,7 @@ var stop = function() {
 	bm.log("stop");
 };
 
-var Connection = bm.EventEmitter.extend({
+var Connection = bm.Device.extend({
 	init : function(deviceId, host, port) {
 		var socket;
 		this._super();
@@ -159,21 +163,35 @@ var Connection = bm.EventEmitter.extend({
 			}
 		});
 
-		this.sendInvoke("setReliabilityForTouch", [['i', 1], ['i', 1]]);
+		this.sendInvoke("setReliabilityForTouch", [['i', 2], ['i', 2]]);
 
 		this.socket.onmessage = bind(this.onMessage, this);
 	},
 
+	setMode : function(mode, text) {
+		if(this.mode !== mode) {
+			if(!(mode in controlModes)) {
+				throw {message:"unknown control mode " + mode};
+			}
 
+			this.mode = mode;
+			var modeIndex = controlModes[mode];
+			if(text !== undefined) {
+				this.sendInvoke("SetControlMode", [['i',modeIndex], ['*',text]]);
+			} else {
+				this.sendInvoke("SetControlMode", [['i',modeIndex]]);
+			}
+		}
+	}
 
 });
 
 var cp = Connection.prototype;
 
-var generateSensorMethods(name) {
+var generateSensorMethods = function(name) {
 	var capsName = name.charAt(0).toUpperCase() + name.slice(1),
 		enabledField = name + "Enabled",
-		intervalField = name + "interval",
+		intervalField = name + "Interval",
 		enableMethod = "enable" + capsName,
 		intervalMethod = "set" + capsName + "Interval";
 	cp[enableMethod] = function (enabled) {
@@ -244,7 +262,7 @@ cp.sendPacket = function(packet) {
 	packet.type = packet.type || PACKET_DATA;
 	packet.rtt = 0;
 	packet.timestamp = 0;
-	bm.log("WROTE PACKET: " + JSON.stringify(packet));
+	//bm.log("WROTE PACKET: " + JSON.stringify(packet));
 	var encodedPacket = encodePacket(packet);
 	this.socket.send(JSON.stringify(encodedPacket));
 };
