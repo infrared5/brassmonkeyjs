@@ -1,6 +1,27 @@
 (function(bm){
 
 /**
+Event
+
+@class bm.Event
+**/
+bm.Event = bm.Class.extend({
+  init:function(eventType){
+    /**
+    Which event this instance is representing.
+    
+    Examples: 
+        
+        "buttondown", "buttonup", or "shake"
+    
+    @property type 
+    @type {String}
+    **/
+    this.type = eventType;
+  }
+});
+
+/**
 Event called when a mobile device first establishes a connection. 
 
 **Note:** 
@@ -8,15 +29,18 @@ Event called when a mobile device first establishes a connection.
 @class bm.DeviceAvailableEvent
 **/
 
-bm.DeviceAvailableEvent = function(device){
-/**
-Device Associated with this event.
-
-@property device 
-@type {bm.Device}
-**/
-  this.device = device;
-}
+bm.DeviceAvailableEvent = bm.Event.extend({
+  init: function(device){
+    this._super("deviceavailable");
+    /**
+    Device Associated with this event.
+    
+    @property device 
+    @type {bm.Device}
+    **/
+    this.device = device;
+  }
+});
 
 /**
 Event called when a mobile device successfully established a connection.
@@ -25,15 +49,18 @@ Event called when a mobile device successfully established a connection.
 **/
 
 
-bm.DeviceConnectedEvent = function(device){
-/**
-Device Associated with this event.
-
-@property device 
-@type {bm.Device}
-**/
-  this.device = device;
-}
+bm.DeviceConnectedEvent = bm.Event.extend({
+  init: function(device){
+    this._super("deviceconnected");
+    /**
+    Device Associated with this event.
+    
+    @property device 
+    @type {bm.Device}
+    **/
+    this.device = device;
+  }
+});
 
 /**
 Event called when a mobile device is disconnected.
@@ -42,15 +69,65 @@ Event called when a mobile device is disconnected.
 **/
 
 
-bm.DeviceDisconnectedEvent = function(device){
-/**
-Device Associated with this event.
+bm.DeviceDisconnectedEvent = bm.Event.extend({
+  init: function(device){
+    this._super("devicedisconnected");
+    /**
+    Device Associated with this event.
+    
+    @property device 
+    @type {bm.Device}
+    **/
+    this.device = device;
+  }
+});
 
-@property device 
-@type {bm.Device}
+/**
+Event for when a button was pressed or released.
+
+@class bm.ButtonEvent
 **/
-  this.device = device;
-}
+
+bm.ButtonEvent = bm.Event.extend({
+  init: function(eventType,device,button){
+    this._super(eventType);
+    /**
+    Device Associated with this event.
+    
+    @property device 
+    @type {bm.Device}
+    **/
+    this.device = device;
+    
+    /**
+    The id of the button that was pressed/released
+    
+    @property button 
+    @type {String}
+    **/
+    this.button = button;
+  }
+});
+
+/**
+Event indicating the user shook their device.
+
+@class bm.ShakeEvent
+**/
+
+bm.ShakeEvent = bm.Event.extend({
+  init: function(eventType,device){
+    this._super("shake");
+    /**
+    Device Associated with this event.
+    
+    @property device 
+    @type {bm.Device}
+    **/
+    this.device = device;
+  }
+});
+
 
 
 /**
@@ -71,39 +148,42 @@ var slotColors = [
   "#cc0000","#80cd68","#6600ff"
 ];
 
-bm.ShowSlotColorEvent = function(device){
-/**
-Device Associated with this event.
-
-@property device 
-@type {bm.Device}
-
-**/
-  this.device = device;
-/**
-Unique identifier to your network. (Each instance of Brass Monkey running get it's own slotIndex number)
-
-@property slotIndex 
-@type {Number}
-
-**/
-
-  // (Francois) I'm not sure why there is this modulus/arithmetic here.
-  this.index = (Math.max(1, this.index) - 1) % slotColors.length;
-  
-/**
-Color to display on the screen. (CSS Style Hexidecimal)
-
-Example:
-
-    "#ff0000"
-
-@property color 
-@type {String}
-
-**/
-  
-  this.color = slotColors[this.index];
-}
+bm.ShowSlotColorEvent = bm.Event.extend({
+  init: function(device){
+    this._super("showslotcolor");
+    /**
+    Device Associated with this event.
+    
+    @property device 
+    @type {bm.Device}
+    
+    **/
+    this.device = device;
+    
+    /**
+    Unique identifier to your network. (Each instance of Brass Monkey running get it's own slotIndex number)
+    
+    @property slotIndex 
+    @type {Number}
+    
+    **/
+    
+    this.index = (Math.max(1, this.index) - 1) % slotColors.length;
+      
+    /**
+    Color to display on the screen. (CSS Style Hexidecimal)
+    
+    Example:
+    
+        "#ff0000"
+    
+    @property color 
+    @type {String}
+    
+    **/
+      
+    this.color = slotColors[this.index];
+  }
+});
 
 })(BrassMonkey);

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src&#x2F;events.js</title>
+    <title>bm.ShakeEvent</title>
     <link rel="stylesheet" href="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;3.5.1&#x2F;build&#x2F;cssgrids&#x2F;cssgrids-min.css">
     <link rel="stylesheet" href="..&#x2F;assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="..&#x2F;assets/css/main.css" id="site_styles">
@@ -100,200 +100,129 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1 class="file-heading">File: src&#x2F;events.js</h1>
-
-<div class="file">
-    <pre class="code prettyprint linenums">
-(function(bm){
-
-&#x2F;**
-Event
-
-@class bm.Event
-**&#x2F;
-bm.Event = bm.Class.extend({
-  init:function(eventType){
-    &#x2F;**
-    Which event this instance is representing.
+                        <h1>bm.ShakeEvent Class</h1>
+<div class="box meta">
     
-    Examples: 
+
+    
+
+    
+        <div class="foundat">
+            Defined in: <a href="..&#x2F;files&#x2F;src_events.js.html#l112"><code>src&#x2F;events.js:112</code></a>
+        </div>
+    
+
+    
+
+    
+</div>
+
+
+
+<div class="box intro">
+    <p>Event indicating the user shook their device.</p>
+</div>
+
+
+
+<div id="classdocs" class="tabview">
+    <ul class="api-class-tabs">
+        <li class="api-class-tab index"><a href="#index">Index</a></li>
+
         
-        &quot;buttondown&quot;, &quot;buttonup&quot;, or &quot;shake&quot;
+        
+            <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
+        
+        
+        
+    </ul>
+
+    <div>
+        <div id="index" class="api-class-tabpanel index">
+            <h2 class="off-left">Item Index</h2>
+
+            
+
+            
+                <div class="index-section properties">
+                    <h3>Properties</h3>
+
+                    <ul class="index-list properties">
+                        
+                            <li class="index-item property">
+                                <a href="#property_device">device</a>
+
+                                
+                                
+                            </li>
+                        
+                    </ul>
+                </div>
+            
+
+            
+
+            
+        </div>
+
+        
+
+        
+            <div id="properties" class="api-class-tabpanel">
+                <h2 class="off-left">Properties</h2>
+
+                
+                    <div id="property_device" class="property item">
+    <h3 class="name"><code>device</code></h3>
+    <span class="type"><a href="../classes/bm.Device.html" class="crosslink">bm.Device</a></span>
+
     
-    @property type 
-    @type {String}
-    **&#x2F;
-    this.type = eventType;
-  }
-});
 
-&#x2F;**
-Event called when a mobile device first establishes a connection. 
-
-**Note:** 
-
-@class bm.DeviceAvailableEvent
-**&#x2F;
-
-bm.DeviceAvailableEvent = bm.Event.extend({
-  init: function(device){
-    this._super(&quot;deviceavailable&quot;);
-    &#x2F;**
-    Device Associated with this event.
     
-    @property device 
-    @type {bm.Device}
-    **&#x2F;
-    this.device = device;
-  }
-});
 
-&#x2F;**
-Event called when a mobile device successfully established a connection.
-
-@class bm.DeviceConnectedEvent
-**&#x2F;
-
-
-bm.DeviceConnectedEvent = bm.Event.extend({
-  init: function(device){
-    this._super(&quot;deviceconnected&quot;);
-    &#x2F;**
-    Device Associated with this event.
     
-    @property device 
-    @type {bm.Device}
-    **&#x2F;
-    this.device = device;
-  }
-});
 
-&#x2F;**
-Event called when a mobile device is disconnected.
-
-@class bm.DeviceDisconnectedEvent
-**&#x2F;
-
-
-bm.DeviceDisconnectedEvent = bm.Event.extend({
-  init: function(device){
-    this._super(&quot;devicedisconnected&quot;);
-    &#x2F;**
-    Device Associated with this event.
     
-    @property device 
-    @type {bm.Device}
-    **&#x2F;
-    this.device = device;
-  }
-});
 
-&#x2F;**
-Event for when a button was pressed or released.
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;src_events.js.html#l121"><code>src&#x2F;events.js:121</code></a>
+        
+        </p>
 
-@class bm.ButtonEvent
-**&#x2F;
+        
 
-bm.ButtonEvent = bm.Event.extend({
-  init: function(eventType,device,button){
-    this._super(eventType);
-    &#x2F;**
-    Device Associated with this event.
-    
-    @property device 
-    @type {bm.Device}
-    **&#x2F;
-    this.device = device;
-    
-    &#x2F;**
-    The id of the button that was pressed&#x2F;released
-    
-    @property button 
-    @type {String}
-    **&#x2F;
-    this.button = button;
-  }
-});
+        
+    </div>
 
-&#x2F;**
-Event indicating the user shook their device.
+    <div class="description">
+        <p>Device Associated with this event.</p>
+    </div>
 
-@class bm.ShakeEvent
-**&#x2F;
+    
 
-bm.ShakeEvent = bm.Event.extend({
-  init: function(eventType,device){
-    this._super(&quot;shake&quot;);
-    &#x2F;**
-    Device Associated with this event.
     
-    @property device 
-    @type {bm.Device}
-    **&#x2F;
-    this.device = device;
-  }
-});
 
+    
+</div>
 
+                
+            </div>
+        
 
-&#x2F;**
-Event called when the SDK has received it&#x27;s assigned slot index&#x2F;color.
+        
 
-This is the unique color that is displayed in top right of the console, in your game, and 
-on the device list in the controller app. It&#x27;s used to help users disambiguate which
-console&#x2F;game they want to connect to, if there is more than one on your network.
-
-@class bm.ShowSlotColorEvent
-**&#x2F;
-
-  &#x2F;&#x2F; Lookup table for converting slot index numbers into an agreed upon matching color.
-var slotColors = [
-  &quot;#ff6600&quot;,&quot;#ffcc00&quot;,&quot;#ff3399&quot;,&quot;#ff0066&quot;,
-  &quot;#cc00ff&quot;,&quot;#999900&quot;,&quot;#9999cc&quot;,&quot;#00cc99&quot;,
-  &quot;#287200&quot;,&quot;#00ccff&quot;,&quot;#003366&quot;,&quot;#99ff00&quot;,
-  &quot;#cc0000&quot;,&quot;#80cd68&quot;,&quot;#6600ff&quot;
-];
-
-bm.ShowSlotColorEvent = bm.Event.extend({
-  init: function(device){
-    this._super(&quot;showslotcolor&quot;);
-    &#x2F;**
-    Device Associated with this event.
-    
-    @property device 
-    @type {bm.Device}
-    
-    **&#x2F;
-    this.device = device;
-    
-    &#x2F;**
-    Unique identifier to your network. (Each instance of Brass Monkey running get it&#x27;s own slotIndex number)
-    
-    @property slotIndex 
-    @type {Number}
-    
-    **&#x2F;
-    
-    this.index = (Math.max(1, this.index) - 1) % slotColors.length;
-      
-    &#x2F;**
-    Color to display on the screen. (CSS Style Hexidecimal)
-    
-    Example:
-    
-        &quot;#ff0000&quot;
-    
-    @property color 
-    @type {String}
-    
-    **&#x2F;
-      
-    this.color = slotColors[this.index];
-  }
-});
-
-})(BrassMonkey);
-    </pre>
+        
+    </div>
 </div>
 
                     </div>

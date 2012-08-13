@@ -133,20 +133,19 @@ EventEmitter = Class.extend({
   @method off
   **/
   off: function(eventType,fn){
-    this.off(eventType,fn);
+    this.removeEventListener(eventType,fn);
   },
   
   /**
-  Trigger an event. (Calls all the callbacks that are listening for the eventType)
+  Trigger an event. (Calls all the callbacks that are listening for this event's type.)
   
   @method trigger
-  @param {String} eventType Which event to trigger.
-  @param {Event} event Event that will be passed to all registered listeners.
+  @param {bm.Event} event Event that will be passed to all registered listeners.
   
   **/
-  trigger: function(eventType,event){
-    if(this.callbacks[eventType]!==undefined){
-      var i,callbacks = this.callbacks[eventType];
+  trigger: function(event){
+    if(this.callbacks[event.type]!==undefined){
+      var i,callbacks = this.callbacks[event.type];
       for(var i = 0; i<callbacks.length;i++){
         callbacks[i](event);
       }
@@ -284,6 +283,7 @@ bm = BrassMonkey = new BrassMonkeyClass();
 
 // Add EventEmitter to the BrassMonkey namespace
 bm.EventEmitter = EventEmitter;
+bm.Class = Class;
 
 // Constants
 /*
@@ -292,5 +292,52 @@ bm.MODE_KEYBOARD=1;
 bm.MODE_NAVIGATION=2;		
 bm.MODE_WAIT=3;
 */
+
+/*---------------------------------------------------------------------------------------
+Enumerate Events here. I (Francois) tried to put these in events.js but couldn't get 
+yuidoc to properly associate with the BrassMonkey Class.
+---------------------------------------------------------------------------------------*/
+
+/**
+Event called when a mobile device successfully established a connection.
+
+@event deviceavailable
+@param {bm.DeviceAvailableEvent} event
+**/
+
+/**
+Event called when a mobile device successfully established a connection.
+
+@event deviceconnected
+@param {bm.DeviceConnectedEvent} event
+**/
+
+/**
+Event called when a mobile device is disconnected.
+
+@event devicedisconnected
+@param {bm.DeviceDisconnectedEvent} event
+**/
+
+/**
+Event called when a button was pressed down.
+
+@event buttondown
+@param {bm.ButtonEvent} event
+**/
+
+/**
+Event called when a button was released.
+
+@event buttonup
+@param {bm.ButtonEvent} event
+**/
+
+/**
+Event indicating the user shook their device.
+
+@event shake
+@param {bm.ShakeEvent} event
+**/
 
 })();

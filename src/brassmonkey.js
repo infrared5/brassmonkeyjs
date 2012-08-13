@@ -201,38 +201,7 @@ function getInternetExplorerVersion(){
   return rv;
 }
 
-/*---------------------------------------------------------------------------------------
-Enumerate Events here. I (Francois) tried to put these in events.js but couldn't get 
-them to properly associate with the BrassMonkey Class.
----------------------------------------------------------------------------------------*/
 
-/**
-Event called when a mobile device successfully established a connection.
-
-@event deviceavailable
-@param {DeviceAvailableEvent} event
-**/
-
-/**
-Event called when a mobile device successfully established a connection.
-
-@event deviceconnected
-@param {DeviceConnectedEvent} event
-**/
-
-/**
-Event called when a mobile device is disconnected.
-
-@event devicedisconnected
-@param {DeviceDisconnectedEvent} event
-**/
-
-/**
-Event called when a mobile device is disconnected.
-
-@event devicedisconnected
-@param {DeviceDisconnectedEvent} event
-**/
 
 
 

@@ -43,6 +43,8 @@
             
                 <li><a href="..&#x2F;classes/bm.html">bm</a></li>
             
+                <li><a href="..&#x2F;classes/bm.ButtonEvent.html">bm.ButtonEvent</a></li>
+            
                 <li><a href="..&#x2F;classes/bm.Device.html">bm.Device</a></li>
             
                 <li><a href="..&#x2F;classes/bm.DeviceAvailableEvent.html">bm.DeviceAvailableEvent</a></li>
@@ -51,7 +53,11 @@
             
                 <li><a href="..&#x2F;classes/bm.DeviceDisconnectedEvent.html">bm.DeviceDisconnectedEvent</a></li>
             
+                <li><a href="..&#x2F;classes/bm.Event.html">bm.Event</a></li>
+            
                 <li><a href="..&#x2F;classes/bm.EventEmitter.html">bm.EventEmitter</a></li>
+            
+                <li><a href="..&#x2F;classes/bm.ShakeEvent.html">bm.ShakeEvent</a></li>
             
                 <li><a href="..&#x2F;classes/bm.ShowSlotColorEvent.html">bm.ShowSlotColorEvent</a></li>
             
@@ -106,7 +112,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="..&#x2F;files&#x2F;src_core.js.html#l157"><code>src&#x2F;core.js:157</code></a>
+            Defined in: <a href="..&#x2F;files&#x2F;src_core.js.html#l156"><code>src&#x2F;core.js:156</code></a>
         </div>
     
 
@@ -242,22 +248,43 @@
 
                     <ul class="index-list events extends">
                         
-                            <li class="index-item event inherited">
+                            <li class="index-item event">
+                                <a href="#event_buttondown">buttondown</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item event">
+                                <a href="#event_buttonup">buttonup</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item event">
                                 <a href="#event_deviceavailable">deviceavailable</a>
 
                                 
                                 
                             </li>
                         
-                            <li class="index-item event inherited">
+                            <li class="index-item event">
                                 <a href="#event_deviceconnected">deviceconnected</a>
 
                                 
                                 
                             </li>
                         
-                            <li class="index-item event inherited inherited">
+                            <li class="index-item event">
                                 <a href="#event_devicedisconnected">devicedisconnected</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item event">
+                                <a href="#event_shake">shake</a>
 
                                 
                                 
@@ -627,7 +654,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;src_core.js.html#l200"><code>src&#x2F;core.js:200</code></a>
+        <a href="..&#x2F;files&#x2F;src_core.js.html#l199"><code>src&#x2F;core.js:199</code></a>
         
         </p>
 
@@ -772,7 +799,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;src_core.js.html#l248"><code>src&#x2F;core.js:248</code></a>
+        <a href="..&#x2F;files&#x2F;src_core.js.html#l247"><code>src&#x2F;core.js:247</code></a>
         
         </p>
 
@@ -826,7 +853,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;src_core.js.html#l259"><code>src&#x2F;core.js:259</code></a>
+        <a href="..&#x2F;files&#x2F;src_core.js.html#l258"><code>src&#x2F;core.js:258</code></a>
         
         </p>
 
@@ -856,12 +883,6 @@
     
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>eventType</code>
-                    
-                </li>
             
                 <li class="arg">
                     
@@ -906,7 +927,7 @@
     </div>
 
     <div class="description">
-        <p>Trigger an event. (Calls all the callbacks that are listening for the eventType)</p>
+        <p>Trigger an event. (Calls all the callbacks that are listening for this event's type.)</p>
     </div>
 
     
@@ -917,23 +938,8 @@
             
                 <li class="param">
                     
-                        <code class="param-name">eventType</code>
-                        <span class="type">String</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>Which event to trigger.</p>
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
                         <code class="param-name">event</code>
-                        <span class="type">Event</span>
+                        <span class="type"><a href="../classes/bm.Event.html" class="crosslink">bm.Event</a></span>
                     
 
                     
@@ -986,7 +992,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;src_core.js.html#l179"><code>src&#x2F;core.js:179</code></a>
+        <a href="..&#x2F;files&#x2F;src_core.js.html#l178"><code>src&#x2F;core.js:178</code></a>
         
         </p>
 
@@ -1029,7 +1035,139 @@
                 <h2 class="off-left">Events</h2>
 
                 
-                    <div id="event_deviceavailable" class="events item inherited">
+                    <div id="event_buttondown" class="events item">
+    <h3 class="name"><code>buttondown</code></h3>
+    <span class="type"></span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;src_core.js.html#l322"><code>src&#x2F;core.js:322</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Event called when a button was pressed down.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Event Payload:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">event</code>
+                        <span class="type"><a href="../classes/bm.ButtonEvent.html" class="crosslink">bm.ButtonEvent</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+
+    
+</div>
+
+                
+                    <div id="event_buttonup" class="events item">
+    <h3 class="name"><code>buttonup</code></h3>
+    <span class="type"></span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;src_core.js.html#l329"><code>src&#x2F;core.js:329</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Event called when a button was released.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Event Payload:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">event</code>
+                        <span class="type"><a href="../classes/bm.ButtonEvent.html" class="crosslink">bm.ButtonEvent</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+
+    
+</div>
+
+                
+                    <div id="event_deviceavailable" class="events item">
     <h3 class="name"><code>deviceavailable</code></h3>
     <span class="type"></span>
 
@@ -1044,12 +1182,15 @@
     <div class="meta">
         
             
-                <p>Inherited from
-                <a href="..&#x2F;classes&#x2F;bm.EventEmitter.html#event_deviceavailable">bm.EventEmitter</a>:
+                
+                <p>
+                
+                Defined in
+                
             
         
         
-        <a href="..&#x2F;files&#x2F;src_brassmonkey.js.html#l209"><code>src&#x2F;brassmonkey.js:209</code></a>
+        <a href="..&#x2F;files&#x2F;src_core.js.html#l301"><code>src&#x2F;core.js:301</code></a>
         
         </p>
 
@@ -1071,13 +1212,13 @@
                 <li class="param">
                     
                         <code class="param-name">event</code>
-                        <span class="type">DeviceAvailableEvent</span>
+                        <span class="type"><a href="../classes/bm.DeviceAvailableEvent.html" class="crosslink">bm.DeviceAvailableEvent</a></span>
                     
 
                     
 
                     <div class="param-description">
-                        
+                         
                     </div>
 
                     
@@ -1092,7 +1233,7 @@
 </div>
 
                 
-                    <div id="event_deviceconnected" class="events item inherited">
+                    <div id="event_deviceconnected" class="events item">
     <h3 class="name"><code>deviceconnected</code></h3>
     <span class="type"></span>
 
@@ -1107,12 +1248,15 @@
     <div class="meta">
         
             
-                <p>Inherited from
-                <a href="..&#x2F;classes&#x2F;bm.EventEmitter.html#event_deviceconnected">bm.EventEmitter</a>:
+                
+                <p>
+                
+                Defined in
+                
             
         
         
-        <a href="..&#x2F;files&#x2F;src_brassmonkey.js.html#l216"><code>src&#x2F;brassmonkey.js:216</code></a>
+        <a href="..&#x2F;files&#x2F;src_core.js.html#l308"><code>src&#x2F;core.js:308</code></a>
         
         </p>
 
@@ -1134,13 +1278,13 @@
                 <li class="param">
                     
                         <code class="param-name">event</code>
-                        <span class="type">DeviceConnectedEvent</span>
+                        <span class="type"><a href="../classes/bm.DeviceConnectedEvent.html" class="crosslink">bm.DeviceConnectedEvent</a></span>
                     
 
                     
 
                     <div class="param-description">
-                        
+                         
                     </div>
 
                     
@@ -1155,7 +1299,7 @@
 </div>
 
                 
-                    <div id="event_devicedisconnected" class="events item inherited">
+                    <div id="event_devicedisconnected" class="events item">
     <h3 class="name"><code>devicedisconnected</code></h3>
     <span class="type"></span>
 
@@ -1169,16 +1313,16 @@
 
     <div class="meta">
         
-            <p>Inherited from
-            <a href="..&#x2F;classes&#x2F;bm.EventEmitter.html#event_devicedisconnected">
-                bm.EventEmitter
-            </a>
             
-            but overwritten in
+                
+                <p>
+                
+                Defined in
+                
             
         
         
-        <a href="..&#x2F;files&#x2F;src_brassmonkey.js.html#l223"><code>src&#x2F;brassmonkey.js:223</code></a>
+        <a href="..&#x2F;files&#x2F;src_core.js.html#l315"><code>src&#x2F;core.js:315</code></a>
         
         </p>
 
@@ -1200,13 +1344,79 @@
                 <li class="param">
                     
                         <code class="param-name">event</code>
-                        <span class="type">DeviceDisconnectedEvent</span>
+                        <span class="type"><a href="../classes/bm.DeviceDisconnectedEvent.html" class="crosslink">bm.DeviceDisconnectedEvent</a></span>
                     
 
                     
 
                     <div class="param-description">
-                        
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+
+    
+</div>
+
+                
+                    <div id="event_shake" class="events item">
+    <h3 class="name"><code>shake</code></h3>
+    <span class="type"></span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;src_core.js.html#l336"><code>src&#x2F;core.js:336</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Event indicating the user shook their device.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Event Payload:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">event</code>
+                        <span class="type"><a href="../classes/bm.ShakeEvent.html" class="crosslink">bm.ShakeEvent</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
                     </div>
 
                     
