@@ -111,63 +111,107 @@ var stop = function() {
 	bm.log("stop");
 };
 
-var Connection = function(deviceId, host, port) {
-	this.deviceId = deviceId;
-	this.socket = new WebSocket("ws://" + host + ":" + port);
-	this.sequence = 0;
+var Connection = bm.EventEmitter.extend({
+	init : function(deviceId, host, port) {
+		var socket;
+		this._super();
+		this.id = deviceId;
+		socket = this.socket = new WebSocket("ws://" + host + ":" + port);
+		this.sequence = 0;
 
-	var self = this;
-	this.socket.onerror = function(/*error*/) {
-		removeConnection(self.deviceId);
+		this.touchEnabled = bm.options.design.touchEnabled;
+		this.accelerometerEnabled = bm.options.design.accelerometerEnabled;
+
+		var self = this;
+		socket.onerror = bind(this.onError, this);
+		socket.onclose = bind(this.onClose, this);
+		socket.onmessage = bind(this.onVersion, this);
+		socket.onopen = bind(this.onOpen, this);
+	},
+
+	onError : function() {
+		removeConnection(this.deviceId);
 		bm.log("error");
-	};
-	this.socket.onclose = function(/*closeEvent*/) {
-		removeConnection(self.deviceId);
+	},
+
+	onClose : function(/*closeEvent*/) {
+		removeConnection(this.deviceId);
 		bm.log("DISCONNECTED");
-	};
-	this.socket.onmessage = bind(this.onVersion, this);
-	this.socket.onopen = function() {
+	},
+
+	onOpen : function() {
 		var handshake = [packedVersion, packedVersion];
-		self.socket.send(JSON.stringify(handshake));
+		this.socket.send(JSON.stringify(handshake));
 		bm.log("CONNECTED");
-	};
-};
+	},
 
-Connection.prototype.onVersion = function(message) {
-	var json = JSON.parse(message.data);
-	bm.log("GOT VERSION");
+	onVersion : function(message) {
+		var json = JSON.parse(message.data);
+		bm.log("GOT VERSION");
 
-	// TODO: verify version
-	this.sendPacket({
-		type : PACKET_ACK,
-		message : {
-			encodeType: ENCODE_ACK,
-			device: localDevice,
-			address: localAddress
+		// TODO: verify version
+		this.sendPacket({
+			type : PACKET_ACK,
+			message : {
+				encodeType: ENCODE_ACK,
+				device: localDevice,
+				address: localAddress
+			}
+		});
+
+		this.sendInvoke("setReliabilityForTouch", [['i', 1], ['i', 1]]);
+
+		this.socket.onmessage = bind(this.onMessage, this);
+	},
+
+
+
+});
+
+var cp = Connection.prototype;
+
+var generateSensorMethods(name) {
+	var capsName = name.charAt(0).toUpperCase() + name.slice(1),
+		enabledField = name + "Enabled",
+		intervalField = name + "interval",
+		enableMethod = "enable" + capsName,
+		intervalMethod = "set" + capsName + "Interval";
+	cp[enableMethod] = function (enabled) {
+		if(enabled !== this[enabledField]) {
+			this[enabledField] = enabled;
+			this.sendInvoke(enableMethod, [['B', enabled]]);
 		}
-	});
+	};
 
-	this.sendInvoke("setReliabilityForTouch", [['i', 1], ['i', 1]]);
+	cp[intervalMethod] = function(interval) {
+		if(interval !== this[intervalField]) {
+			this[intervalField] = interval;
+			this.sendInvoke(intervalMethod, [["f",interval]]);
+		}
+	}
+}
 
-	this.socket.onmessage = bind(this.onMessage, this);
-};
+generateSensorMethods('touch');
+generateSensorMethods('accelerometer');
+generateSensorMethods('gyro');
+generateSensorMethods('orientation');
 
-Connection.prototype.onMessage = function(message) {
+cp.onMessage = function(message) {
 	var json = JSON.parse(message.data);
 	var packet = decodePacket(json);
 
-	bm.log("GOT MESSAGE: " + JSON.stringify(packet));
+	//bm.log("GOT MESSAGE: " + JSON.stringify(packet));
 
 	if(CHANNEL_MESSAGE === packet.channel) {
 		this.handleInvoke(packet.message);
 	}
 };
 
-Connection.prototype.close = function() {
+cp.close = function() {
 	this.socket.close();
 };
 
-Connection.prototype.handleInvoke = function(invoke) {
+cp.handleInvoke = function(invoke) {
 	switch(invoke.method) {
 		case "RequestXML":
 		this.sendControlScheme();
@@ -176,10 +220,10 @@ Connection.prototype.handleInvoke = function(invoke) {
 		case "OTHER":
 		default:
 			// TODO
-		}
-	};
+	}
+};
 
-Connection.prototype.sendControlScheme = function() {
+cp.sendControlScheme = function() {
 	for(var i = 0; i < controlSchemeChunks.length; ++i) {
 		this.sendPacket({
 			channel : CHANNEL_BYTE,
@@ -188,11 +232,11 @@ Connection.prototype.sendControlScheme = function() {
 	}
 };
 
-Connection.prototype.sendInvoke = function(method, params) {
+cp.sendInvoke = function(method, params) {
 	this.sendPacket({channel:CHANNEL_MESSAGE, message:makeInvoke(method, params)});
 };
 
-Connection.prototype.sendPacket = function(packet) {
+cp.sendPacket = function(packet) {
 	packet.sequence = ++this.sequence;
 	packet.deviceId = localDevice.id;
 	packet.deviceType = localDevice.type;
