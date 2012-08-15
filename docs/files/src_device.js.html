@@ -137,8 +137,6 @@ bm.Device = bm.EventEmitter.extend({
     
     this.mode = &quot;gamepad&quot;;
   },
-  
-  
   &#x2F;**
   Enable&#x2F;Disable touch events.
   
@@ -244,6 +242,16 @@ bm.Device = bm.EventEmitter.extend({
   }
   
 });
+
+&#x2F;**
+Event called on keyboard input.
+
+@event keyboard
+@param {String} type keyboard
+@param {bm.Device} device Device that generated this event.
+@param text {String} Text entered on keyboard. &quot;&quot; if backspace pressed.
+@bubbles bm
+**&#x2F;
 
 })(BrassMonkey);
     </pre>

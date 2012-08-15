@@ -248,10 +248,10 @@ EventEmitter = Class.extend({
         callbacks[i](event);
       }
     }
-  }
+  },
   
   &#x2F;**
-  Convenience function that adds .type field to the event then passes it to trigger()
+  Convenience function that adds .type field to the event reflecting which type the event is and then passes it to trigger().
   
   @method triggerWithType
   @param {String} eventType Which event to trigger. 
@@ -267,6 +267,19 @@ EventEmitter = Class.extend({
     this.trigger(eventType,event);
   }
 });
+
+var getQueryParams = function(qs) {
+    qs = qs.split(&quot;+&quot;).join(&quot; &quot;);
+    var params = {},
+        tokens,
+        re = &#x2F;[?&amp;]?([^=]+)=([^&amp;]*)&#x2F;g;
+
+    while (tokens = re.exec(qs)) {
+        params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
+    }
+
+    return params;
+};
 
 &#x2F;**
 The Brass Monkey SDK. This is a singleton accessed like so:
@@ -338,15 +351,17 @@ var BrassMonkeyClass = EventEmitter.extend({
     
     &#x2F;&#x2F; Store options for convenient access later
       &#x2F;&#x2F; TODO: Add defaults to these options for those not provided.
-    this.options = options;  
+    this.options = options;
       &#x2F;&#x2F; If no images&#x2F;layout were provided we default them to being empty arrays.
       &#x2F;&#x2F; This could be the case for when certain hosts like the website only
       &#x2F;&#x2F; use the built in controllers (Keyboard Mode, Navigation Mode, and any future
-      &#x2F;&#x2F; ones) 
+      &#x2F;&#x2F; ones)
     &#x2F;&#x2F;bm.options.design.images =  options.design.images?options.design.images:[];
     &#x2F;&#x2F;bm.options.design.layout =  options.design.layout?options.design.layout:[];
     
-    
+    var getParams = getQueryParams(document.location.search);
+    options.deviceId = getParams.appId || Math.floor(Math.random()*16777215*16777215).toString(16);
+    options.portalId = getParams.portalId;
     
     &#x2F;&#x2F; Choose the proper communication runtime based on the environment.
     &#x2F;&#x2F; For now it&#x27;s basically WebSockets in Mobile Safari otherwise Flash
@@ -357,7 +372,7 @@ var BrassMonkeyClass = EventEmitter.extend({
       this.runtime = new bm.FlashRT();
     }
     
-    this.runtime.start();
+    this.runtime.start(options);
   },
   
   &#x2F;**
@@ -382,22 +397,24 @@ var BrassMonkeyClass = EventEmitter.extend({
   @method log
   **&#x2F;
   log: function(str){
+    return;
     if( console!==undefined&amp;&amp;
         console.log!==undefined){
-      console.log(str);
+      console.log.apply(console,arguments);
     }
   },
   
   addDevice: function(device){
     this.devices[device.id] = device;
     
-    this.notify(&#x27;deviceconnected&#x27;, {device: device});
+    this.triggerWithType(&#x27;deviceconnected&#x27;, {device: device});
   },
   
   removeDevice: function(device){
-    delete this.devices[device.id];
-    
-    this.notify(&#x27;devicedisconnected&#x27;, {device: device});
+    if(device.id in this.devices) {
+      delete this.devices[device.id];
+      this.triggerWithType(&#x27;devicedisconnected&#x27;, {device: device});
+    }
   },
   
   getDevice: function(id){
@@ -412,9 +429,49 @@ bm = BrassMonkey = new BrassMonkeyClass();
 bm.EventEmitter = EventEmitter;
 bm.Class = Class;
 
+&#x2F;**
+Log to Brass Monkey&#x27;s console.
+
+TODO: Implement a proper built cross browser debug pannel. For now uses built in console.log 
+      where it&#x27;s available.
+
+@method log
+**&#x2F;
+
+if(console!==undefined &amp;&amp; console.log!==undefined) {
+  bm.log = function() {console.log.apply(console,arguments);};
+} else {
+  bm.log = function() {};
+}
+
 window[&#x27;boomBa&#x27;] = function(slot){
   console.log(slot);
 }
+
+var makeMethodProxy = function(devices, methodName) {
+  return function() {
+    for(var deviceId in devices) {
+      if(devices.hasOwnProperty(deviceId)) {
+        var device = devices[deviceId];
+        device[methodName].apply(device, arguments);
+      }
+    }
+  };
+};
+
+bm.allDevices = (function() {
+  var proxy = {},
+      devices = bm.devices,
+      methods = [&quot;setMode&quot;, &quot;enableTouch&quot;];
+
+  for(var i = 0; i &lt; methods.length; ++i) {
+    proxy[methods[i]] = makeMethodProxy(devices, methods[i]);
+  }
+
+  return function() {
+    return proxy;
+  };
+})();
 
 &#x2F;&#x2F; Constants
 &#x2F;*
@@ -493,8 +550,8 @@ Event representing the latest accelerometer values.
 
   Accelerometer events must be enabled (See [Device.enableAccelerometer](bm.Device.html)) and are sent continuously on the interval specified by [Device.setAccelerometerInterval](bm.Device.html).
 
-@event accelerometer
-@param {String} type Which event this is. Ie. **&quot;accelerometer&quot;**
+@event acceleration
+@param {String} type Which event this is. Ie. **&quot;acceleration&quot;**
 @param {bm.Device} device Device that generated this event.
 **&#x2F;
 
@@ -537,6 +594,37 @@ Event called when a button was released.
 @event buttonup
 @param {String} type Which event this is. Ie. **&quot;buttonup&quot;**
 @param {bm.Device} device Device that generated this event.
+**&#x2F;
+
+&#x2F;**
+Event called when a touch has started.
+
+@event touchstart
+@param {String} type Which event this is. Ie. **&quot;touchstart&quot;**
+@param {bm.Device} device Device that generated this event.
+@param {Number} x X coordinate of the touch (In pixel units).
+@param {Number} y Y coordinate of the touch (In pixel units).
+@param {String} id Unique identified for this touch.
+**&#x2F;
+
+&#x2F;**
+Event called when a touch has moved.
+
+@event touchmove
+@param {String} type Which event this is. Ie. **&quot;touchmove&quot;**
+@param {bm.Device} device Device that generated this event.
+@param {Number} x X coordinate of the touch (In pixel units). 
+@param {Number} y Y coordinate of the touch (In pixel units).
+@param {String} id Unique identified for this touch.
+**&#x2F;
+
+&#x2F;**
+Event called when a finger has been lifted up.
+
+@event touchend
+@param {String} type Which event this is. Ie. **&quot;touchend&quot;**
+@param {bm.Device} device Device that generated this event.
+@param {String} id Unique identified for this touch.
 **&#x2F;
 
 &#x2F;**

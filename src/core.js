@@ -505,6 +505,37 @@ Event called when a button was released.
 **/
 
 /**
+Event called when a touch has started.
+
+@event touchstart
+@param {String} type Which event this is. Ie. **"touchstart"**
+@param {bm.Device} device Device that generated this event.
+@param {Number} x X coordinate of the touch (In pixel units).
+@param {Number} y Y coordinate of the touch (In pixel units).
+@param {String} id Unique identified for this touch.
+**/
+
+/**
+Event called when a touch has moved.
+
+@event touchmove
+@param {String} type Which event this is. Ie. **"touchmove"**
+@param {bm.Device} device Device that generated this event.
+@param {Number} x X coordinate of the touch (In pixel units). 
+@param {Number} y Y coordinate of the touch (In pixel units).
+@param {String} id Unique identified for this touch.
+**/
+
+/**
+Event called when a finger has been lifted up.
+
+@event touchend
+@param {String} type Which event this is. Ie. **"touchend"**
+@param {bm.Device} device Device that generated this event.
+@param {String} id Unique identified for this touch.
+**/
+
+/**
 Event indicating the user shook their device.
 
 **Note:** Accelerometer/Gyroscope events do not need to enabled, shake events do not take much network traffic so this was unnecessary.
