@@ -1,5 +1,5 @@
 /*jshint forin:true, noarg:true, noempty:true, eqeqeq:true, bitwise:false, strict:true, undef:true, unused:true, curly:true, browser:true, sub:true, maxerr:50 */
-/*global WebSocket:false, BrassMonkey:true, unescape:false, escape:false, Base64:false */
+/*global WebSocket:false, BrassMonkey:true, unescape:false, escape:false */
 (function(bm) {
 "use strict";
 
@@ -75,14 +75,11 @@ var localAddress = {
   encodeType : ENCODE_ADDRESS
 };
 
-var removeConnection = function(deviceId) {
-  var i;
-  for(i = 0; i < connections.length; ++i) {
-    if(connections[i].deviceId === deviceId) {
-      connections.splice(i, 1);
-      // TODO notify
-      break;
-    }
+var removeConnection = function(connection) {
+  var index = connections.indexOf(connections);
+  if(index >= 0)  {
+    connections.splice(index, 1);
+    bm.removeDevice(connection);
   }
 };
 
@@ -110,6 +107,7 @@ var start = function(ipAddress) {
 var stop = function() {
   var i;
   for(i = 0; i < connections.length; ++i) {
+    bm.removeDevice(connections[i]); // < Should this be done?
     connections[i].close();
   }
   connections.length = 0;
@@ -135,12 +133,12 @@ var Connection = bm.Device.extend({
   },
 
   onError : function() {
-    removeConnection(this.deviceId);
+    removeConnection(this);
     bm.log("error");
   },
 
   onClose : function(/*closeEvent*/) {
-    removeConnection(this.deviceId);
+    removeConnection(this);
     bm.log("DISCONNECTED");
   },
 
@@ -163,6 +161,8 @@ var Connection = bm.Device.extend({
         address: localAddress
       }
     });
+
+    bm.addDevice(this);
 
     this.sendInvoke("setReliabilityForTouch", [['i', 2], ['i', 2]]);
 
@@ -278,18 +278,24 @@ cp.handleInvoke = function(invoke) {
       break;
 
     case "onKeyString":
+      notify(this, "keyboard", {device:this, text:invoke.params[0][1]});
       break;
 
     case "onControlSchemeParsed":
       break;
 
     case "WaitCancelled":
+      // TODO: name?
+      notify(this, "waitcancelled", {device:this});
       break;
 
     case "bmPause":
+      // TODO: keep track of pause state?
+      notify(this, "pause", {device:this});
       break;
 
     case "onNavigationString":
+      // TODO: ?
       break;
 
     default:
@@ -565,7 +571,6 @@ encoders[ENCODE_SHAKE] = function(/*shake*/) {
 };
 
 // ByteChunk
-// TODO: Base64
 decoders[ENCODE_BYTE_CHUNK] = function(encoded) {
   return {
     setId : encoded[1],
@@ -640,7 +645,7 @@ var generateByteChunks = function(xml) {
     totalBytes = 0;
 
   for(nextChar = 0; nextChar < xmlLength; nextChar += MAX_CHUNK_SIZE) {
-    var result = Base64.encode(xml.substr(nextChar, MAX_CHUNK_SIZE)),
+    var result = bm.Base64.encode(xml.substr(nextChar, MAX_CHUNK_SIZE)),
         chunkSize = result[0],
         encoded = result[1];
 

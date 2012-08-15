@@ -299,13 +299,14 @@ var BrassMonkeyClass = EventEmitter.extend({
   addDevice: function(device){
     this.devices[device.id] = device;
     
-    this.notify('deviceconnected', {device: device});
+    this.triggerWithType('deviceconnected', {device: device});
   },
   
   removeDevice: function(device){
-    delete this.devices[device.id];
-    
-    this.notify('devicedisconnected', {device: device});
+    if(device.id in this.devices) {
+      delete this.devices[device.id];
+      this.triggerWithType('devicedisconnected', {device: device});
+    }
   },
   
   getDevice: function(id){
@@ -323,6 +324,31 @@ bm.Class = Class;
 window['boomBa'] = function(slot){
   console.log(slot);
 }
+
+var makeMethodProxy = function(devices, methodName) {
+  return function() {
+    for(var deviceId in devices) {
+      if(devices.hasOwnProperty(deviceId)) {
+        var device = devices[deviceId];
+        device[methodName].apply(device, arguments);
+      }
+    }
+  };
+};
+
+bm.allDevices = (function() {
+  var proxy = {},
+      devices = bm.devices,
+      methods = ["setMode", "enableTouch"];
+
+  for(var i = 0; i < methods.length; ++i) {
+    proxy[methods[i]] = makeMethodProxy(devices, methods[i]);
+  }
+
+  return function() {
+    return proxy;
+  };
+})();
 
 // Constants
 /*

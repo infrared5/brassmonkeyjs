@@ -22,21 +22,23 @@ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
 */
+(function(bm) {
+
 function StringBuffer()
-{ 
+{
     this.buffer = [];
-} 
+}
 
 StringBuffer.prototype.append = function append(string)
-{ 
+{
     this.buffer.push(string);
     return this;
-}; 
+};
 
 StringBuffer.prototype.toString = function toString()
-{ 
+{
     return this.buffer.join("");
-}; 
+};
 
 var Base64 =
 {
@@ -109,7 +111,7 @@ var Base64 =
 
         return output.toString();
     }
-}
+};
 
 
 function Utf8EncodeEnumerator(input)
@@ -170,7 +172,7 @@ Utf8EncodeEnumerator.prototype =
             return true;
         }
     }
-}
+};
 
 function Base64DecodeEnumerator(input)
 {
@@ -218,3 +220,7 @@ Base64DecodeEnumerator.prototype =
         }
     }
 };
+
+bm.Base64 = Base64;
+
+})(BrassMonkey);

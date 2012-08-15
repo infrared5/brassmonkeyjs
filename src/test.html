@@ -28,7 +28,7 @@
       
       design: {
         orientation: "portrait",
-        touchEnabled: false,
+        touchEnabled: true,
         accelerometerEnabled: false,
         images:[
           '../examples/shared/background.png',
@@ -55,6 +55,7 @@
       }
     });
     
+
     // Should fail as 10 isn't a function.
     bm.on('buttondown', function(e){
       if(e.id="push"){
@@ -68,12 +69,23 @@
         button.style.background = "white";
       }
     });
+
+    bm.on( 'deviceconnected', function (e){
+      bm.log("device connected %o", e);
+    });
     
   </script>
 </head>
 <body style="margin:0px">
   <div id="button" style="padding-top: 30px;width:64px;height:64px;background:white;"></div>
 
+<br><br>
+<ul>
+<li><a href="javascript:void(0)" onClick="bm.allDevices().setMode('keyboard')"> keyboard </a></li>
+<li><a href="javascript:void(0)" onClick="bm.allDevices().setMode('navigation')"> navigation </a></li>
+<li><a href="javascript:void(0)" onClick="bm.allDevices().setMode('gamepad')"> gamepad </a></li>
+<li><a href="javascript:void(0)" onClick="bm.allDevices().setMode('wait')"> wait </a></li>
+</ul>
 
 </body>
 </html>
