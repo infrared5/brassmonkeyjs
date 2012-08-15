@@ -43,23 +43,9 @@
             
                 <li><a href="..&#x2F;classes/bm.html">bm</a></li>
             
-                <li><a href="..&#x2F;classes/bm.ButtonEvent.html">bm.ButtonEvent</a></li>
-            
                 <li><a href="..&#x2F;classes/bm.Device.html">bm.Device</a></li>
             
-                <li><a href="..&#x2F;classes/bm.DeviceAvailableEvent.html">bm.DeviceAvailableEvent</a></li>
-            
-                <li><a href="..&#x2F;classes/bm.DeviceConnectedEvent.html">bm.DeviceConnectedEvent</a></li>
-            
-                <li><a href="..&#x2F;classes/bm.DeviceDisconnectedEvent.html">bm.DeviceDisconnectedEvent</a></li>
-            
-                <li><a href="..&#x2F;classes/bm.Event.html">bm.Event</a></li>
-            
                 <li><a href="..&#x2F;classes/bm.EventEmitter.html">bm.EventEmitter</a></li>
-            
-                <li><a href="..&#x2F;classes/bm.ShakeEvent.html">bm.ShakeEvent</a></li>
-            
-                <li><a href="..&#x2F;classes/bm.ShowSlotColorEvent.html">bm.ShowSlotColorEvent</a></li>
             
             </ul>
 
@@ -275,7 +261,11 @@
                     
 
                     <div class="param-description">
-                        <p>Which event to listen to.</p>
+                        <p>Which event to listen to.
+  Examples: </p>
+
+<pre><code>  "buttondown", "buttonup", or "shake"
+</code></pre>
                     </div>
 
                     
@@ -338,7 +328,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;src_core.js.html#l130"><code>src&#x2F;core.js:130</code></a>
+        <a href="..&#x2F;files&#x2F;src_core.js.html#l135"><code>src&#x2F;core.js:135</code></a>
         
         </p>
 
@@ -392,7 +382,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;src_core.js.html#l98"><code>src&#x2F;core.js:98</code></a>
+        <a href="..&#x2F;files&#x2F;src_core.js.html#l103"><code>src&#x2F;core.js:103</code></a>
         
         </p>
 
@@ -462,7 +452,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;src_core.js.html#l107"><code>src&#x2F;core.js:107</code></a>
+        <a href="..&#x2F;files&#x2F;src_core.js.html#l112"><code>src&#x2F;core.js:112</code></a>
         
         </p>
 
@@ -531,6 +521,12 @@
             
                 <li class="arg">
                     
+                        <code>eventType</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
                         <code>event</code>
                     
                 </li>
@@ -564,7 +560,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;src_core.js.html#l139"><code>src&#x2F;core.js:139</code></a>
+        <a href="..&#x2F;files&#x2F;src_core.js.html#l144"><code>src&#x2F;core.js:144</code></a>
         
         </p>
 
@@ -575,7 +571,7 @@
     </div>
 
     <div class="description">
-        <p>Trigger an event. (Calls all the callbacks that are listening for this event's type.)</p>
+        <p>Trigger an event. (Calls all the callbacks that are listening for the eventType)</p>
     </div>
 
     
@@ -586,8 +582,23 @@
             
                 <li class="param">
                     
+                        <code class="param-name">eventType</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Which event to trigger.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
                         <code class="param-name">event</code>
-                        <span class="type"><a href="../classes/bm.Event.html" class="crosslink">bm.Event</a></span>
+                        <span class="type">Event</span>
                     
 
                     

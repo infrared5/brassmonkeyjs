@@ -251,6 +251,7 @@ cp.handleInvoke = function(invoke) {
 		case "OTHER":
 		default:
 			// TODO
+      //console.log(invoke);
 	}
 };
 
@@ -570,18 +571,6 @@ if(INCLUDE_UNUSED_ENCODERS) {
 		return [ENCODE_ORIENTATION, q['x'], q['y'], q['z'], q['w'] ];
 	};
 }
-
-/*
-FRANCOIS: Commented these out as I wasn't sure when these would be used external to this file.
-          Add it back in if it will be. Otherwise remove later please.
-bm.decodeObject = decodeObject;
-bm.encodeObject = encodeObject;
-
-FRANCOIS: This file won't define bm.start but a run time that will be called by bm.start/bm.stop
-            
-bm.start = start;
-bm.stop = stop;
-*/
 
 bm.WebSocketsRT = function(){
 }

@@ -19,21 +19,6 @@
             },
             "fors": {},
             "namespaces": {}
-        },
-        "src/events.js": {
-            "name": "src/events.js",
-            "modules": {},
-            "classes": {
-                "bm.Event": 1,
-                "bm.DeviceAvailableEvent": 1,
-                "bm.DeviceConnectedEvent": 1,
-                "bm.DeviceDisconnectedEvent": 1,
-                "bm.ButtonEvent": 1,
-                "bm.ShakeEvent": 1,
-                "bm.ShowSlotColorEvent": 1
-            },
-            "fors": {},
-            "namespaces": {}
         }
     },
     "modules": {},
@@ -59,7 +44,7 @@
             "plugin_for": [],
             "extension_for": [],
             "file": "src/core.js",
-            "line": 156,
+            "line": 162,
             "description": "The Brass Monkey SDK. This is a singleton accessed like so:\n\n    bm.init(...);\n    \nor\n\n    var version = bm.version;",
             "extends": "bm.EventEmitter",
             "static": 1
@@ -76,90 +61,6 @@
             "line": 2,
             "description": "Each connected device is represented by an instance of this class. \n\nCommunicating with a particular device is done through this class' methods.",
             "extends": "bm.EventEmitter"
-        },
-        "bm.Event": {
-            "name": "bm.Event",
-            "shortname": "bm.Event",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "file": "src/events.js",
-            "line": 3,
-            "description": "Event"
-        },
-        "bm.DeviceAvailableEvent": {
-            "name": "bm.DeviceAvailableEvent",
-            "shortname": "bm.DeviceAvailableEvent",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "file": "src/events.js",
-            "line": 24,
-            "description": "Event called when a mobile device first establishes a connection. \n\n**Note:**"
-        },
-        "bm.DeviceConnectedEvent": {
-            "name": "bm.DeviceConnectedEvent",
-            "shortname": "bm.DeviceConnectedEvent",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "file": "src/events.js",
-            "line": 45,
-            "description": "Event called when a mobile device successfully established a connection."
-        },
-        "bm.DeviceDisconnectedEvent": {
-            "name": "bm.DeviceDisconnectedEvent",
-            "shortname": "bm.DeviceDisconnectedEvent",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "file": "src/events.js",
-            "line": 65,
-            "description": "Event called when a mobile device is disconnected."
-        },
-        "bm.ButtonEvent": {
-            "name": "bm.ButtonEvent",
-            "shortname": "bm.ButtonEvent",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "file": "src/events.js",
-            "line": 85,
-            "description": "Event for when a button was pressed or released."
-        },
-        "bm.ShakeEvent": {
-            "name": "bm.ShakeEvent",
-            "shortname": "bm.ShakeEvent",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "file": "src/events.js",
-            "line": 112,
-            "description": "Event indicating the user shook their device."
-        },
-        "bm.ShowSlotColorEvent": {
-            "name": "bm.ShowSlotColorEvent",
-            "shortname": "bm.ShowSlotColorEvent",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "file": "src/events.js",
-            "line": 133,
-            "description": "Event called when the SDK has received it's assigned slot index/color.\n\nThis is the unique color that is displayed in top right of the console, in your game, and \non the device list in the controller app. It's used to help users disambiguate which\nconsole/game they want to connect to, if there is more than one on your network."
         }
     },
     "classitems": [
@@ -172,7 +73,7 @@
             "params": [
                 {
                     "name": "eventType",
-                    "description": "Which event to listen to.",
+                    "description": "Which event to listen to.\n  Examples: \n      \n      \"buttondown\", \"buttonup\", or \"shake\"",
                     "type": "String"
                 },
                 {
@@ -185,7 +86,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 98,
+            "line": 103,
             "description": "Alias for {EventEmitter.addEventListener}",
             "itemtype": "method",
             "name": "on",
@@ -193,7 +94,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 107,
+            "line": 112,
             "description": "Unregister a callback for a particular event.",
             "itemtype": "method",
             "name": "removeEventListener",
@@ -213,7 +114,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 130,
+            "line": 135,
             "description": "Alias for {EventEmitter.removeEventListener}",
             "itemtype": "method",
             "name": "off",
@@ -221,22 +122,27 @@
         },
         {
             "file": "src/core.js",
-            "line": 139,
-            "description": "Trigger an event. (Calls all the callbacks that are listening for this event's type.)",
+            "line": 144,
+            "description": "Trigger an event. (Calls all the callbacks that are listening for the eventType)",
             "itemtype": "method",
             "name": "trigger",
             "params": [
                 {
+                    "name": "eventType",
+                    "description": "Which event to trigger.",
+                    "type": "String"
+                },
+                {
                     "name": "event",
                     "description": "Event that will be passed to all registered listeners.",
-                    "type": "bm.Event"
+                    "type": "Event"
                 }
             ],
             "class": "bm.EventEmitter"
         },
         {
             "file": "src/core.js",
-            "line": 178,
+            "line": 184,
             "description": "Version number of the SDK. \n\nFormat:\n\n    Major.Minor.Patch\n\nExample:\n\n    \"0.5.1\"\n    \nFollows the [Semantic Versioning Specification.](http://semver.org)",
             "itemtype": "property",
             "name": "version",
@@ -245,7 +151,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 199,
+            "line": 205,
             "description": "Startup Brass Monkey",
             "itemtype": "method",
             "name": "start",
@@ -285,7 +191,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 247,
+            "line": 253,
             "description": "Shutdown Brass Monkey",
             "itemtype": "method",
             "name": "stop",
@@ -293,7 +199,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 258,
+            "line": 264,
             "description": "Shutdown Brass Monkey. \n\nThis will close all open network connections and disconnect all controllers.",
             "itemtype": "method",
             "name": "stop",
@@ -301,60 +207,40 @@
         },
         {
             "file": "src/core.js",
-            "line": 301,
+            "line": 313,
             "description": "Event called when a mobile device successfully established a connection.",
             "itemtype": "event",
             "name": "deviceavailable",
             "params": [
                 {
-                    "name": "event",
-                    "description": "",
-                    "type": "bm.DeviceAvailableEvent"
+                    "name": "type",
+                    "description": "Which event this is. Ie. **\"deviceavailable\"**",
+                    "type": "String"
+                },
+                {
+                    "name": "device",
+                    "description": "Device that generated this event.",
+                    "type": "bm.Device"
                 }
             ],
             "class": "bm"
         },
         {
             "file": "src/core.js",
-            "line": 308,
+            "line": 321,
             "description": "Event called when a mobile device successfully established a connection.",
             "itemtype": "event",
             "name": "deviceconnected",
             "params": [
                 {
-                    "name": "event",
-                    "description": "",
-                    "type": "bm.DeviceConnectedEvent"
-                }
-            ],
-            "class": "bm"
-        },
-        {
-            "file": "src/core.js",
-            "line": 315,
-            "description": "Event called when a mobile device is disconnected.",
-            "itemtype": "event",
-            "name": "devicedisconnected",
-            "params": [
+                    "name": "type",
+                    "description": "Which event this is. Ie. **\"deviceconnected\"**",
+                    "type": "String"
+                },
                 {
-                    "name": "event",
-                    "description": "",
-                    "type": "bm.DeviceDisconnectedEvent"
-                }
-            ],
-            "class": "bm"
-        },
-        {
-            "file": "src/core.js",
-            "line": 322,
-            "description": "Event called when a button was pressed down.",
-            "itemtype": "event",
-            "name": "buttondown",
-            "params": [
-                {
-                    "name": "event",
-                    "description": "",
-                    "type": "bm.ButtonEvent"
+                    "name": "device",
+                    "description": "Device that generated this event.",
+                    "type": "bm.Device"
                 }
             ],
             "class": "bm"
@@ -362,29 +248,164 @@
         {
             "file": "src/core.js",
             "line": 329,
-            "description": "Event called when a button was released.",
+            "description": "Event called when a mobile device is disconnected.",
             "itemtype": "event",
-            "name": "buttonup",
+            "name": "devicedisconnected",
             "params": [
                 {
-                    "name": "event",
-                    "description": "",
-                    "type": "bm.ButtonEvent"
+                    "name": "type",
+                    "description": "Which event this is. Ie. **\"devicedisconnected\"**",
+                    "type": "String"
+                },
+                {
+                    "name": "device",
+                    "description": "Device that generated this event.",
+                    "type": "bm.Device"
                 }
             ],
             "class": "bm"
         },
         {
             "file": "src/core.js",
-            "line": 336,
-            "description": "Event indicating the user shook their device.",
+            "line": 338,
+            "description": "Event called when the SDK has received it's assigned slot index/color.\n\nThis is the unique color that is displayed in top right of the console, in your game, and \non the device list in the controller app. It's used to help users disambiguate which\nconsole/game they want to connect to, if there is more than one on their network.",
+            "itemtype": "event",
+            "name": "showslotcolor",
+            "params": [
+                {
+                    "name": "type",
+                    "description": "Which event this is. Ie. **\"showslotcolor\"**",
+                    "type": "String"
+                },
+                {
+                    "name": "slot",
+                    "description": "Unique identifier to your network. (Each instance of Brass Monkey running get it's own slot number assigned.)",
+                    "type": "Number"
+                },
+                {
+                    "name": "color",
+                    "description": "Color to display on the screen. (CSS Style Hexidecimal)\n    \n    Example:\n    \n        \"#ff0000\"",
+                    "type": "String"
+                }
+            ],
+            "class": "bm"
+        },
+        {
+            "file": "src/core.js",
+            "line": 370,
+            "description": "Event representing the latest accelerometer values.\n\n**Note:** \n\n  Accelerometer events must be enabled (See [Device.enableAccelerometer](bm.Device.html)) and are sent continuously on the interval specified by [Device.setAccelerometerInterval](bm.Device.html).",
+            "itemtype": "event",
+            "name": "accelerometer",
+            "params": [
+                {
+                    "name": "type",
+                    "description": "Which event this is. Ie. **\"accelerometer\"**",
+                    "type": "String"
+                },
+                {
+                    "name": "device",
+                    "description": "Device that generated this event.",
+                    "type": "bm.Device"
+                }
+            ],
+            "class": "bm"
+        },
+        {
+            "file": "src/core.js",
+            "line": 382,
+            "description": "Event representing the latest gyroscope values.\n\n**Note:** \n\n  Gyroscope events must be enabled (See [Device.enableGyroscope](bm.Device.html)) and are sent continuously on the interval specified by [Device.setGyroscopeInterval](bm.Device.html).",
+            "itemtype": "event",
+            "name": "gyroscope",
+            "params": [
+                {
+                    "name": "type",
+                    "description": "Which event this is. Ie. **\"gyroscope\"**",
+                    "type": "String"
+                },
+                {
+                    "name": "device",
+                    "description": "Device that generated this event.",
+                    "type": "bm.Device"
+                }
+            ],
+            "class": "bm"
+        },
+        {
+            "file": "src/core.js",
+            "line": 394,
+            "description": "Event representing the latest orientation values.\n\n**Note:** \n\n  Orientation events must be enabled (See [Device.enableOrientation](bm.Device.html)) and are sent continuously on the interval specified by [Device.setOrientationInterval](bm.Device.html).",
+            "itemtype": "event",
+            "name": "orientation",
+            "params": [
+                {
+                    "name": "type",
+                    "description": "Which event this is. Ie. **\"orientation\"**",
+                    "type": "String"
+                },
+                {
+                    "name": "device",
+                    "description": "Device that generated this event.",
+                    "type": "bm.Device"
+                }
+            ],
+            "class": "bm"
+        },
+        {
+            "file": "src/core.js",
+            "line": 407,
+            "description": "Event called when a button was pressed down.",
+            "itemtype": "event",
+            "name": "buttondown",
+            "params": [
+                {
+                    "name": "type",
+                    "description": "Which event this is. Ie. **\"buttondown\"**",
+                    "type": "String"
+                },
+                {
+                    "name": "device",
+                    "description": "Device that generated this event.",
+                    "type": "bm.Device"
+                }
+            ],
+            "class": "bm"
+        },
+        {
+            "file": "src/core.js",
+            "line": 415,
+            "description": "Event called when a button was released.",
+            "itemtype": "event",
+            "name": "buttonup",
+            "params": [
+                {
+                    "name": "type",
+                    "description": "Which event this is. Ie. **\"buttonup\"**",
+                    "type": "String"
+                },
+                {
+                    "name": "device",
+                    "description": "Device that generated this event.",
+                    "type": "bm.Device"
+                }
+            ],
+            "class": "bm"
+        },
+        {
+            "file": "src/core.js",
+            "line": 423,
+            "description": "Event indicating the user shook their device.\n\n**Note:** Accelerometer/Gyroscope events do not need to enabled, shake events do not take much network traffic so this was unnecessary.",
             "itemtype": "event",
             "name": "shake",
             "params": [
                 {
-                    "name": "event",
-                    "description": "",
-                    "type": "bm.ShakeEvent"
+                    "name": "type",
+                    "description": "Which event this is, Ie. **\"shake\"**",
+                    "type": "String"
+                },
+                {
+                    "name": "device",
+                    "description": "Device that generated this event.",
+                    "type": "bm.Device"
                 }
             ],
             "class": "bm"
@@ -553,96 +574,6 @@
                 "type": "String"
             },
             "class": "bm.Device"
-        },
-        {
-            "file": "src/events.js",
-            "line": 10,
-            "description": "Which event this instance is representing.\n\nExamples: \n    \n    \"buttondown\", \"buttonup\", or \"shake\"",
-            "itemtype": "property",
-            "name": "type",
-            "type": "{String}",
-            "class": "bm.Event"
-        },
-        {
-            "file": "src/events.js",
-            "line": 35,
-            "description": "Device Associated with this event.",
-            "itemtype": "property",
-            "name": "device",
-            "type": "{bm.Device}",
-            "class": "bm.DeviceAvailableEvent"
-        },
-        {
-            "file": "src/events.js",
-            "line": 55,
-            "description": "Device Associated with this event.",
-            "itemtype": "property",
-            "name": "device",
-            "type": "{bm.Device}",
-            "class": "bm.DeviceConnectedEvent"
-        },
-        {
-            "file": "src/events.js",
-            "line": 75,
-            "description": "Device Associated with this event.",
-            "itemtype": "property",
-            "name": "device",
-            "type": "{bm.Device}",
-            "class": "bm.DeviceDisconnectedEvent"
-        },
-        {
-            "file": "src/events.js",
-            "line": 94,
-            "description": "Device Associated with this event.",
-            "itemtype": "property",
-            "name": "device",
-            "type": "{bm.Device}",
-            "class": "bm.ButtonEvent"
-        },
-        {
-            "file": "src/events.js",
-            "line": 102,
-            "description": "The id of the button that was pressed/released",
-            "itemtype": "property",
-            "name": "button",
-            "type": "{String}",
-            "class": "bm.ButtonEvent"
-        },
-        {
-            "file": "src/events.js",
-            "line": 121,
-            "description": "Device Associated with this event.",
-            "itemtype": "property",
-            "name": "device",
-            "type": "{bm.Device}",
-            "class": "bm.ShakeEvent"
-        },
-        {
-            "file": "src/events.js",
-            "line": 154,
-            "description": "Device Associated with this event.",
-            "itemtype": "property",
-            "name": "device",
-            "type": "{bm.Device}",
-            "class": "bm.ShowSlotColorEvent"
-        },
-        {
-            "file": "src/events.js",
-            "line": 163,
-            "description": "Unique identifier to your network. (Each instance of Brass Monkey running get it's own slotIndex number)",
-            "itemtype": "property",
-            "name": "slotIndex",
-            "type": "{Number}",
-            "class": "bm.ShowSlotColorEvent"
-        },
-        {
-            "file": "src/events.js",
-            "line": 173,
-            "description": "Color to display on the screen. (CSS Style Hexidecimal)\n\nExample:\n\n    \"#ff0000\"",
-            "itemtype": "property",
-            "name": "color",
-            "type": "{String}",
-            "class": "bm.ShowSlotColorEvent"
         }
     ]
 }

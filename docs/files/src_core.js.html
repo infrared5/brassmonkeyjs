@@ -43,23 +43,9 @@
             
                 <li><a href="..&#x2F;classes/bm.html">bm</a></li>
             
-                <li><a href="..&#x2F;classes/bm.ButtonEvent.html">bm.ButtonEvent</a></li>
-            
                 <li><a href="..&#x2F;classes/bm.Device.html">bm.Device</a></li>
             
-                <li><a href="..&#x2F;classes/bm.DeviceAvailableEvent.html">bm.DeviceAvailableEvent</a></li>
-            
-                <li><a href="..&#x2F;classes/bm.DeviceConnectedEvent.html">bm.DeviceConnectedEvent</a></li>
-            
-                <li><a href="..&#x2F;classes/bm.DeviceDisconnectedEvent.html">bm.DeviceDisconnectedEvent</a></li>
-            
-                <li><a href="..&#x2F;classes/bm.Event.html">bm.Event</a></li>
-            
                 <li><a href="..&#x2F;classes/bm.EventEmitter.html">bm.EventEmitter</a></li>
-            
-                <li><a href="..&#x2F;classes/bm.ShakeEvent.html">bm.ShakeEvent</a></li>
-            
-                <li><a href="..&#x2F;classes/bm.ShowSlotColorEvent.html">bm.ShowSlotColorEvent</a></li>
             
             </ul>
 
@@ -183,6 +169,11 @@ EventEmitter = Class.extend({
   
   @method addEventListener
   @param {String} eventType Which event to listen to.
+    Examples: 
+        
+        &quot;buttondown&quot;, &quot;buttonup&quot;, or &quot;shake&quot;
+        
+        
   @param {Function} fn Function to be called back when the event occurs.
   
   **&#x2F;
@@ -243,15 +234,16 @@ EventEmitter = Class.extend({
   },
   
   &#x2F;**
-  Trigger an event. (Calls all the callbacks that are listening for this event&#x27;s type.)
+  Trigger an event. (Calls all the callbacks that are listening for the eventType)
   
   @method trigger
-  @param {bm.Event} event Event that will be passed to all registered listeners.
+  @param {String} eventType Which event to trigger.
+  @param {Event} event Event that will be passed to all registered listeners.
   
   **&#x2F;
-  trigger: function(event){
-    if(this.callbacks[event.type]!==undefined){
-      var i,callbacks = this.callbacks[event.type];
+  trigger: function(eventType,event){
+    if(this.callbacks[eventType]!==undefined){
+      var i,callbacks = this.callbacks[eventType];
       for(var i = 0; i&lt;callbacks.length;i++){
         callbacks[i](event);
       }
@@ -375,7 +367,13 @@ var BrassMonkeyClass = EventEmitter.extend({
   addDevice: function(device){
     this.devices[device.id] = device;
     
-    this.trigger(&#x27;deviceconnected&#x27;, new DeviceConnectedEvent(device));
+    this.trigger(&#x27;deviceconnected&#x27;, {type: &#x27;deviceconnected&#x27;, device: device});
+  },
+  
+  removeDevice: function(device){
+    delete this.devices[device.id];
+    
+    this.trigger(&#x27;devicedisconnected&#x27;, {type: &#x27;devicedisconnected&#x27;, device: device});
   },
   
   getDevice: function(id){
@@ -408,42 +406,120 @@ yuidoc to properly associate with the BrassMonkey Class.
 Event called when a mobile device successfully established a connection.
 
 @event deviceavailable
-@param {bm.DeviceAvailableEvent} event
+@param {String} type Which event this is. Ie. **&quot;deviceavailable&quot;**
+@param {bm.Device} device Device that generated this event.
 **&#x2F;
 
 &#x2F;**
 Event called when a mobile device successfully established a connection.
 
 @event deviceconnected
-@param {bm.DeviceConnectedEvent} event
+@param {String} type Which event this is. Ie. **&quot;deviceconnected&quot;**
+@param {bm.Device} device Device that generated this event.
 **&#x2F;
 
 &#x2F;**
 Event called when a mobile device is disconnected.
 
 @event devicedisconnected
-@param {bm.DeviceDisconnectedEvent} event
+@param {String} type Which event this is. Ie. **&quot;devicedisconnected&quot;**
+@param {bm.Device} device Device that generated this event.
+
 **&#x2F;
+
+&#x2F;**
+Event called when the SDK has received it&#x27;s assigned slot index&#x2F;color.
+
+This is the unique color that is displayed in top right of the console, in your game, and 
+on the device list in the controller app. It&#x27;s used to help users disambiguate which
+console&#x2F;game they want to connect to, if there is more than one on their network.
+
+@event showslotcolor
+@param {String} type Which event this is. Ie. **&quot;showslotcolor&quot;**
+@param {Number} slot Unique identifier to your network. (Each instance of Brass Monkey running get it&#x27;s own slot number assigned.)
+
+@param {String} color Color to display on the screen. (CSS Style Hexidecimal)
+    
+    Example:
+    
+        &quot;#ff0000&quot;
+             
+**&#x2F;
+
+&#x2F;&#x2F; Lookup table for converting slot index numbers into an agreed upon matching color.
+bm.slotColors = [
+  &quot;#ff6600&quot;,&quot;#ffcc00&quot;,&quot;#ff3399&quot;,&quot;#ff0066&quot;,
+  &quot;#cc00ff&quot;,&quot;#999900&quot;,&quot;#9999cc&quot;,&quot;#00cc99&quot;,
+  &quot;#287200&quot;,&quot;#00ccff&quot;,&quot;#003366&quot;,&quot;#99ff00&quot;,
+  &quot;#cc0000&quot;,&quot;#80cd68&quot;,&quot;#6600ff&quot;
+];
+
+&#x2F;*    
+this.slot = (Math.max(1, this.slot) - 1) % slotColors.length;
+this.color = slotColors[this.slot];
+*&#x2F;
+
+&#x2F;**
+Event representing the latest accelerometer values.
+
+**Note:** 
+
+  Accelerometer events must be enabled (See [Device.enableAccelerometer](bm.Device.html)) and are sent continuously on the interval specified by [Device.setAccelerometerInterval](bm.Device.html).
+
+@event accelerometer
+@param {String} type Which event this is. Ie. **&quot;accelerometer&quot;**
+@param {bm.Device} device Device that generated this event.
+**&#x2F;
+
+&#x2F;**
+Event representing the latest gyroscope values.
+
+**Note:** 
+
+  Gyroscope events must be enabled (See [Device.enableGyroscope](bm.Device.html)) and are sent continuously on the interval specified by [Device.setGyroscopeInterval](bm.Device.html).
+
+@event gyroscope
+@param {String} type Which event this is. Ie. **&quot;gyroscope&quot;**
+@param {bm.Device} device Device that generated this event.
+**&#x2F;
+
+&#x2F;**
+Event representing the latest orientation values.
+
+**Note:** 
+
+  Orientation events must be enabled (See [Device.enableOrientation](bm.Device.html)) and are sent continuously on the interval specified by [Device.setOrientationInterval](bm.Device.html).
+
+@event orientation
+@param {String} type Which event this is. Ie. **&quot;orientation&quot;**
+@param {bm.Device} device Device that generated this event.
+**&#x2F;
+
 
 &#x2F;**
 Event called when a button was pressed down.
 
 @event buttondown
-@param {bm.ButtonEvent} event
+@param {String} type Which event this is. Ie. **&quot;buttondown&quot;**
+@param {bm.Device} device Device that generated this event.
 **&#x2F;
 
 &#x2F;**
 Event called when a button was released.
 
 @event buttonup
-@param {bm.ButtonEvent} event
+@param {String} type Which event this is. Ie. **&quot;buttonup&quot;**
+@param {bm.Device} device Device that generated this event.
 **&#x2F;
 
 &#x2F;**
 Event indicating the user shook their device.
 
+**Note:** Accelerometer&#x2F;Gyroscope events do not need to enabled, shake events do not take much network traffic so this was unnecessary.
+
 @event shake
-@param {bm.ShakeEvent} event
+@param {String} type Which event this is, Ie. **&quot;shake&quot;**
+@param {bm.Device} device Device that generated this event.
 **&#x2F;
 
 })();

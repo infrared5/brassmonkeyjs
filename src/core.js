@@ -77,6 +77,11 @@ EventEmitter = Class.extend({
   
   @method addEventListener
   @param {String} eventType Which event to listen to.
+    Examples: 
+        
+        "buttondown", "buttonup", or "shake"
+        
+        
   @param {Function} fn Function to be called back when the event occurs.
   
   **/
@@ -137,15 +142,16 @@ EventEmitter = Class.extend({
   },
   
   /**
-  Trigger an event. (Calls all the callbacks that are listening for this event's type.)
+  Trigger an event. (Calls all the callbacks that are listening for the eventType)
   
   @method trigger
-  @param {bm.Event} event Event that will be passed to all registered listeners.
+  @param {String} eventType Which event to trigger.
+  @param {Event} event Event that will be passed to all registered listeners.
   
   **/
-  trigger: function(event){
-    if(this.callbacks[event.type]!==undefined){
-      var i,callbacks = this.callbacks[event.type];
+  trigger: function(eventType,event){
+    if(this.callbacks[eventType]!==undefined){
+      var i,callbacks = this.callbacks[eventType];
       for(var i = 0; i<callbacks.length;i++){
         callbacks[i](event);
       }
@@ -269,7 +275,13 @@ var BrassMonkeyClass = EventEmitter.extend({
   addDevice: function(device){
     this.devices[device.id] = device;
     
-    this.trigger('deviceconnected', new DeviceConnectedEvent(device));
+    this.trigger('deviceconnected', {type: 'deviceconnected', device: device});
+  },
+  
+  removeDevice: function(device){
+    delete this.devices[device.id];
+    
+    this.trigger('devicedisconnected', {type: 'devicedisconnected', device: device});
   },
   
   getDevice: function(id){
@@ -302,42 +314,120 @@ yuidoc to properly associate with the BrassMonkey Class.
 Event called when a mobile device successfully established a connection.
 
 @event deviceavailable
-@param {bm.DeviceAvailableEvent} event
+@param {String} type Which event this is. Ie. **"deviceavailable"**
+@param {bm.Device} device Device that generated this event.
 **/
 
 /**
 Event called when a mobile device successfully established a connection.
 
 @event deviceconnected
-@param {bm.DeviceConnectedEvent} event
+@param {String} type Which event this is. Ie. **"deviceconnected"**
+@param {bm.Device} device Device that generated this event.
 **/
 
 /**
 Event called when a mobile device is disconnected.
 
 @event devicedisconnected
-@param {bm.DeviceDisconnectedEvent} event
+@param {String} type Which event this is. Ie. **"devicedisconnected"**
+@param {bm.Device} device Device that generated this event.
+
 **/
+
+/**
+Event called when the SDK has received it's assigned slot index/color.
+
+This is the unique color that is displayed in top right of the console, in your game, and 
+on the device list in the controller app. It's used to help users disambiguate which
+console/game they want to connect to, if there is more than one on their network.
+
+@event showslotcolor
+@param {String} type Which event this is. Ie. **"showslotcolor"**
+@param {Number} slot Unique identifier to your network. (Each instance of Brass Monkey running get it's own slot number assigned.)
+
+@param {String} color Color to display on the screen. (CSS Style Hexidecimal)
+    
+    Example:
+    
+        "#ff0000"
+             
+**/
+
+// Lookup table for converting slot index numbers into an agreed upon matching color.
+bm.slotColors = [
+  "#ff6600","#ffcc00","#ff3399","#ff0066",
+  "#cc00ff","#999900","#9999cc","#00cc99",
+  "#287200","#00ccff","#003366","#99ff00",
+  "#cc0000","#80cd68","#6600ff"
+];
+
+/*    
+this.slot = (Math.max(1, this.slot) - 1) % slotColors.length;
+this.color = slotColors[this.slot];
+*/
+
+/**
+Event representing the latest accelerometer values.
+
+**Note:** 
+
+  Accelerometer events must be enabled (See [Device.enableAccelerometer](bm.Device.html)) and are sent continuously on the interval specified by [Device.setAccelerometerInterval](bm.Device.html).
+
+@event accelerometer
+@param {String} type Which event this is. Ie. **"accelerometer"**
+@param {bm.Device} device Device that generated this event.
+**/
+
+/**
+Event representing the latest gyroscope values.
+
+**Note:** 
+
+  Gyroscope events must be enabled (See [Device.enableGyroscope](bm.Device.html)) and are sent continuously on the interval specified by [Device.setGyroscopeInterval](bm.Device.html).
+
+@event gyroscope
+@param {String} type Which event this is. Ie. **"gyroscope"**
+@param {bm.Device} device Device that generated this event.
+**/
+
+/**
+Event representing the latest orientation values.
+
+**Note:** 
+
+  Orientation events must be enabled (See [Device.enableOrientation](bm.Device.html)) and are sent continuously on the interval specified by [Device.setOrientationInterval](bm.Device.html).
+
+@event orientation
+@param {String} type Which event this is. Ie. **"orientation"**
+@param {bm.Device} device Device that generated this event.
+**/
+
 
 /**
 Event called when a button was pressed down.
 
 @event buttondown
-@param {bm.ButtonEvent} event
+@param {String} type Which event this is. Ie. **"buttondown"**
+@param {bm.Device} device Device that generated this event.
 **/
 
 /**
 Event called when a button was released.
 
 @event buttonup
-@param {bm.ButtonEvent} event
+@param {String} type Which event this is. Ie. **"buttonup"**
+@param {bm.Device} device Device that generated this event.
 **/
 
 /**
 Event indicating the user shook their device.
 
+**Note:** Accelerometer/Gyroscope events do not need to enabled, shake events do not take much network traffic so this was unnecessary.
+
 @event shake
-@param {bm.ShakeEvent} event
+@param {String} type Which event this is, Ie. **"shake"**
+@param {bm.Device} device Device that generated this event.
 **/
 
 })();
