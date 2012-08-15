@@ -65,7 +65,7 @@
     bm.on('buttonup', function(e){
       if(e.id="push"){
         var button = document.getElementById('button');
-        button.style.background = "white";
+        button.style.background = "#ffafaf";
       }
     });
 
@@ -82,19 +82,25 @@
     
     var touches = {};
     bm.on('touchstart', function (e){
+      var color = '#'+Math.floor(Math.random()*16777215).toString(16);
+    
+      drawContext.fillStyle=color;
+      drawContext.fillRect(e.x-1,e.y-1,3,3);
+    
       // Store the last position of a touch
-      touches[e.id]={x:e.x,y:e.y};
-      //bm.log(e);
+      touches[e.id]={
+        x:e.x,
+        y:e.y,
+        color: color
+      };
     });
 
     bm.on('touchmove', function (e){
-      var cvs = document.getElementById('canvas'),
-          ctx = cvs.getContext('2d');
-          
-      ctx.beginPath();
-      ctx.moveTo(touches[e.id].x,touches[e.id].y);
-      ctx.lineTo(e.x,e.y);
-      ctx.stroke();
+      drawContext.strokeStyle=touches[e.id].color;
+      drawContext.beginPath();
+      drawContext.moveTo(touches[e.id].x,touches[e.id].y);
+      drawContext.lineTo(e.x,e.y);
+      drawContext.stroke();
       
       // Update the last position
       touches[e.id]={x:e.x,y:e.y};
@@ -105,15 +111,13 @@
     });
     
     function onload(){
-      // Initialize canvas to black.
-      var cvs = document.getElementById('canvas'),
-          ctx = cvs.getContext('2d');
-      ctx.fillStyle="black";
-      ctx.fillRect(0,0,320,480);
+      // Initialize canvas to black.      
+      drawContext = document.getElementById('canvas').getContext('2d');
+      drawContext.fillStyle="black";
+      drawContext.fillRect(0,0,320,480);
       
-      ctx.lineWidth = 3;
-      ctx.lineCap = ctx.lineJoin = "round";
-      ctx.strokeStyle="white";
+      drawContext.lineWidth = 3;
+      drawContext.lineCap = ctx.lineJoin = "round";
     }
 
 
@@ -125,7 +129,7 @@
   </script>
 </head>
 <body style="margin:0px" onload="onload();">
-  <div id="button" style="padding-top: 30px;width:64px;height:64px;background:white;"></div>
+  <div id="button" style="padding-top: 30px;width:64px;height:64px;background:#ffafaf;"></div>
   <canvas id="canvas" width="320px" height="480px"></canvas>
 
 <br><br>
