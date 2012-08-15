@@ -299,6 +299,9 @@ cp.handleInvoke = function(invoke) {
       break;
 
     case "GetPortalId":
+      if(bm.options.portalId) {
+        this.sendInvoke(invoke.returnMethod, [['*', bm.options.portalId]]);
+      }
       break;
 
     case "setCapabilities":
@@ -323,6 +326,7 @@ cp.handleInvoke = function(invoke) {
 
     case "onNavigationString":
       // TODO: ?
+      notify(this, "navstring", {device:this, string:invoke.params[0][1]});
       break;
 
     default:
@@ -526,6 +530,7 @@ decoders[ENCODE_TOUCH_SET] = function(encoded) {
     touch['viewWidth'] = encoded[++i];
     touch['viewHeight'] = encoded[++i];
     touch['phase'] = encoded[++i];
+    touch['id'] = encoded[++i];
     touches.push(touch);
   }
 
@@ -544,6 +549,7 @@ if(INCLUDE_UNUSED_ENCODERS) {
       encoded.push(touch['viewWidth']);
       encoded.push(touch['viewHeight']);
       encoded.push(touch['phase']);
+      encoded.push(touch['id']);
     }
     return encoded;
   };
@@ -767,8 +773,8 @@ function createDebugControls(){
   }
 }
 
-// 
-if(bm.detectRuntime()=="websockets"){
+//
+if(bm.detectRuntime()==="websockets"){
   if (window.addEventListener) {
     window.addEventListener('DOMContentLoaded', createDebugControls, false);
   } else {
@@ -778,10 +784,11 @@ if(bm.detectRuntime()=="websockets"){
 
 bm.WebSocketsRT = bm.Class.extend({
   init:function(){
-    
   },
-  start: function(){
-    
+  start: function(options){
+    localDevice.id = options.deviceId;
+    localDevice.name = options.name;
+    bm.log(options.deviceId);
   },
   stop: function(){
     stop();

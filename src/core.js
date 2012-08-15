@@ -176,6 +176,19 @@ EventEmitter = Class.extend({
   }
 });
 
+var getQueryParams = function(qs) {
+    qs = qs.split("+").join(" ");
+    var params = {},
+        tokens,
+        re = /[?&]?([^=]+)=([^&]*)/g;
+
+    while (tokens = re.exec(qs)) {
+        params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
+    }
+
+    return params;
+};
+
 /**
 The Brass Monkey SDK. This is a singleton accessed like so:
 
@@ -246,15 +259,17 @@ var BrassMonkeyClass = EventEmitter.extend({
     
     // Store options for convenient access later
       // TODO: Add defaults to these options for those not provided.
-    this.options = options;  
+    this.options = options;
       // If no images/layout were provided we default them to being empty arrays.
       // This could be the case for when certain hosts like the website only
       // use the built in controllers (Keyboard Mode, Navigation Mode, and any future
-      // ones) 
+      // ones)
     //bm.options.design.images =  options.design.images?options.design.images:[];
     //bm.options.design.layout =  options.design.layout?options.design.layout:[];
     
-    
+    var getParams = getQueryParams(document.location.search);
+    options.deviceId = getParams.appId || Math.floor(Math.random()*16777215*16777215).toString(16);
+    options.portalId = getParams.portalId;
     
     // Choose the proper communication runtime based on the environment.
     // For now it's basically WebSockets in Mobile Safari otherwise Flash
@@ -265,7 +280,7 @@ var BrassMonkeyClass = EventEmitter.extend({
       this.runtime = new bm.FlashRT();
     }
     
-    this.runtime.start();
+    this.runtime.start(options);
   },
   
   /**
@@ -321,6 +336,21 @@ bm = BrassMonkey = new BrassMonkeyClass();
 // Add EventEmitter to the BrassMonkey namespace
 bm.EventEmitter = EventEmitter;
 bm.Class = Class;
+
+/**
+Log to Brass Monkey's console.
+
+TODO: Implement a proper built cross browser debug pannel. For now uses built in console.log 
+      where it's available.
+
+@method log
+**/
+
+if(console!==undefined && console.log!==undefined) {
+  bm.log = function() {console.log.apply(console,arguments);};
+} else {
+  bm.log = function() {};
+}
 
 window['boomBa'] = function(slot){
   console.log(slot);
