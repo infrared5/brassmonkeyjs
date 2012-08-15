@@ -272,6 +272,9 @@ cp.handleInvoke = function(invoke) {
       break;
 
     case "GetPortalId":
+      if(bm.options.portalId) {
+        this.sendInvoke(invoke.returnMethod, [['*', bm.options.portalId]]);
+      }
       break;
 
     case "setCapabilities":
@@ -740,8 +743,8 @@ function createDebugControls(){
   }
 }
 
-// 
-if(bm.detectRuntime()=="websockets"){
+//
+if(bm.detectRuntime()==="websockets"){
   if (window.addEventListener) {
     window.addEventListener('DOMContentLoaded', createDebugControls, false);
   } else {
@@ -751,10 +754,11 @@ if(bm.detectRuntime()=="websockets"){
 
 bm.WebSocketsRT = bm.Class.extend({
   init:function(){
-    
   },
-  start: function(){
-    
+  start: function(options){
+    localDevice.id = options.deviceId;
+    localDevice.name = options.name;
+    bm.log(options.deviceId);
   },
   stop: function(){
     stop();
