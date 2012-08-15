@@ -296,21 +296,6 @@ var BrassMonkeyClass = EventEmitter.extend({
     }
   },
   
-  /**
-  Log to Brass Monkey's console.
-  
-  TODO: Implement a proper built cross browser debug pannel. For now uses built in console.log 
-        where it's available.
-  
-  @method log
-  **/
-  log: function(str){
-    if( console!==undefined&&
-        console.log!==undefined){
-      console.log(str);
-    }
-  },
-  
   addDevice: function(device){
     this.devices[device.id] = device;
     
@@ -335,6 +320,21 @@ bm = BrassMonkey = new BrassMonkeyClass();
 // Add EventEmitter to the BrassMonkey namespace
 bm.EventEmitter = EventEmitter;
 bm.Class = Class;
+
+/**
+Log to Brass Monkey's console.
+
+TODO: Implement a proper built cross browser debug pannel. For now uses built in console.log 
+      where it's available.
+
+@method log
+**/
+
+if(console!==undefined && console.log!==undefined) {
+  bm.log = function() {console.log.apply(console,arguments);};
+} else {
+  bm.log = function() {};
+}
 
 window['boomBa'] = function(slot){
   console.log(slot);

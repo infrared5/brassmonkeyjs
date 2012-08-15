@@ -70,8 +70,12 @@
       }
     });
 
-    bm.on( 'deviceconnected', function (e){
+    bm.on('deviceconnected', function (e){
       bm.log("device connected %o", e);
+    });
+
+    bm.on('navstring', function (e){
+      bm.log("nav string %s", e.string);
     });
     
   </script>

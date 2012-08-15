@@ -299,6 +299,7 @@ cp.handleInvoke = function(invoke) {
 
     case "onNavigationString":
       // TODO: ?
+      notify(this, "navstring", {device:this, string:invoke.params[0][1]});
       break;
 
     default:
