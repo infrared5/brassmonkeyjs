@@ -103,7 +103,8 @@ var makeInvoke = function(methodName, params) {
 
 var start = function(ipAddress) {
   bm.log("start");
-  connections.push( new Connection("deviceId", ipAddress, 9011));
+  
+  connections.push(new Connection("deviceId", ipAddress, 9011));
 };
 
 var stop = function() {
@@ -171,7 +172,7 @@ var Connection = bm.Device.extend({
   setMode : function(mode, text) {
     if(this.mode !== mode) {
       if(!(mode in controlModes)) {
-        throw {message:"unknown control mode " + mode};
+        throw new Error("unknown control mode " + mode);
       }
 
       this.mode = mode;
@@ -230,7 +231,6 @@ generateSensorMethods('orientation');
 var notify = function(connection, type, event) {
   //TODO: remove debug log
   bm.log("notify: " + type);
-  event.type = type;
   connection.trigger(type, event);
   bm.trigger(type, event);
 };
@@ -369,7 +369,7 @@ function decodeObject(encoded) {
     return decoder(encoded);
   }
 
-  throw "no decoder for "+encoded;
+  throw new Error("no decoder for "+encoded);
 }
 
 function encodeObject(object) {
@@ -378,7 +378,7 @@ function encodeObject(object) {
     return encoder(object);
   }
   
-  throw "no encoder for "+object;
+  throw new Error("no encoder for "+object);
 }
 
 var decoders = [];

@@ -44,7 +44,7 @@
             "plugin_for": [],
             "extension_for": [],
             "file": "src/core.js",
-            "line": 162,
+            "line": 179,
             "description": "The Brass Monkey SDK. This is a singleton accessed like so:\n\n    bm.init(...);\n    \nor\n\n    var version = bm.version;",
             "extends": "bm.EventEmitter",
             "static": 1
@@ -142,7 +142,27 @@
         },
         {
             "file": "src/core.js",
-            "line": 184,
+            "line": 161,
+            "description": "Convenience function that adds .type field to the event then passes it to trigger()",
+            "itemtype": "method",
+            "name": "triggerWithType",
+            "params": [
+                {
+                    "name": "eventType",
+                    "description": "Which event to trigger. \n\n  Appends to the event as a field called .type (event.type=eventType).",
+                    "type": "String"
+                },
+                {
+                    "name": "event",
+                    "description": "Event that will be passed to all registered listeners.",
+                    "type": "Event"
+                }
+            ],
+            "class": "bm.EventEmitter"
+        },
+        {
+            "file": "src/core.js",
+            "line": 201,
             "description": "Version number of the SDK. \n\nFormat:\n\n    Major.Minor.Patch\n\nExample:\n\n    \"0.5.1\"\n    \nFollows the [Semantic Versioning Specification.](http://semver.org)",
             "itemtype": "property",
             "name": "version",
@@ -151,7 +171,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 205,
+            "line": 222,
             "description": "Startup Brass Monkey",
             "itemtype": "method",
             "name": "start",
@@ -180,7 +200,7 @@
                         },
                         {
                             "name": "swfURL",
-                            "description": "The location of the SWF file that implements the SDK when there a browser doesn't support Websockets. \n    \n    (If not provided the matching version on the Brass Monkey CDN is used.)",
+                            "description": "The location of the SWF file that implements the SDK when there a browser doesn't support Websockets. (Used by the flash implementation if it is chosen at )\n    \n    (If not provided the matching version on the Brass Monkey CDN is used.)",
                             "type": "URL",
                             "optional": true
                         }
@@ -191,23 +211,23 @@
         },
         {
             "file": "src/core.js",
-            "line": 254,
-            "description": "Shutdown Brass Monkey",
+            "line": 271,
+            "description": "Shutdown Brass Monkey\n\nThis will close all open network connections and disconnect all controllers.",
             "itemtype": "method",
             "name": "stop",
             "class": "bm"
         },
         {
             "file": "src/core.js",
-            "line": 265,
-            "description": "Shutdown Brass Monkey. \n\nThis will close all open network connections and disconnect all controllers.",
+            "line": 284,
+            "description": "Log to Brass Monkey's console.\n\nTODO: Implement a proper built cross browser debug pannel. For now uses built in console.log \n      where it's available.",
             "itemtype": "method",
-            "name": "stop",
+            "name": "log",
             "class": "bm"
         },
         {
             "file": "src/core.js",
-            "line": 314,
+            "line": 340,
             "description": "Event called when a mobile device successfully established a connection.",
             "itemtype": "event",
             "name": "deviceavailable",
@@ -227,7 +247,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 322,
+            "line": 348,
             "description": "Event called when a mobile device successfully established a connection.",
             "itemtype": "event",
             "name": "deviceconnected",
@@ -247,7 +267,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 330,
+            "line": 356,
             "description": "Event called when a mobile device is disconnected.",
             "itemtype": "event",
             "name": "devicedisconnected",
@@ -267,7 +287,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 339,
+            "line": 365,
             "description": "Event called when the SDK has received it's assigned slot index/color.\n\nThis is the unique color that is displayed in top right of the console, in your game, and \non the device list in the controller app. It's used to help users disambiguate which\nconsole/game they want to connect to, if there is more than one on their network.",
             "itemtype": "event",
             "name": "showslotcolor",
@@ -292,7 +312,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 371,
+            "line": 397,
             "description": "Event representing the latest accelerometer values.\n\n**Note:** \n\n  Accelerometer events must be enabled (See [Device.enableAccelerometer](bm.Device.html)) and are sent continuously on the interval specified by [Device.setAccelerometerInterval](bm.Device.html).",
             "itemtype": "event",
             "name": "accelerometer",
@@ -312,7 +332,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 383,
+            "line": 409,
             "description": "Event representing the latest gyroscope values.\n\n**Note:** \n\n  Gyroscope events must be enabled (See [Device.enableGyroscope](bm.Device.html)) and are sent continuously on the interval specified by [Device.setGyroscopeInterval](bm.Device.html).",
             "itemtype": "event",
             "name": "gyroscope",
@@ -332,7 +352,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 395,
+            "line": 421,
             "description": "Event representing the latest orientation values.\n\n**Note:** \n\n  Orientation events must be enabled (See [Device.enableOrientation](bm.Device.html)) and are sent continuously on the interval specified by [Device.setOrientationInterval](bm.Device.html).",
             "itemtype": "event",
             "name": "orientation",
@@ -352,7 +372,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 408,
+            "line": 434,
             "description": "Event called when a button was pressed down.",
             "itemtype": "event",
             "name": "buttondown",
@@ -372,7 +392,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 416,
+            "line": 442,
             "description": "Event called when a button was released.",
             "itemtype": "event",
             "name": "buttonup",
@@ -392,7 +412,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 424,
+            "line": 450,
             "description": "Event indicating the user shook their device.\n\n**Note:** Accelerometer/Gyroscope events do not need to enabled, shake events do not take much network traffic so this was unnecessary.",
             "itemtype": "event",
             "name": "shake",
@@ -430,7 +450,7 @@
         },
         {
             "file": "src/device.js",
-            "line": 48,
+            "line": 50,
             "description": "Enable/Disable touch events.\n\nTouch events are off by default to reduce network traffic and should only be enabled if you are doing touch based controls.",
             "itemtype": "method",
             "name": "enableTouch",
@@ -445,7 +465,7 @@
         },
         {
             "file": "src/device.js",
-            "line": 58,
+            "line": 60,
             "description": "Set the interval at which touch events are sent from the controller app.",
             "itemtype": "method",
             "name": "setTouchInterval",
@@ -460,7 +480,7 @@
         },
         {
             "file": "src/device.js",
-            "line": 67,
+            "line": 69,
             "description": "Enable/Disable accelerometer events.\n\nAccelerometer events are off by default to reduce network traffic and should only be enabled if you are doing accelerometer based controls.",
             "itemtype": "method",
             "name": "enableAccelerometer",
@@ -475,7 +495,7 @@
         },
         {
             "file": "src/device.js",
-            "line": 77,
+            "line": 79,
             "description": "Set the interval at which acclerometer events are sent from the controller app.",
             "itemtype": "method",
             "name": "setAccelerometerInterval",
@@ -490,7 +510,7 @@
         },
         {
             "file": "src/device.js",
-            "line": 86,
+            "line": 88,
             "description": "Enable/Disable gyroscope events.\n\nGyroscope events are off by default to reduce network traffic and should only be enabled if you are doing gyroscope based controls.",
             "itemtype": "method",
             "name": "enableGyroscope",
@@ -505,7 +525,7 @@
         },
         {
             "file": "src/device.js",
-            "line": 96,
+            "line": 98,
             "description": "Set the interval at which gyroscope events are sent from the controller app.",
             "itemtype": "method",
             "name": "setGyroscopeInterval",
@@ -520,7 +540,7 @@
         },
         {
             "file": "src/device.js",
-            "line": 105,
+            "line": 107,
             "description": "Enable/Disable orientation events.\n\nTouch events are off by default to reduce network traffic and should only be enabled if you are doing touch based controls.",
             "itemtype": "method",
             "name": "enableOrientation",
@@ -535,7 +555,7 @@
         },
         {
             "file": "src/device.js",
-            "line": 115,
+            "line": 117,
             "description": "Set the interval at which touch events are sent from the controller app.",
             "itemtype": "method",
             "name": "setOrientationInterval",
@@ -550,7 +570,7 @@
         },
         {
             "file": "src/device.js",
-            "line": 125,
+            "line": 127,
             "description": "Set which controller mode the device is in.",
             "itemtype": "method",
             "name": "setMode",
@@ -565,7 +585,7 @@
         },
         {
             "file": "src/device.js",
-            "line": 141,
+            "line": 143,
             "description": "Get which controller mode the device is in.",
             "itemtype": "method",
             "name": "getMode",

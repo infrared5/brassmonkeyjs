@@ -88,7 +88,7 @@ EventEmitter = Class.extend({
 
   addEventListener: function(eventType,fn){
     if (typeof fn !== 'function'){
-      throw new Error('.on() only accepts instances of Function');
+      throw new Error('.on() callback provided was not a function');
     }
   
     // Make an array for this particular eventName
@@ -156,6 +156,23 @@ EventEmitter = Class.extend({
         callbacks[i](event);
       }
     }
+  },
+  
+  /**
+  Convenience function that adds .type field to the event reflecting which type the event is and then passes it to trigger().
+  
+  @method triggerWithType
+  @param {String} eventType Which event to trigger. 
+  
+    Appends to the event as a field called .type (event.type=eventType).
+    
+  @param {Event} event Event that will be passed to all registered listeners.
+  
+  **/
+  // 
+  triggerWithType: function(eventType,event){
+    event.type = eventType;
+    this.trigger(eventType,event);
   }
 });
 
@@ -254,6 +271,8 @@ var BrassMonkeyClass = EventEmitter.extend({
   /**
   Shutdown Brass Monkey
   
+  This will close all open network connections and disconnect all controllers.
+  
   @method stop
   **/
   stop: function(){
@@ -263,32 +282,35 @@ var BrassMonkeyClass = EventEmitter.extend({
   },
   
   /**
-  Shutdown Brass Monkey. 
+  Log to Brass Monkey's console.
   
-  This will close all open network connections and disconnect all controllers.
+  TODO: Implement a proper built cross browser debug pannel. For now uses built in console.log 
+        where it's available.
   
-  @method stop
+  @method log
   **/
   log: function(str){
-    console.log(str);
+    if( console!==undefined&&
+        console.log!==undefined){
+      console.log(str);
+    }
   },
   
   addDevice: function(device){
     this.devices[device.id] = device;
     
-    this.trigger('deviceconnected', {type: 'deviceconnected', device: device});
+    this.notify('deviceconnected', {device: device});
   },
   
   removeDevice: function(device){
     delete this.devices[device.id];
     
-    this.trigger('devicedisconnected', {type: 'devicedisconnected', device: device});
+    this.notify('devicedisconnected', {device: device});
   },
   
   getDevice: function(id){
     return this.devices[id];
   }
-  
 });
 
 // Create singleton instance of BrassMonkey

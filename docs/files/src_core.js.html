@@ -180,7 +180,7 @@ EventEmitter = Class.extend({
 
   addEventListener: function(eventType,fn){
     if (typeof fn !== &#x27;function&#x27;){
-      throw new Error(&#x27;.on() only accepts instances of Function&#x27;);
+      throw new Error(&#x27;.on() callback provided was not a function&#x27;);
     }
   
     &#x2F;&#x2F; Make an array for this particular eventName
@@ -249,6 +249,23 @@ EventEmitter = Class.extend({
       }
     }
   }
+  
+  &#x2F;**
+  Convenience function that adds .type field to the event then passes it to trigger()
+  
+  @method triggerWithType
+  @param {String} eventType Which event to trigger. 
+  
+    Appends to the event as a field called .type (event.type=eventType).
+    
+  @param {Event} event Event that will be passed to all registered listeners.
+  
+  **&#x2F;
+  &#x2F;&#x2F; 
+  triggerWithType: function(eventType,event){
+    event.type = eventType;
+    this.trigger(eventType,event);
+  }
 });
 
 &#x2F;**
@@ -313,7 +330,7 @@ var BrassMonkeyClass = EventEmitter.extend({
       (Defaults to single player only.)
       
     @param {URL} [options.swfURL]
-      The location of the SWF file that implements the SDK when there a browser doesn&#x27;t support Websockets. 
+      The location of the SWF file that implements the SDK when there a browser doesn&#x27;t support Websockets. (Used by the flash implementation if it is chosen at )
       
       (If not provided the matching version on the Brass Monkey CDN is used.)
   **&#x2F;
@@ -334,7 +351,7 @@ var BrassMonkeyClass = EventEmitter.extend({
     &#x2F;&#x2F; Choose the proper communication runtime based on the environment.
     &#x2F;&#x2F; For now it&#x27;s basically WebSockets in Mobile Safari otherwise Flash
     &#x2F;&#x2F; everywhere else.
-    if(true){&#x2F;&#x2F;bm.detectIOS()){
+    if(bm.detectRuntime()==&quot;websockets&quot;){
       this.runtime = new bm.WebSocketsRT();
     } else {
       this.runtime = new bm.FlashRT();
@@ -346,6 +363,8 @@ var BrassMonkeyClass = EventEmitter.extend({
   &#x2F;**
   Shutdown Brass Monkey
   
+  This will close all open network connections and disconnect all controllers.
+  
   @method stop
   **&#x2F;
   stop: function(){
@@ -355,32 +374,35 @@ var BrassMonkeyClass = EventEmitter.extend({
   },
   
   &#x2F;**
-  Shutdown Brass Monkey. 
+  Log to Brass Monkey&#x27;s console.
   
-  This will close all open network connections and disconnect all controllers.
+  TODO: Implement a proper built cross browser debug pannel. For now uses built in console.log 
+        where it&#x27;s available.
   
-  @method stop
+  @method log
   **&#x2F;
   log: function(str){
-    console.log(str);
+    if( console!==undefined&amp;&amp;
+        console.log!==undefined){
+      console.log(str);
+    }
   },
   
   addDevice: function(device){
     this.devices[device.id] = device;
     
-    this.trigger(&#x27;deviceconnected&#x27;, {type: &#x27;deviceconnected&#x27;, device: device});
+    this.notify(&#x27;deviceconnected&#x27;, {device: device});
   },
   
   removeDevice: function(device){
     delete this.devices[device.id];
     
-    this.trigger(&#x27;devicedisconnected&#x27;, {type: &#x27;devicedisconnected&#x27;, device: device});
+    this.notify(&#x27;devicedisconnected&#x27;, {device: device});
   },
   
   getDevice: function(id){
     return this.devices[id];
   }
-  
 });
 
 &#x2F;&#x2F; Create singleton instance of BrassMonkey
@@ -389,6 +411,10 @@ bm = BrassMonkey = new BrassMonkeyClass();
 &#x2F;&#x2F; Add EventEmitter to the BrassMonkey namespace
 bm.EventEmitter = EventEmitter;
 bm.Class = Class;
+
+window[&#x27;boomBa&#x27;] = function(slot){
+  console.log(slot);
+}
 
 &#x2F;&#x2F; Constants
 &#x2F;*

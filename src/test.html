@@ -55,16 +55,24 @@
       }
     });
     
-    bm.on( 'deviceconnected', function (e){
-      console.log(e.device);
-      console.log(e.type);
+    // Should fail as 10 isn't a function.
+    bm.on('buttondown', function(e){
+      if(e.id="push"){
+        var button = document.getElementById('button');
+        button.style.background = "red";
+      }
     });
-    
-    bm.trigger('deviceconnected',{type:'deviceconnected',device:'notadevice'});
+    bm.on('buttonup', function(e){
+      if(e.id="push"){
+        var button = document.getElementById('button');
+        button.style.background = "white";
+      }
+    });
     
   </script>
 </head>
 <body style="margin:0px">
+  <div id="button" style="padding-top: 30px;width:64px;height:64px;background:white;"></div>
 
 
 </body>
