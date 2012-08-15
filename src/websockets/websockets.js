@@ -1,5 +1,5 @@
 /*jshint forin:true, noarg:true, noempty:true, eqeqeq:true, bitwise:false, strict:true, undef:true, unused:true, curly:true, browser:true, sub:true, maxerr:50 */
-/*global WebSocket:false */
+/*global WebSocket:false, BrassMonkey:true, unescape:false, Base64:false */
 (function(bm) {
 "use strict";
 
@@ -50,10 +50,10 @@ var ENCODE_GYRO = 22;
 var ENCODE_ORIENTATION = 23;
 
 var controlModes = {
-	gamepad : 0,
-	keyboard : 1,
-	navigation : 2,
-	wait : 3
+  gamepad : 0,
+  keyboard : 1,
+  navigation : 2,
+  wait : 3
 };
 
 
@@ -62,223 +62,223 @@ var connections = [];
 var packedVersion = packVersion({major:1, minor:4});
 
 var localDevice = {
-	id : "sadkldsjadsjladsjklsaklasdkljsadla",
-	name : "dorian",
-	type : DEVICE_FLASH,
-	encodeType : ENCODE_DEVICE_FLASH
+  id : "sadkldsjadsjladsjklsaklasdkljsadla",
+  name : "dorian",
+  type : DEVICE_FLASH,
+  encodeType : ENCODE_DEVICE_FLASH
 };
 
 var localAddress = {
-	hostname : "unknown",
-	updPort : 0,
-	tcpPort : 0,
-	encodeType : ENCODE_ADDRESS
+  hostname : "unknown",
+  updPort : 0,
+  tcpPort : 0,
+  encodeType : ENCODE_ADDRESS
 };
 
 var removeConnection = function(deviceId) {
-	var i;
-	for(i = 0; i < connections.length; ++i) {
-		if(connections[i].deviceId === deviceId) {
-			connections.splice(i, 1);
-			// TODO notify
-			break;
-		}
-	}
+  var i;
+  for(i = 0; i < connections.length; ++i) {
+    if(connections[i].deviceId === deviceId) {
+      connections.splice(i, 1);
+      // TODO notify
+      break;
+    }
+  }
 };
 
 var bind = function(func, target) {
-	return function() {
-		func.apply(target, arguments);
-	};
+  return function() {
+    func.apply(target, arguments);
+  };
 };
 
 var makeInvoke = function(methodName, params) {
-	return {
-		method : methodName,
-		returnMethod : "",
-		params : params,
-		encodeType : ENCODE_INVOKE
-	};
+  return {
+    method : methodName,
+    returnMethod : "",
+    params : params,
+    encodeType : ENCODE_INVOKE
+  };
 };
 
 var start = function(ipAddress) {
-	bm.log("start");
-	connections.push( new Connection("deviceId", ipAddress, 9011));
+  bm.log("start");
+  connections.push( new Connection("deviceId", ipAddress, 9011));
 };
 
 var stop = function() {
-	var i;
-	for(i = 0; i < connections.length; ++i) {
-		connections[i].close();
-	}
-	connections.length = 0;
-	bm.log("stop");
+  var i;
+  for(i = 0; i < connections.length; ++i) {
+    connections[i].close();
+  }
+  connections.length = 0;
+  bm.log("stop");
 };
 
 var Connection = bm.Device.extend({
-	init : function(deviceId, host, port) {
-		var socket;
-		this._super();
-		this.id = deviceId;
-		socket = this.socket = new WebSocket("ws://" + host + ":" + port);
-		this.sequence = 0;
+  init : function(deviceId, host, port) {
+    var socket;
+    this._super();
+    this.id = deviceId;
+    socket = this.socket = new WebSocket("ws://" + host + ":" + port);
+    this.sequence = 0;
 
-		this.touchEnabled = bm.options.design.touchEnabled;
-		this.accelerometerEnabled = bm.options.design.accelerometerEnabled;
+    this.touchEnabled = bm.options.design.touchEnabled;
+    this.accelerometerEnabled = bm.options.design.accelerometerEnabled;
 
-		var self = this;
-		socket.onerror = bind(this.onError, this);
-		socket.onclose = bind(this.onClose, this);
-		socket.onmessage = bind(this.onVersion, this);
-		socket.onopen = bind(this.onOpen, this);
-	},
+    var self = this;
+    socket.onerror = bind(this.onError, this);
+    socket.onclose = bind(this.onClose, this);
+    socket.onmessage = bind(this.onVersion, this);
+    socket.onopen = bind(this.onOpen, this);
+  },
 
-	onError : function() {
-		removeConnection(this.deviceId);
-		bm.log("error");
-	},
+  onError : function() {
+    removeConnection(this.deviceId);
+    bm.log("error");
+  },
 
-	onClose : function(/*closeEvent*/) {
-		removeConnection(this.deviceId);
-		bm.log("DISCONNECTED");
-	},
+  onClose : function(/*closeEvent*/) {
+    removeConnection(this.deviceId);
+    bm.log("DISCONNECTED");
+  },
 
-	onOpen : function() {
-		var handshake = [packedVersion, packedVersion];
-		this.socket.send(JSON.stringify(handshake));
-		bm.log("CONNECTED");
-	},
+  onOpen : function() {
+    var handshake = [packedVersion, packedVersion];
+    this.socket.send(JSON.stringify(handshake));
+    bm.log("CONNECTED");
+  },
 
-	onVersion : function(message) {
-		var json = JSON.parse(message.data);
-		bm.log("GOT VERSION");
+  onVersion : function(message) {
+    var json = JSON.parse(message.data);
+    bm.log("GOT VERSION");
 
-		// TODO: verify version
-		this.sendPacket({
-			type : PACKET_ACK,
-			message : {
-				encodeType: ENCODE_ACK,
-				device: localDevice,
-				address: localAddress
-			}
-		});
+    // TODO: verify version
+    this.sendPacket({
+      type : PACKET_ACK,
+      message : {
+        encodeType: ENCODE_ACK,
+        device: localDevice,
+        address: localAddress
+      }
+    });
 
-		this.sendInvoke("setReliabilityForTouch", [['i', 2], ['i', 2]]);
+    this.sendInvoke("setReliabilityForTouch", [['i', 2], ['i', 2]]);
 
-		this.socket.onmessage = bind(this.onMessage, this);
-	},
+    this.socket.onmessage = bind(this.onMessage, this);
+  },
 
-	setMode : function(mode, text) {
-		if(this.mode !== mode) {
-			if(!(mode in controlModes)) {
-				throw {message:"unknown control mode " + mode};
-			}
+  setMode : function(mode, text) {
+    if(this.mode !== mode) {
+      if(!(mode in controlModes)) {
+        throw {message:"unknown control mode " + mode};
+      }
 
-			this.mode = mode;
-			var modeIndex = controlModes[mode];
-			if(text !== undefined) {
-				this.sendInvoke("SetControlMode", [['i',modeIndex], ['*',text]]);
-			} else {
-				this.sendInvoke("SetControlMode", [['i',modeIndex]]);
-			}
-		}
-	},
+      this.mode = mode;
+      var modeIndex = controlModes[mode];
+      if(text !== undefined) {
+        this.sendInvoke("SetControlMode", [['i',modeIndex], ['*',text]]);
+      } else {
+        this.sendInvoke("SetControlMode", [['i',modeIndex]]);
+      }
+    }
+  },
 
-	enableGyroscope : function (enabled) {
-		if(enabled !== this.gyroEnabled) {
-			this.gyroEnabled = enabled;
-			this.sendInvoke("enableGyro", [['B', enabled]]);
-		}
-	},
+  enableGyroscope : function (enabled) {
+    if(enabled !== this.gyroEnabled) {
+      this.gyroEnabled = enabled;
+      this.sendInvoke("enableGyro", [['B', enabled]]);
+    }
+  },
 
-	setGyroscopeInterval : function(interval) {
-		if(interval !== this.gyroInterval) {
-			this.gyroInterval = interval;
-			this.sendInvoke("setGyroInterval", [['f',interval]]);
-		}
-	}
+  setGyroscopeInterval : function(interval) {
+    if(interval !== this.gyroInterval) {
+      this.gyroInterval = interval;
+      this.sendInvoke("setGyroInterval", [['f',interval]]);
+    }
+  }
 
 });
 
 var cp = Connection.prototype;
 
 var generateSensorMethods = function(name) {
-	var capsName = name.charAt(0).toUpperCase() + name.slice(1),
-		enabledField = name + "Enabled",
-		intervalField = name + "Interval",
-		enableMethod = "enable" + capsName,
-		intervalMethod = "set" + capsName + "Interval";
-	cp[enableMethod] = function (enabled) {
-		if(enabled !== this[enabledField]) {
-			this[enabledField] = enabled;
-			this.sendInvoke(enableMethod, [['B', enabled]]);
-		}
-	};
+  var capsName = name.charAt(0).toUpperCase() + name.slice(1),
+    enabledField = name + "Enabled",
+    intervalField = name + "Interval",
+    enableMethod = "enable" + capsName,
+    intervalMethod = "set" + capsName + "Interval";
+  cp[enableMethod] = function (enabled) {
+    if(enabled !== this[enabledField]) {
+      this[enabledField] = enabled;
+      this.sendInvoke(enableMethod, [['B', enabled]]);
+    }
+  };
 
-	cp[intervalMethod] = function(interval) {
-		if(interval !== this[intervalField]) {
-			this[intervalField] = interval;
-			this.sendInvoke(intervalMethod, [['f',interval]]);
-		}
-	}
-}
+  cp[intervalMethod] = function(interval) {
+    if(interval !== this[intervalField]) {
+      this[intervalField] = interval;
+      this.sendInvoke(intervalMethod, [['f',interval]]);
+    }
+  };
+};
 
 generateSensorMethods('touch');
 generateSensorMethods('accelerometer');
 generateSensorMethods('orientation');
 
 cp.onMessage = function(message) {
-	var json = JSON.parse(message.data);
-	var packet = decodePacket(json);
+  var json = JSON.parse(message.data);
+  var packet = decodePacket(json);
 
-	//bm.log("GOT MESSAGE: " + JSON.stringify(packet));
+  //bm.log("GOT MESSAGE: " + JSON.stringify(packet));
 
-	if(CHANNEL_MESSAGE === packet.channel) {
-		this.handleInvoke(packet.message);
-	}
+  if(CHANNEL_MESSAGE === packet.channel) {
+    this.handleInvoke(packet.message);
+  }
 };
 
 cp.close = function() {
-	this.socket.close();
+  this.socket.close();
 };
 
 cp.handleInvoke = function(invoke) {
-	switch(invoke.method) {
-		case "RequestXML":
-		this.sendControlScheme();
-		break;
+  switch(invoke.method) {
+    case "RequestXML":
+    this.sendControlScheme();
+    break;
 
-		case "OTHER":
-		default:
-			// TODO
+    case "OTHER":
+    default:
+      // TODO
       //console.log(invoke);
-	}
+  }
 };
 
 cp.sendControlScheme = function() {
-	for(var i = 0; i < controlSchemeChunks.length; ++i) {
-		this.sendPacket({
-			channel : CHANNEL_BYTE,
-			message : controlSchemeChunks[i]
-		});
-	}
+  for(var i = 0; i < controlSchemeChunks.length; ++i) {
+    this.sendPacket({
+      channel : CHANNEL_BYTE,
+      message : controlSchemeChunks[i]
+    });
+  }
 };
 
 cp.sendInvoke = function(method, params) {
-	this.sendPacket({channel:CHANNEL_MESSAGE, message:makeInvoke(method, params)});
+  this.sendPacket({channel:CHANNEL_MESSAGE, message:makeInvoke(method, params)});
 };
 
 cp.sendPacket = function(packet) {
-	packet.sequence = ++this.sequence;
-	packet.deviceId = localDevice.id;
-	packet.deviceType = localDevice.type;
-	packet.channel = packet.channel || CHANNEL_BROADCAST;
-	packet.type = packet.type || PACKET_DATA;
-	packet.rtt = 0;
-	packet.timestamp = 0;
-	//bm.log("WROTE PACKET: " + JSON.stringify(packet));
-	var encodedPacket = encodePacket(packet);
-	this.socket.send(JSON.stringify(encodedPacket));
+  packet.sequence = ++this.sequence;
+  packet.deviceId = localDevice.id;
+  packet.deviceType = localDevice.type;
+  packet.channel = packet.channel || CHANNEL_BROADCAST;
+  packet.type = packet.type || PACKET_DATA;
+  packet.rtt = 0;
+  packet.timestamp = 0;
+  //bm.log("WROTE PACKET: " + JSON.stringify(packet));
+  var encodedPacket = encodePacket(packet);
+  this.socket.send(JSON.stringify(encodedPacket));
 };
 
 
@@ -290,14 +290,14 @@ cp.sendPacket = function(packet) {
 /////////////////////////////////////////////////////////////////////
 //   Serialization Stuff
 function packVersion(version) {
-	return ((version.major&0xFF)<<24) | ((version.minor&0xFF)<<16);
+  return ((version.major&0xFF)<<24) | ((version.minor&0xFF)<<16);
 }
 
 function unpackVersion(packed) {
-	return {
-		major: (packed >> 24)&0xFF,
-		minor: (packed >> 16)&0xFF
-	};
+  return {
+    major: (packed >> 24)&0xFF,
+    minor: (packed >> 16)&0xFF
+  };
 }
 
 var INCLUDE_UNUSED_ENCODERS = false;
@@ -305,56 +305,56 @@ var INCLUDE_UNUSED_ENCODERS = false;
 
 
 function decodeObject(encoded) {
-	var decoder = decoders[encoded[0]];
-	if(decoder) {
-		return decoder(encoded);
-	}
+  var decoder = decoders[encoded[0]];
+  if(decoder) {
+    return decoder(encoded);
+  }
 
-	throw "no decoder for "+encoded;
+  throw "no decoder for "+encoded;
 }
 
 function encodeObject(object) {
-	var encoder = encoders[object.encodeType];
-	if(encoder) {
-		return encoder(object);
-	}
-	
-	throw "no encoder for "+object;
+  var encoder = encoders[object.encodeType];
+  if(encoder) {
+    return encoder(object);
+  }
+  
+  throw "no encoder for "+object;
 }
 
 var decoders = {};
 var encoders = {};
 
 function decodePacket(encoded) {
-	var packet = {};
-	var i = 0;
-	packet.channel = encoded[++i];
-	packet.sequence = encoded[++i];
-	packet.timestamp = encoded[++i];
-	packet.rtt = encoded[++i];
-	packet.type = encoded[++i];
-	packet.deviceType = encoded[++i];
-	packet.deviceId = encoded[++i];
-	packet.deviceName = encoded[++i];
-	if(encoded[++i]) {
-		packet.message = decodeObject(encoded[++i]);
-	}
-	return packet;
+  var packet = {};
+  var i = 0;
+  packet.channel = encoded[++i];
+  packet.sequence = encoded[++i];
+  packet.timestamp = encoded[++i];
+  packet.rtt = encoded[++i];
+  packet.type = encoded[++i];
+  packet.deviceType = encoded[++i];
+  packet.deviceId = encoded[++i];
+  packet.deviceName = encoded[++i];
+  if(encoded[++i]) {
+    packet.message = decodeObject(encoded[++i]);
+  }
+  return packet;
 }
 decoders[ENCODE_PACKET] = decodePacket;
 
 function encodePacket(packet) {
-	return [ENCODE_PACKET, packet.channel, packet.sequence, 0, 0, packet.type, packet.deviceType, packet.deviceId, packet.deviceName, true, encodeObject(packet.message)];
+  return [ENCODE_PACKET, packet.channel, packet.sequence, 0, 0, packet.type, packet.deviceType, packet.deviceId, packet.deviceName, true, encodeObject(packet.message)];
 }
 encoders[ENCODE_PACKET] = encodePacket;
 
 function decodeAddress(encoded) {
-	return { hostname:encoded[1], udpPort:encoded[2], tcpPort:encoded[3] };
+  return { hostname:encoded[1], udpPort:encoded[2], tcpPort:encoded[3] };
 }
 decoders[ENCODE_ADDRESS] = decodeAddress;
 
 function encodeAddress(address) {
-	return [ENCODE_ADDRESS, address.hostname, address.udpPort, address.tcpPort];
+  return [ENCODE_ADDRESS, address.hostname, address.udpPort, address.tcpPort];
 }
 encoders[ENCODE_ADDRESS] = encodeAddress;
 
@@ -363,112 +363,112 @@ encoders[ENCODE_ADDRESS] = encodeAddress;
 // (zfk) I am just going to represent this as an array for compactness
 // I can get away with it since only Invokes use them
 function decodeParameter(encoded) {
-	var type = encoded[1];
-	var value = encoded[2];
-	if(type === '@') {
-		value = decodeObject(value);
-	}
-	return [type, value];
+  var type = encoded[1];
+  var value = encoded[2];
+  if(type === '@') {
+    value = decodeObject(value);
+  }
+  return [type, value];
 }
 decoders[ENCODE_PARAMETER] = decodeParameter;
 
 function encodeParameter(param) {
-	return [ENCODE_PARAMETER, param[0], (param[0] === '@' ? encodeObject(param[1]) : param[1])];
+  return [ENCODE_PARAMETER, param[0], (param[0] === '@' ? encodeObject(param[1]) : param[1])];
 }
 encoders[ENCODE_PARAMETER] = encodeParameter;
 
 function decodeInvoke(encoded) {
-	var i = 0;
-	var params = [];
-	var invoke = {};
-	++i; // invoke_id
-	invoke.method = encoded[++i];
-	invoke.returnMethod = encoded[++i];
-	invoke.params = params;
+  var i = 0;
+  var params = [];
+  var invoke = {};
+  ++i; // invoke_id
+  invoke.method = encoded[++i];
+  invoke.returnMethod = encoded[++i];
+  invoke.params = params;
 
-	var paramCount = encoded[++i];
-	var paramEnd = i + paramCount;
-	while( i < paramEnd ) {
-		params.push(decodeParameter(encoded[++i]));
-	}
+  var paramCount = encoded[++i];
+  var paramEnd = i + paramCount;
+  while( i < paramEnd ) {
+    params.push(decodeParameter(encoded[++i]));
+  }
 
-	return invoke;
+  return invoke;
 }
 decoders[ENCODE_INVOKE] = decodeInvoke;
 
 function encodeInvoke(invoke) {
-	var params = invoke.params;
-	var encoded = [ENCODE_INVOKE, 0, invoke.method, invoke.returnMethod, params.length];
-	var i;
-	for(i = 0; i < params.length; ++i) {
-		encoded.push(encodeParameter(params[i]));
-	}
-	return encoded;
+  var params = invoke.params;
+  var encoded = [ENCODE_INVOKE, 0, invoke.method, invoke.returnMethod, params.length];
+  var i;
+  for(i = 0; i < params.length; ++i) {
+    encoded.push(encodeParameter(params[i]));
+  }
+  return encoded;
 }
 encoders[ENCODE_INVOKE] = encodeInvoke;
 
 
 function decodeAcceleration(encoded) {
-	return {'x':encoded[1], 'y':encoded[2], 'z':encoded[3]};
+  return {'x':encoded[1], 'y':encoded[2], 'z':encoded[3]};
 }
 decoders[ENCODE_ACCELERATION] = decodeAcceleration;
 
 if(INCLUDE_UNUSED_ENCODERS) {
-	encoders[ENCODE_ACCELERATION] = function(accel) {
-		return [ENCODE_ACCELERATION, accel['x'], accel['y'], accel['z'] ];
-	};
+  encoders[ENCODE_ACCELERATION] = function(accel) {
+    return [ENCODE_ACCELERATION, accel['x'], accel['y'], accel['z'] ];
+  };
 }
 
 ////////////
 // Touch Set
 ////////////
 decoders[ENCODE_TOUCH_SET] = function(encoded) {
-	var i = 0;
-	var touchCount = encoded[++i];
-	var touches = [];
-	var currentTouch;
-	for(currentTouch = 0; currentTouch < touchCount; ++currentTouch) {
-		var touch = {};
-		touch['x'] = encoded[++i];
-		touch['y'] = encoded[++i];
-		touch['viewWidth'] = encoded[++i];
-		touch['viewHeight'] = encoded[++i];
-		touch['phase'] = encoded[++i];
-		touches.push(touch);
-	}
+  var i = 0;
+  var touchCount = encoded[++i];
+  var touches = [];
+  var currentTouch;
+  for(currentTouch = 0; currentTouch < touchCount; ++currentTouch) {
+    var touch = {};
+    touch['x'] = encoded[++i];
+    touch['y'] = encoded[++i];
+    touch['viewWidth'] = encoded[++i];
+    touch['viewHeight'] = encoded[++i];
+    touch['phase'] = encoded[++i];
+    touches.push(touch);
+  }
 
-	return {touches:touches};
+  return {touches:touches};
 };
 
 if(INCLUDE_UNUSED_ENCODERS) {
-	encoders[ENCODE_TOUCH_SET] = function(touchSet) {
-		var touches = touchSet.touches;
-		var encoded = [ENCODE_TOUCH_SET, touches.length];
-		var i;
-		for(i = 0; i < touches.length; ++i) {
-			var touch = touches[i];
-			encoded.push(touch['x']);
-			encoded.push(touch['y']);
-			encoded.push(touch['viewWidth']);
-			encoded.push(touch['viewHeight']);
-			encoded.push(touch['phase']);
-		}
-		return encoded;
-	};
+  encoders[ENCODE_TOUCH_SET] = function(touchSet) {
+    var touches = touchSet.touches;
+    var encoded = [ENCODE_TOUCH_SET, touches.length];
+    var i;
+    for(i = 0; i < touches.length; ++i) {
+      var touch = touches[i];
+      encoded.push(touch['x']);
+      encoded.push(touch['y']);
+      encoded.push(touch['viewWidth']);
+      encoded.push(touch['viewHeight']);
+      encoded.push(touch['phase']);
+    }
+    return encoded;
+  };
 }
 
 //
 // Devices
 function decodeDevice(encoded) {
-	return {encodeType:encoded[0], type:encoded[1], id:encoded[2], name:encoded[3]};
+  return {encodeType:encoded[0], type:encoded[1], id:encoded[2], name:encoded[3]};
 }
 function encodeDevice(device) {
-	return [device.encodeType, device.type, device.id, device.name];
+  return [device.encodeType, device.type, device.id, device.name];
 }
 
 var addDeviceEncoder = function(type) {
-	decoders[type] = decodeDevice;
-	encoders[type] = encodeDevice;
+  decoders[type] = decodeDevice;
+  encoders[type] = encodeDevice;
 };
 
 addDeviceEncoder(ENCODE_DEVICE_IPHONE);
@@ -481,72 +481,72 @@ addDeviceEncoder(ENCODE_DEVICE_FLASH);
 //
 // Ack
 decoders[ENCODE_ACK] = function(encoded) {
-	return { device:decodeDevice(encoded[1]), address:decodeAddress(encoded[2]) };
+  return { device:decodeDevice(encoded[1]), address:decodeAddress(encoded[2]) };
 };
 encoders[ENCODE_ACK] = function(ack) {
-	return [ENCODE_ACK, encodeDevice(ack.device), encodeAddress(ack.address)];
+  return [ENCODE_ACK, encodeDevice(ack.device), encodeAddress(ack.address)];
 };
 
 //
 // Ping
 decoders[ENCODE_PING] = function(encoded) {
-	return {uid:encoded[1], address:decodeAddress(encoded[2])};
+  return {uid:encoded[1], address:decodeAddress(encoded[2])};
 };
 encoders[ENCODE_PING] = function(ping) {
-	return [ENCODE_PING, ping.uid, encodeAddress(ping.address)];
+  return [ENCODE_PING, ping.uid, encodeAddress(ping.address)];
 };
 
 //
 // Shake
 decoders[ENCODE_SHAKE] = function(/*encoded*/) {
-	return {};
+  return {};
 };
 encoders[ENCODE_SHAKE] = function(/*shake*/) {
-	return [ENCODE_SHAKE, 0];
+  return [ENCODE_SHAKE, 0];
 };
 
 // ByteChunk
 // TODO: Base64
 decoders[ENCODE_BYTE_CHUNK] = function(encoded) {
-	return {
-		setId : encoded[1],
-		startByte : encoded[2],
-		chunkSize : encoded[3],
-		totalSize : encoded[4],
-		data : encoded[5]
-	};
+  return {
+    setId : encoded[1],
+    startByte : encoded[2],
+    chunkSize : encoded[3],
+    totalSize : encoded[4],
+    data : encoded[5]
+  };
 };
 encoders[ENCODE_BYTE_CHUNK] = function(chunk) {
-	return [ENCODE_BYTE_CHUNK, chunk.setId, chunk.startByte, chunk.chunkSize, chunk.totalSize, chunk.data];
+  return [ENCODE_BYTE_CHUNK, chunk.setId, chunk.startByte, chunk.chunkSize, chunk.totalSize, chunk.data];
 };
 
 // RegistryInfo
 decoders[ENCODE_REGISTRY_INFO] = function(encoded) {
-	var i = 0;
-	var info = {};
-	info.device = decodeDevice(encoded[++i]);
-	info.address = decodeAddress(encoded[++i]);
-	info.appId = encoded[++i];
-	info.slotId = encoded[++i];
-	if(info.slotId > 0) {
-		info.currentPlayers = encoded[++i];
-		info.maxPlayers = encoded[++i];
-	}
-	return info;
+  var i = 0;
+  var info = {};
+  info.device = decodeDevice(encoded[++i]);
+  info.address = decodeAddress(encoded[++i]);
+  info.appId = encoded[++i];
+  info.slotId = encoded[++i];
+  if(info.slotId > 0) {
+    info.currentPlayers = encoded[++i];
+    info.maxPlayers = encoded[++i];
+  }
+  return info;
 };
 encoders[ENCODE_REGISTRY_INFO] = function(info) {
-	var encoded = [
-		ENCODE_REGISTRY_INFO,
-		encodeDevice(info.device),
-		encodeAddress(info.address),
-		info.appId,
-		info.slotId
-	];
-	if(info.slotId > 0) {
-		encoded.push(info.currentPlayers);
-		encoded.push(info.maxPlayers);
-	}
-	return encoded;
+  var encoded = [
+    ENCODE_REGISTRY_INFO,
+    encodeDevice(info.device),
+    encodeAddress(info.address),
+    info.appId,
+    info.slotId
+  ];
+  if(info.slotId > 0) {
+    encoded.push(info.currentPlayers);
+    encoded.push(info.maxPlayers);
+  }
+  return encoded;
 };
 
 // TaggedArray
@@ -554,57 +554,57 @@ encoders[ENCODE_REGISTRY_INFO] = function(info) {
 
 // Gyro
 decoders[ENCODE_GYRO] = function(encoded) {
-	return {'x':encoded[1], 'y':encoded[2], 'z':encoded[3]};
+  return {'x':encoded[1], 'y':encoded[2], 'z':encoded[3]};
 };
 if(INCLUDE_UNUSED_ENCODERS) {
-	encoders[ENCODE_GYRO] = function(gyro) {
-		return [ENCODE_GYRO, gyro['x'], gyro['y'], gyro['z'] ];
-	};
+  encoders[ENCODE_GYRO] = function(gyro) {
+    return [ENCODE_GYRO, gyro['x'], gyro['y'], gyro['z'] ];
+  };
 }
 
 // Orientation
 decoders[ENCODE_ORIENTATION] = function(encoded) {
-	return {'x':encoded[1], 'y':encoded[2], 'z':encoded[3], 'w':encoded[4]};
+  return {'x':encoded[1], 'y':encoded[2], 'z':encoded[3], 'w':encoded[4]};
 };
 if(INCLUDE_UNUSED_ENCODERS) {
-	encoders[ENCODE_ORIENTATION] = function(q) {
-		return [ENCODE_ORIENTATION, q['x'], q['y'], q['z'], q['w'] ];
-	};
+  encoders[ENCODE_ORIENTATION] = function(q) {
+    return [ENCODE_ORIENTATION, q['x'], q['y'], q['z'], q['w'] ];
+  };
 }
 
 bm.WebSocketsRT = function(){
-}
+};
 
 var controlSchemeChunks;
 var generateByteChunks = function(xml) {
-	var MAX_CHUNK_SIZE = 1024*32,
-		chunks = [],
-		xmlLength = xml.length,
-		nextChar = 0,
-		totalBytes = 0;
+  var MAX_CHUNK_SIZE = 1024*32,
+    chunks = [],
+    xmlLength = xml.length,
+    nextChar = 0,
+    totalBytes = 0;
 
-	for(nextChar = 0; nextChar < xmlLength; nextChar += MAX_CHUNK_SIZE) {
-		var result = Base64.encode(xml.substr(nextChar, MAX_CHUNK_SIZE)),
-			chunkSize = result[0],
-			encoded = result[1];
+  for(nextChar = 0; nextChar < xmlLength; nextChar += MAX_CHUNK_SIZE) {
+    var result = Base64.encode(xml.substr(nextChar, MAX_CHUNK_SIZE)),
+        chunkSize = result[0],
+        encoded = result[1];
 
-		chunks.push({
-			encodeType : ENCODE_BYTE_CHUNK,
-			setId: 'testXML',
-			startByte: totalBytes,
-			chunkSize: chunkSize,
-			data: encoded
-		});
+    chunks.push({
+      encodeType : ENCODE_BYTE_CHUNK,
+      setId: 'testXML',
+      startByte: totalBytes,
+      chunkSize: chunkSize,
+      data: encoded
+    });
 
-		totalBytes += chunkSize;
-	}
+    totalBytes += chunkSize;
+  }
 
-	for(var i = 0; i < chunks.length; ++i) {
-		chunks[i].totalSize = totalBytes;
-	}
+  for(var i = 0; i < chunks.length; ++i) {
+    chunks[i].totalSize = totalBytes;
+  }
 
-	return chunks;
-}
+  return chunks;
+};
 
 
 
@@ -631,7 +631,7 @@ function createDebugControls(){
     setCookie("ipaddress",ipAddress.value);
   
     // Load all of the controller images and then generate
-    // the base64 encoded version of their data for sending 
+    // the base64 encoded version of their data for sending
     // to the controller app devices as they connect.
     // TODO: Can we do work in parallel with this?
     bm.loadImages(bm.options.design.images,function(imageData){
@@ -639,7 +639,7 @@ function createDebugControls(){
       controlSchemeChunks = generateByteChunks(xml);
       start(ipAddress.value);
     });
-  }
+  };
   ui.appendChild(startButton);
   
   // Create input field for the device IP Address
@@ -678,7 +678,7 @@ function createDebugControls(){
     }
   }
 }
-// 
+//
 if (window.addEventListener) {
   window.addEventListener('DOMContentLoaded', createDebugControls, false);
 } else {
@@ -687,10 +687,10 @@ if (window.addEventListener) {
 
 bm.WebSocketsRT.prototype.start = function(){
   
-}
+};
 
 bm.WebSocketsRT.prototype.stop = function(){
   stop();
-}
+};
 
 })(BrassMonkey);
