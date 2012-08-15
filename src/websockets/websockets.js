@@ -1,5 +1,5 @@
 /*jshint forin:true, noarg:true, noempty:true, eqeqeq:true, bitwise:false, strict:true, undef:true, unused:true, curly:true, browser:true, sub:true, maxerr:50 */
-/*global WebSocket:false, BrassMonkey:true, unescape:false, Base64:false */
+/*global WebSocket:false, BrassMonkey:true, unescape:false, escape:false, Base64:false */
 (function(bm) {
 "use strict";
 
@@ -204,10 +204,10 @@ var cp = Connection.prototype;
 
 var generateSensorMethods = function(name) {
   var capsName = name.charAt(0).toUpperCase() + name.slice(1),
-    enabledField = name + "Enabled",
-    intervalField = name + "Interval",
-    enableMethod = "enable" + capsName,
-    intervalMethod = "set" + capsName + "Interval";
+      enabledField = name + "Enabled",
+      intervalField = name + "Interval",
+      enableMethod = "enable" + capsName,
+      intervalMethod = "set" + capsName + "Interval";
   cp[enableMethod] = function (enabled) {
     if(enabled !== this[enabledField]) {
       this[enabledField] = enabled;
@@ -227,14 +227,37 @@ generateSensorMethods('touch');
 generateSensorMethods('accelerometer');
 generateSensorMethods('orientation');
 
+var notify = function(connection, type, event) {
+  //TODO: remove debug log
+  bm.log("notify: " + type);
+  event.type = type;
+  connection.trigger(type, event);
+  bm.trigger(type, event);
+};
+
 cp.onMessage = function(message) {
-  var json = JSON.parse(message.data);
-  var packet = decodePacket(json);
+  var json = JSON.parse(message.data),
+      packet = decodePacket(json),
+      channel = packet.channel;
 
   //bm.log("GOT MESSAGE: " + JSON.stringify(packet));
-
-  if(CHANNEL_MESSAGE === packet.channel) {
+  if(CHANNEL_MESSAGE === channel) {
     this.handleInvoke(packet.message);
+  }
+  else if(CHANNEL_SHAKE === channel) {
+    notify(this, "shake", {device: this});
+  }
+  else if(CHANNEL_ACCELERATION === channel) {
+    notify(this, "acceleration", {device:this, acceleration:packet.message});
+  }
+  else if(CHANNEL_TOUCH === channel) {
+    notify(this, "touch", {device:this, touches:packet.message.touches});
+  }
+  else if(CHANNEL_GYRO === channel) {
+    notify(this, "gyroscope", {device:this, gyroscope:packet.message});
+  }
+  else if(CHANNEL_ORIENTATION === channel) {
+    notify(this, "orientation", {device:this, orientation:packet.message});
   }
 };
 
@@ -245,13 +268,49 @@ cp.close = function() {
 cp.handleInvoke = function(invoke) {
   switch(invoke.method) {
     case "RequestXML":
-    this.sendControlScheme();
-    break;
+      this.sendControlScheme();
+      break;
 
-    case "OTHER":
+    case "GetPortalId":
+      break;
+
+    case "setCapabilities":
+      break;
+
+    case "onKeyString":
+      break;
+
+    case "onControlSchemeParsed":
+      break;
+
+    case "WaitCancelled":
+      break;
+
+    case "bmPause":
+      break;
+
+    case "onNavigationString":
+      break;
+
     default:
-      // TODO
-      //console.log(invoke);
+      this.handleButtonInvoke(invoke);
+      break;
+  }
+};
+
+cp.handleButtonInvoke = function(invoke) {
+  var firstParam;
+  if(invoke.params.length !== 1) {
+    return;
+  }
+
+  var value = invoke.params[0][1];
+
+  if(value === "up") {
+    notify(this, "buttonup", {device:this, button:invoke.method});
+  }
+  else if(value === "down") {
+    notify(this, "buttondown", {device:this, button:invoke.method});
   }
 };
 
@@ -322,8 +381,8 @@ function encodeObject(object) {
   throw "no encoder for "+object;
 }
 
-var decoders = {};
-var encoders = {};
+var decoders = [];
+var encoders = [];
 
 function decodePacket(encoded) {
   var packet = {};
@@ -662,7 +721,7 @@ function createDebugControls(){
     var exdays = 365,
         exdate=new Date();
     exdate.setDate(exdate.getDate() + exdays);
-    var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
+    var c_value=escape(value) + ((exdays===null) ? "" : "; expires="+exdate.toUTCString());
     document.cookie=c_name + "=" + c_value;
   }
   
@@ -672,7 +731,7 @@ function createDebugControls(){
       x=ARRcookies[i].substr(0,ARRcookies[i].indexOf("="));
       y=ARRcookies[i].substr(ARRcookies[i].indexOf("=")+1);
       x=x.replace(/^\s+|\s+$/g,"");
-      if (x==c_name){
+      if (x===c_name){
         return unescape(y);
       }
     }
