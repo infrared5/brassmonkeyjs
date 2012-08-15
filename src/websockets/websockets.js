@@ -631,9 +631,6 @@ if(INCLUDE_UNUSED_ENCODERS) {
   };
 }
 
-bm.WebSocketsRT = function(){
-};
-
 var controlSchemeChunks;
 var generateByteChunks = function(xml) {
   var MAX_CHUNK_SIZE = 1024*32,
@@ -672,7 +669,7 @@ function createDebugControls(){
   var ui = document.createElement('div');
   document.body.insertBefore(ui,document.body.firstChild);
   
-  ui.style.width = "173px";
+  ui.style.width = "273px";
   ui.style.height = "23px";
   ui.style.position = "absolute";
   ui.style.overflow = "hidden";
@@ -737,19 +734,26 @@ function createDebugControls(){
     }
   }
 }
-//
-if (window.addEventListener) {
-  window.addEventListener('DOMContentLoaded', createDebugControls, false);
-} else {
-  window.attachEvent('onload', createDebugControls);
+
+// 
+if(bm.detectRuntime()=="websockets"){
+  if (window.addEventListener) {
+    window.addEventListener('DOMContentLoaded', createDebugControls, false);
+  } else {
+    window.attachEvent('onload', createDebugControls);
+  }
 }
 
-bm.WebSocketsRT.prototype.start = function(){
-  
-};
-
-bm.WebSocketsRT.prototype.stop = function(){
-  stop();
-};
+bm.WebSocketsRT = bm.Class.extend({
+  init:function(){
+    
+  },
+  start: function(){
+    
+  },
+  stop: function(){
+    stop();
+  }
+});
 
 })(BrassMonkey);

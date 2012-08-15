@@ -218,11 +218,12 @@ var BrassMonkeyClass = EventEmitter.extend({
     @param {Number} [options.maxPlayers=1]
       The number of players that can play your game.
       
-    @param {URL} [options.swfURL]
-      The location of the SWF file that implements 
-      the SDK when there a browser doesn't support Websockets. 
+      (Defaults to single player only.)
       
-      If not provided the matching version on the Brass Monkey CDN is used.
+    @param {URL} [options.swfURL]
+      The location of the SWF file that implements the SDK when there a browser doesn't support Websockets. (Used by the flash implementation if it is chosen at )
+      
+      (If not provided the matching version on the Brass Monkey CDN is used.)
   **/
   start: function(options){
     
@@ -241,7 +242,7 @@ var BrassMonkeyClass = EventEmitter.extend({
     // Choose the proper communication runtime based on the environment.
     // For now it's basically WebSockets in Mobile Safari otherwise Flash
     // everywhere else.
-    if(true){//bm.detectIOS()){
+    if(bm.detectRuntime()=="websockets"){
       this.runtime = new bm.WebSocketsRT();
     } else {
       this.runtime = new bm.FlashRT();
@@ -296,6 +297,10 @@ bm = BrassMonkey = new BrassMonkeyClass();
 // Add EventEmitter to the BrassMonkey namespace
 bm.EventEmitter = EventEmitter;
 bm.Class = Class;
+
+window['boomBa'] = function(slot){
+  console.log(slot);
+}
 
 // Constants
 /*

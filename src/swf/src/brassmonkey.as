@@ -39,6 +39,7 @@ package
 		private var resources:Array=[];
 		private var resourceQue:Array=[];
 		private var resourcesToLoad:int=0;
+		private var globalName:String;
 		
 		public function brassmonkey()
 		{		
@@ -52,7 +53,10 @@ package
 			//if(loaderInfo.parameters.debug && ( loaderInfo.parameters.debug=="true" || loaderInfo.parameters.debug==true))
 			brassMonkey.debugger=this;
 			
+			// Store the name of the Brass Monkey JS global
+			this.globalName = loaderInfo.parameters['globalName'];
 			
+			ExternalInterface.call("boomBa",10);
 			
 			brassMonkey.addEventListener(DeviceEvent.SLOT_DISPLAY_REQUEST, onSlot);
 			brassMonkey.addEventListener(DeviceEvent.DEVICE_AVAILABLE,this.onDeviceDiscovery);
@@ -100,7 +104,7 @@ package
 				start();
 				
 			}
-			flash.utils.setTimeout(ExternalInterface.call,1000,"bm.onFlashLoadedInternal");
+			//flash.utils.setTimeout(ExternalInterface.call,1000,"bm.onFlashLoadedInternal");
 		//	ExternalInterface.call("bm.onFlashLoadedInternal");		
 		}
 		
@@ -503,8 +507,11 @@ package
 		}
 		public function onSlot(de:DeviceEvent):void
 		{
-			trace("onSlot");
-			ExternalInterface.call("bm.showSlotInternal",brassMonkey.session.getSlotDisplay().slot);
+			trace("onSlotaaa");
+			ExternalInterface.call("boomBa",10);
+			
+			
+			var test:int = 10;
 		}
 		protected function SetVisibility(isVisible:Boolean, doNotify:Boolean):void
 		{
