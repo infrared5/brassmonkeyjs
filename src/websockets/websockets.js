@@ -251,7 +251,34 @@ cp.onMessage = function(message) {
     notify(this, "acceleration", {device:this, acceleration:packet.message});
   }
   else if(CHANNEL_TOUCH === channel) {
-    notify(this, "touch", {device:this, touches:packet.message.touches});
+  
+    // Convert events to something more similar to web standards
+    // TODO:  Revisit this as looking at the web standards they seem messier than they should be
+    //        but the benefits of people being able to drop in brass monkey to replace existing
+    //        may out weight that.
+    var touches = packet.message.touches,
+        len = touches.length;
+    console.log(len);
+    for(var i = 0; i<len;i++){
+      // NOTE:  Touch ids are made from a combination of the device id and the in coming touch id
+      //        so that they are unique for clients of the SDK to be able to identify them as unique
+      //        if doing logic that combines the touch events coming from multiple devices.
+      //        In practice when coding say multi user drawing apps this came up for me (Francois)
+      //        allowing me to use the id of a particular touch coming from a particular device and know
+      //        it's unique across all touches coming from all devices. The existing ids are only unique to
+      //        a particular device.
+      switch(touches[i].phase){
+        case 1:
+          notify(this, "touchstart", {device:this, x:touches[i].x, y:touches[i].y,id:this.id+touches[i].id});
+          break;
+        case 2:
+          notify(this, "touchmove", {device:this, x:touches[i].x, y:touches[i].y,id:this.id+touches[i].id});
+          break;
+        case 4:
+          notify(this, "touchend", {device:this, x:touches[i].x, y:touches[i].y,id:this.id+touches[i].id});
+          break;
+      }
+    }
   }
   else if(CHANNEL_GYRO === channel) {
     notify(this, "gyroscope", {device:this, gyroscope:packet.message});

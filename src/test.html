@@ -4,7 +4,6 @@
   <meta charset="utf-8" />
   <title>WebSocket Test</title>
 
-  
   <script language="javascript" type="text/javascript" src="core.js" ></script>
   <script language="javascript" type="text/javascript" src="base64.js" ></script>
   <script language="javascript" type="text/javascript" src="resources.js" ></script>
@@ -72,12 +71,55 @@
 
     bm.on( 'deviceconnected', function (e){
       bm.log("device connected %o", e);
+      
+     e.device.enableTouch(true);
+     e.device.setTouchInterval(1/60);
     });
+    
+    bm.on('acceleration', function (e){
+      //bm.log(e);
+    });
+    
+    var touches = {};
+    bm.on('touchstart', function (e){
+      // Store the last position of a touch
+      touches[e.id]={x:e.x,y:e.y};
+      //bm.log(e);
+    });
+    bm.on('touchmove', function (e){
+      var cvs = document.getElementById('canvas'),
+          ctx = cvs.getContext('2d');
+          
+      ctx.beginPath();
+      ctx.moveTo(touches[e.id].x,touches[e.id].y);
+      ctx.lineTo(e.x,e.y);
+      ctx.stroke();
+      
+      // Update the last position
+      touches[e.id]={x:e.x,y:e.y};
+    });
+    bm.on('touchend', function (e){
+      // Delete the touch from our list of tracked ones
+      delete touches[e.id]
+    });
+    
+    function onload(){
+      // Initialize canvas to black.
+      var cvs = document.getElementById('canvas'),
+          ctx = cvs.getContext('2d');
+      ctx.fillStyle="black";
+      ctx.fillRect(0,0,320,480);
+      
+      ctx.lineWidth = 3;
+      ctx.lineCap = ctx.lineJoin = "round";
+      ctx.strokeStyle="white";
+    }
     
   </script>
 </head>
-<body style="margin:0px">
+<body style="margin:0px" onload="onload();">
   <div id="button" style="padding-top: 30px;width:64px;height:64px;background:white;"></div>
+  <canvas id="canvas" width="320px" height="480px"></canvas>
 
 <br><br>
 <ul>

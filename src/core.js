@@ -290,9 +290,10 @@ var BrassMonkeyClass = EventEmitter.extend({
   @method log
   **/
   log: function(str){
+    return;
     if( console!==undefined&&
         console.log!==undefined){
-      console.log(str);
+      console.log.apply(console,arguments);
     }
   },
   
@@ -427,8 +428,8 @@ Event representing the latest accelerometer values.
 
   Accelerometer events must be enabled (See [Device.enableAccelerometer](bm.Device.html)) and are sent continuously on the interval specified by [Device.setAccelerometerInterval](bm.Device.html).
 
-@event accelerometer
-@param {String} type Which event this is. Ie. **"accelerometer"**
+@event acceleration
+@param {String} type Which event this is. Ie. **"acceleration"**
 @param {bm.Device} device Device that generated this event.
 **/
 
