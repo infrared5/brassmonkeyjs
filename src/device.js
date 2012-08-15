@@ -151,4 +151,14 @@ bm.Device = bm.EventEmitter.extend({
   
 });
 
+/**
+Event called on keyboard input.
+
+@event keyboard
+@param {String} type keyboard
+@param {bm.Device} device Device that generated this event.
+@param text {String} Text entered on keyboard. "" if backspace pressed.
+@bubbles bm
+**/
+
 })(BrassMonkey);

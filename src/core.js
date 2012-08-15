@@ -280,9 +280,10 @@ var BrassMonkeyClass = EventEmitter.extend({
   },
   
   removeDevice: function(device){
-    delete this.devices[device.id];
-    
-    this.trigger('devicedisconnected', {type: 'devicedisconnected', device: device});
+    if(device.id in this.devices) {
+      delete this.devices[device.id];
+      this.trigger('devicedisconnected', {type: 'devicedisconnected', device: device});
+    }
   },
   
   getDevice: function(id){

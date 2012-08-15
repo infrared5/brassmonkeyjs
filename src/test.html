@@ -28,7 +28,7 @@
       
       design: {
         orientation: "portrait",
-        touchEnabled: false,
+        touchEnabled: true,
         accelerometerEnabled: false,
         images:[
           '../examples/shared/background.png',
@@ -56,11 +56,8 @@
     });
     
     bm.on( 'deviceconnected', function (e){
-      console.log(e.device);
-      console.log(e.type);
+      console.log("device connected %o", e);
     });
-    
-    bm.trigger('deviceconnected',{type:'deviceconnected',device:'notadevice'});
     
   </script>
 </head>
