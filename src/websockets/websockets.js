@@ -503,6 +503,7 @@ decoders[ENCODE_TOUCH_SET] = function(encoded) {
     touch['viewWidth'] = encoded[++i];
     touch['viewHeight'] = encoded[++i];
     touch['phase'] = encoded[++i];
+    touch['id'] = encoded[++i];
     touches.push(touch);
   }
 
@@ -521,6 +522,7 @@ if(INCLUDE_UNUSED_ENCODERS) {
       encoded.push(touch['viewWidth']);
       encoded.push(touch['viewHeight']);
       encoded.push(touch['phase']);
+      encoded.push(touch['id']);
     }
     return encoded;
   };
