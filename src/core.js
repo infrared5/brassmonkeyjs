@@ -303,6 +303,31 @@ window['boomBa'] = function(slot){
   console.log(slot);
 }
 
+var makeMethodProxy = function(devices, methodName) {
+  return function() {
+    for(var deviceId in devices) {
+      if(devices.hasOwnProperty(deviceId)) {
+        var device = devices[deviceId];
+        device[methodName].apply(device, arguments);
+      }
+    }
+  };
+};
+
+bm.allDevices = (function() {
+  var proxy = {},
+      devices = bm.devices,
+      methods = ["setMode", "enableTouch"];
+
+  for(var i = 0; i < methods.length; ++i) {
+    proxy[methods[i]] = makeMethodProxy(devices, methods[i]);
+  }
+
+  return function() {
+    return proxy;
+  };
+})();
+
 // Constants
 /*
 bm.MODE_GAMEPAD=0;	
