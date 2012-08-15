@@ -548,7 +548,7 @@ Event representing the latest accelerometer values.
 
 **Note:** 
 
-  Accelerometer events must be enabled (See [Device.enableAccelerometer](bm.Device.html)) and are sent continuously on the interval specified by [Device.setAccelerometerInterval](bm.Device.html).
+  Accelerometer events must be enabled (See [Device.enableAccelerometer](bm.Device.html#method_enableAccelerometer)) and are sent continuously on the interval specified by [Device.setAccelerometerInterval](bm.Device.html#method_setAccelerometerInterval).
 
 @event acceleration
 @param {String} type Which event this is. Ie. **&quot;acceleration&quot;**
@@ -560,11 +560,17 @@ Event representing the latest gyroscope values.
 
 **Note:** 
 
-  Gyroscope events must be enabled (See [Device.enableGyroscope](bm.Device.html)) and are sent continuously on the interval specified by [Device.setGyroscopeInterval](bm.Device.html).
+  Gyroscope events must be enabled (See [Device.enableGyroscope](bm.Device.html#method_enableGyroscope)) and are sent continuously on the interval specified by [Device.setGyroscopeInterval](bm.Device.html#method_setGyroscopeInterval).
 
 @event gyroscope
 @param {String} type Which event this is. Ie. **&quot;gyroscope&quot;**
 @param {bm.Device} device Device that generated this event.
+@param {Object} gyroscope X&#x2F;Y&#x2F;Z angular momentum of the device.
+    @param {Float} gyroscope.x X
+
+    @param {Float} gyroscope.y Y
+      
+    @param {Float} gyroscope.z Z
 **&#x2F;
 
 &#x2F;**
@@ -572,11 +578,19 @@ Event representing the latest orientation values.
 
 **Note:** 
 
-  Orientation events must be enabled (See [Device.enableOrientation](bm.Device.html)) and are sent continuously on the interval specified by [Device.setOrientationInterval](bm.Device.html).
+  Orientation events must be enabled (See [Device.enableOrientation](bm.Device.html#method_enableOrientation)) and are sent continuously on the interval specified by [Device.setOrientationInterval](bm.Device.html#method_setOrientationInterval).
 
 @event orientation
 @param {String} type Which event this is. Ie. **&quot;orientation&quot;**
 @param {bm.Device} device Device that generated this event.
+@param {Object} orientation Orientation of the device as a Quaternion.
+    @param {Float} orientation.x X
+
+    @param {Float} orientation.y Y
+      
+    @param {Float} orientation.z Z
+    
+    @param {Float} orientation.w W
 **&#x2F;
 
 

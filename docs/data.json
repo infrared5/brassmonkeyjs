@@ -321,7 +321,7 @@
         {
             "file": "src/core.js",
             "line": 454,
-            "description": "Event representing the latest accelerometer values.\n\n**Note:** \n\n  Accelerometer events must be enabled (See [Device.enableAccelerometer](bm.Device.html)) and are sent continuously on the interval specified by [Device.setAccelerometerInterval](bm.Device.html).",
+            "description": "Event representing the latest accelerometer values.\n\n**Note:** \n\n  Accelerometer events must be enabled (See [Device.enableAccelerometer](bm.Device.html#method_enableAccelerometer)) and are sent continuously on the interval specified by [Device.setAccelerometerInterval](bm.Device.html#method_setAccelerometerInterval).",
             "itemtype": "event",
             "name": "acceleration",
             "params": [
@@ -341,7 +341,7 @@
         {
             "file": "src/core.js",
             "line": 466,
-            "description": "Event representing the latest gyroscope values.\n\n**Note:** \n\n  Gyroscope events must be enabled (See [Device.enableGyroscope](bm.Device.html)) and are sent continuously on the interval specified by [Device.setGyroscopeInterval](bm.Device.html).",
+            "description": "Event representing the latest gyroscope values.\n\n**Note:** \n\n  Gyroscope events must be enabled (See [Device.enableGyroscope](bm.Device.html#method_enableGyroscope)) and are sent continuously on the interval specified by [Device.setGyroscopeInterval](bm.Device.html#method_setGyroscopeInterval).",
             "itemtype": "event",
             "name": "gyroscope",
             "params": [
@@ -354,14 +354,36 @@
                     "name": "device",
                     "description": "Device that generated this event.",
                     "type": "bm.Device"
+                },
+                {
+                    "name": "gyroscope",
+                    "description": "X/Y/Z angular momentum of the device.",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "x",
+                            "description": "X",
+                            "type": "Float"
+                        },
+                        {
+                            "name": "y",
+                            "description": "Y",
+                            "type": "Float"
+                        },
+                        {
+                            "name": "z",
+                            "description": "Z",
+                            "type": "Float"
+                        }
+                    ]
                 }
             ],
             "class": "bm"
         },
         {
             "file": "src/core.js",
-            "line": 478,
-            "description": "Event representing the latest orientation values.\n\n**Note:** \n\n  Orientation events must be enabled (See [Device.enableOrientation](bm.Device.html)) and are sent continuously on the interval specified by [Device.setOrientationInterval](bm.Device.html).",
+            "line": 484,
+            "description": "Event representing the latest orientation values.\n\n**Note:** \n\n  Orientation events must be enabled (See [Device.enableOrientation](bm.Device.html#method_enableOrientation)) and are sent continuously on the interval specified by [Device.setOrientationInterval](bm.Device.html#method_setOrientationInterval).",
             "itemtype": "event",
             "name": "orientation",
             "params": [
@@ -374,13 +396,40 @@
                     "name": "device",
                     "description": "Device that generated this event.",
                     "type": "bm.Device"
+                },
+                {
+                    "name": "orientation",
+                    "description": "Orientation of the device as a Quaternion.",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "x",
+                            "description": "X",
+                            "type": "Float"
+                        },
+                        {
+                            "name": "y",
+                            "description": "Y",
+                            "type": "Float"
+                        },
+                        {
+                            "name": "z",
+                            "description": "Z",
+                            "type": "Float"
+                        },
+                        {
+                            "name": "w",
+                            "description": "W",
+                            "type": "Float"
+                        }
+                    ]
                 }
             ],
             "class": "bm"
         },
         {
             "file": "src/core.js",
-            "line": 491,
+            "line": 505,
             "description": "Event called when a button was pressed down.",
             "itemtype": "event",
             "name": "buttondown",
@@ -400,7 +449,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 499,
+            "line": 513,
             "description": "Event called when a button was released.",
             "itemtype": "event",
             "name": "buttonup",
@@ -420,7 +469,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 507,
+            "line": 521,
             "description": "Event called when a touch has started.",
             "itemtype": "event",
             "name": "touchstart",
@@ -455,7 +504,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 518,
+            "line": 532,
             "description": "Event called when a touch has moved.",
             "itemtype": "event",
             "name": "touchmove",
@@ -490,7 +539,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 529,
+            "line": 543,
             "description": "Event called when a finger has been lifted up.",
             "itemtype": "event",
             "name": "touchend",
@@ -515,7 +564,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 538,
+            "line": 552,
             "description": "Event indicating the user shook their device.\n\n**Note:** Accelerometer/Gyroscope events do not need to enabled, shake events do not take much network traffic so this was unnecessary.",
             "itemtype": "event",
             "name": "shake",

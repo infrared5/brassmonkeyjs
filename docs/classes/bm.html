@@ -1315,7 +1315,7 @@
 
 <p><strong>Note:</strong> </p>
 
-<p>Accelerometer events must be enabled (See <a href="bm.Device.html">Device.enableAccelerometer</a>) and are sent continuously on the interval specified by <a href="bm.Device.html">Device.setAccelerometerInterval</a>.</p>
+<p>Accelerometer events must be enabled (See <a href="bm.Device.html#method_enableAccelerometer">Device.enableAccelerometer</a>) and are sent continuously on the interval specified by <a href="bm.Device.html#method_setAccelerometerInterval">Device.setAccelerometerInterval</a>.</p>
     </div>
 
     
@@ -1386,7 +1386,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;src_core.js.html#l491"><code>src&#x2F;core.js:491</code></a>
+        <a href="..&#x2F;files&#x2F;src_core.js.html#l505"><code>src&#x2F;core.js:505</code></a>
         
         </p>
 
@@ -1467,7 +1467,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;src_core.js.html#l499"><code>src&#x2F;core.js:499</code></a>
+        <a href="..&#x2F;files&#x2F;src_core.js.html#l513"><code>src&#x2F;core.js:513</code></a>
         
         </p>
 
@@ -1805,7 +1805,7 @@
 
 <p><strong>Note:</strong> </p>
 
-<p>Gyroscope events must be enabled (See <a href="bm.Device.html">Device.enableGyroscope</a>) and are sent continuously on the interval specified by <a href="bm.Device.html">Device.setGyroscopeInterval</a>.</p>
+<p>Gyroscope events must be enabled (See <a href="bm.Device.html#method_enableGyroscope">Device.enableGyroscope</a>) and are sent continuously on the interval specified by <a href="bm.Device.html#method_setGyroscopeInterval">Device.setGyroscopeInterval</a>.</p>
     </div>
 
     
@@ -1844,6 +1844,58 @@
                     
                 </li>
             
+                <li class="param">
+                    
+                        <code class="param-name">gyroscope</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>X/Y/Z angular momentum of the device.</p>
+                    </div>
+
+                    
+                        <ul class="params-list">
+                            
+                            <li class="param">
+                                <code class="param-name">x</code>
+                                <span class="type">Float</span>
+
+                                <div class="param-description">
+                                    <p>X</p>
+                                </div>
+
+                                
+                            </li>
+                            
+                            <li class="param">
+                                <code class="param-name">y</code>
+                                <span class="type">Float</span>
+
+                                <div class="param-description">
+                                    <p>Y</p>
+                                </div>
+
+                                
+                            </li>
+                            
+                            <li class="param">
+                                <code class="param-name">z</code>
+                                <span class="type">Float</span>
+
+                                <div class="param-description">
+                                    <p>Z</p>
+                                </div>
+
+                                
+                            </li>
+                            
+                        </ul>
+                    
+                </li>
+            
             </ul>
         </div>
     
@@ -1876,7 +1928,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;src_core.js.html#l478"><code>src&#x2F;core.js:478</code></a>
+        <a href="..&#x2F;files&#x2F;src_core.js.html#l484"><code>src&#x2F;core.js:484</code></a>
         
         </p>
 
@@ -1890,7 +1942,7 @@
 
 <p><strong>Note:</strong> </p>
 
-<p>Orientation events must be enabled (See <a href="bm.Device.html">Device.enableOrientation</a>) and are sent continuously on the interval specified by <a href="bm.Device.html">Device.setOrientationInterval</a>.</p>
+<p>Orientation events must be enabled (See <a href="bm.Device.html#method_enableOrientation">Device.enableOrientation</a>) and are sent continuously on the interval specified by <a href="bm.Device.html#method_setOrientationInterval">Device.setOrientationInterval</a>.</p>
     </div>
 
     
@@ -1929,6 +1981,69 @@
                     
                 </li>
             
+                <li class="param">
+                    
+                        <code class="param-name">orientation</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Orientation of the device as a Quaternion.</p>
+                    </div>
+
+                    
+                        <ul class="params-list">
+                            
+                            <li class="param">
+                                <code class="param-name">x</code>
+                                <span class="type">Float</span>
+
+                                <div class="param-description">
+                                    <p>X</p>
+                                </div>
+
+                                
+                            </li>
+                            
+                            <li class="param">
+                                <code class="param-name">y</code>
+                                <span class="type">Float</span>
+
+                                <div class="param-description">
+                                    <p>Y</p>
+                                </div>
+
+                                
+                            </li>
+                            
+                            <li class="param">
+                                <code class="param-name">z</code>
+                                <span class="type">Float</span>
+
+                                <div class="param-description">
+                                    <p>Z</p>
+                                </div>
+
+                                
+                            </li>
+                            
+                            <li class="param">
+                                <code class="param-name">w</code>
+                                <span class="type">Float</span>
+
+                                <div class="param-description">
+                                    <p>W</p>
+                                </div>
+
+                                
+                            </li>
+                            
+                        </ul>
+                    
+                </li>
+            
             </ul>
         </div>
     
@@ -1961,7 +2076,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;src_core.js.html#l538"><code>src&#x2F;core.js:538</code></a>
+        <a href="..&#x2F;files&#x2F;src_core.js.html#l552"><code>src&#x2F;core.js:552</code></a>
         
         </p>
 
@@ -2149,7 +2264,7 @@ console/game they want to connect to, if there is more than one on their network
             
         
         
-        <a href="..&#x2F;files&#x2F;src_core.js.html#l529"><code>src&#x2F;core.js:529</code></a>
+        <a href="..&#x2F;files&#x2F;src_core.js.html#l543"><code>src&#x2F;core.js:543</code></a>
         
         </p>
 
@@ -2245,7 +2360,7 @@ console/game they want to connect to, if there is more than one on their network
             
         
         
-        <a href="..&#x2F;files&#x2F;src_core.js.html#l518"><code>src&#x2F;core.js:518</code></a>
+        <a href="..&#x2F;files&#x2F;src_core.js.html#l532"><code>src&#x2F;core.js:532</code></a>
         
         </p>
 
@@ -2371,7 +2486,7 @@ console/game they want to connect to, if there is more than one on their network
             
         
         
-        <a href="..&#x2F;files&#x2F;src_core.js.html#l507"><code>src&#x2F;core.js:507</code></a>
+        <a href="..&#x2F;files&#x2F;src_core.js.html#l521"><code>src&#x2F;core.js:521</code></a>
         
         </p>
 
