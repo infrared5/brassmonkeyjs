@@ -310,11 +310,12 @@ var BrassMonkeyClass = EventEmitter.extend({
     @param {Number} [options.maxPlayers=1]
       The number of players that can play your game.
       
-    @param {URL} [options.swfURL]
-      The location of the SWF file that implements 
-      the SDK when there a browser doesn&#x27;t support Websockets. 
+      (Defaults to single player only.)
       
-      If not provided the matching version on the Brass Monkey CDN is used.
+    @param {URL} [options.swfURL]
+      The location of the SWF file that implements the SDK when there a browser doesn&#x27;t support Websockets. 
+      
+      (If not provided the matching version on the Brass Monkey CDN is used.)
   **&#x2F;
   start: function(options){
     

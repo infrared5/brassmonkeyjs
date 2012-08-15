@@ -4,15 +4,18 @@
   <meta charset="utf-8" />
   <title>WebSocket Test</title>
 
-  <script language="javascript" type="text/javascript" src="../core.js" ></script>
   
-  <script language="javascript" type="text/javascript" src="../base64.js" ></script>
+  <script language="javascript" type="text/javascript" src="core.js" ></script>
+  <script language="javascript" type="text/javascript" src="base64.js" ></script>
+  <script language="javascript" type="text/javascript" src="resources.js" ></script>
+  <script language="javascript" type="text/javascript" src="device.js" ></script>
   
-  <script language="javascript" type="text/javascript" src="../resources.js" ></script>
+  <script language="javascript" type="text/javascript" src="detect.js" ></script>
   
-  <script language="javascript" type="text/javascript" src="../device.js" ></script>
+  <script language="javascript" type="text/javascript" src="flash/swfobject.js" ></script>
+  <script language="javascript" type="text/javascript" src="flash/flash.js" ></script>
   
-  <script language="javascript" type="text/javascript" src="websockets.js" ></script>
+  <script language="javascript" type="text/javascript" src="websockets/websockets.js" ></script>
 
   <script language="javascript" type="text/javascript">
     bm.start({
@@ -21,15 +24,16 @@
       maxPlayers: 1,
       
       //appId:"62e822bc0e6b9f22fc158763591845be",
+      swfURL: "swf/bin/brassmonkey.swf",
       
       design: {
         orientation: "portrait",
         touchEnabled: false,
         accelerometerEnabled: false,
         images:[
-          '../../examples/shared/background.png',
-          '../../examples/buttons/button-up.png',
-          '../../examples/buttons/button-down.png'
+          '../examples/shared/background.png',
+          '../examples/buttons/button-up.png',
+          '../examples/buttons/button-down.png'
         ],
         layout:[{
           type:   "image",

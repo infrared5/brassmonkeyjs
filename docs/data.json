@@ -173,14 +173,14 @@
                         },
                         {
                             "name": "maxPlayers",
-                            "description": "The number of players that can play your game.",
+                            "description": "The number of players that can play your game.\n    \n    (Defaults to single player only.)",
                             "type": "Number",
                             "optional": true,
                             "optdefault": "1"
                         },
                         {
                             "name": "swfURL",
-                            "description": "The location of the SWF file that implements \n    the SDK when there a browser doesn't support Websockets. \n    \n    If not provided the matching version on the Brass Monkey CDN is used.",
+                            "description": "The location of the SWF file that implements the SDK when there a browser doesn't support Websockets. \n    \n    (If not provided the matching version on the Brass Monkey CDN is used.)",
                             "type": "URL",
                             "optional": true
                         }
@@ -191,7 +191,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 253,
+            "line": 254,
             "description": "Shutdown Brass Monkey",
             "itemtype": "method",
             "name": "stop",
@@ -199,7 +199,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 264,
+            "line": 265,
             "description": "Shutdown Brass Monkey. \n\nThis will close all open network connections and disconnect all controllers.",
             "itemtype": "method",
             "name": "stop",
@@ -207,7 +207,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 313,
+            "line": 314,
             "description": "Event called when a mobile device successfully established a connection.",
             "itemtype": "event",
             "name": "deviceavailable",
@@ -227,7 +227,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 321,
+            "line": 322,
             "description": "Event called when a mobile device successfully established a connection.",
             "itemtype": "event",
             "name": "deviceconnected",
@@ -247,7 +247,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 329,
+            "line": 330,
             "description": "Event called when a mobile device is disconnected.",
             "itemtype": "event",
             "name": "devicedisconnected",
@@ -267,7 +267,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 338,
+            "line": 339,
             "description": "Event called when the SDK has received it's assigned slot index/color.\n\nThis is the unique color that is displayed in top right of the console, in your game, and \non the device list in the controller app. It's used to help users disambiguate which\nconsole/game they want to connect to, if there is more than one on their network.",
             "itemtype": "event",
             "name": "showslotcolor",
@@ -292,7 +292,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 370,
+            "line": 371,
             "description": "Event representing the latest accelerometer values.\n\n**Note:** \n\n  Accelerometer events must be enabled (See [Device.enableAccelerometer](bm.Device.html)) and are sent continuously on the interval specified by [Device.setAccelerometerInterval](bm.Device.html).",
             "itemtype": "event",
             "name": "accelerometer",
@@ -312,7 +312,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 382,
+            "line": 383,
             "description": "Event representing the latest gyroscope values.\n\n**Note:** \n\n  Gyroscope events must be enabled (See [Device.enableGyroscope](bm.Device.html)) and are sent continuously on the interval specified by [Device.setGyroscopeInterval](bm.Device.html).",
             "itemtype": "event",
             "name": "gyroscope",
@@ -332,7 +332,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 394,
+            "line": 395,
             "description": "Event representing the latest orientation values.\n\n**Note:** \n\n  Orientation events must be enabled (See [Device.enableOrientation](bm.Device.html)) and are sent continuously on the interval specified by [Device.setOrientationInterval](bm.Device.html).",
             "itemtype": "event",
             "name": "orientation",
@@ -352,7 +352,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 407,
+            "line": 408,
             "description": "Event called when a button was pressed down.",
             "itemtype": "event",
             "name": "buttondown",
@@ -372,7 +372,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 415,
+            "line": 416,
             "description": "Event called when a button was released.",
             "itemtype": "event",
             "name": "buttonup",
@@ -392,7 +392,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 423,
+            "line": 424,
             "description": "Event indicating the user shook their device.\n\n**Note:** Accelerometer/Gyroscope events do not need to enabled, shake events do not take much network traffic so this was unnecessary.",
             "itemtype": "event",
             "name": "shake",
