@@ -42,6 +42,7 @@ bm.Device = bm.EventEmitter.extend({
     
     this.orientationEnabled = false;
     this.orientationInterval = 1/10.0;
+    this.capabilities = 0;
     
     this.mode = "gamepad";
   },
@@ -147,9 +148,37 @@ bm.Device = bm.EventEmitter.extend({
   **/
   getMode: function(mode){
     return this.mode;
+  },
+
+  /**
+  Checks whether the device supports the following capability
+  
+  @method hasCapability
+  @param {String} the capability to check
+    
+    **"gyroscope"** Can generate gyroscope events
+    
+    **"orientation"** Can generate orientation events
+  
+  @return true if the device has the given capability, false
+   if the device does not have the given capability, or the
+   capabilities have not been set
+  
+  **/
+  hasCapability : function(feature) {
+    if(!(feature in capabilityFlags)) {
+      throw new Error("unknown capability " + feature);
+    }
+
+    return (this.capabilities & capabilityFlags[feature]) !== 0;
   }
   
 });
+
+var capabilityFlags = {
+  gyroscope : 1 << 0,
+  orientation : 1 << 1
+};
 
 /**
 Event called on keyboard input.

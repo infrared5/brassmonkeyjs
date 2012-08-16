@@ -74,6 +74,8 @@
       
      e.device.enableTouch(true);
      e.device.setTouchInterval(1/60);
+
+     bm.log("device gyro: %b, orientation: %b", e.device.hasCapability("gyroscope"), e.device.hasCapability("orientation"));
     });
     
     bm.on('acceleration', function (e){

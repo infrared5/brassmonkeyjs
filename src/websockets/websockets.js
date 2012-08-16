@@ -121,6 +121,7 @@ var Connection = bm.Device.extend({
     this.id = deviceId;
     socket = this.socket = new WebSocket("ws://" + host + ":" + port);
     this.sequence = 0;
+    this.capabilities = 0;
 
     this.touchEnabled = bm.options.design.touchEnabled;
     this.accelerometerEnabled = bm.options.design.accelerometerEnabled;
@@ -161,8 +162,6 @@ var Connection = bm.Device.extend({
         address: localAddress
       }
     });
-
-    bm.addDevice(this);
 
     this.sendInvoke("setReliabilityForTouch", [['i', 2], ['i', 2]]);
 
@@ -305,6 +304,8 @@ cp.handleInvoke = function(invoke) {
       break;
 
     case "setCapabilities":
+      this.capabilities = invoke.params[0][1];
+      bm.addDevice(this);
       break;
 
     case "onKeyString":
