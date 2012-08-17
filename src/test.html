@@ -27,7 +27,7 @@
       
       design: {
         orientation: "portrait",
-        touchEnabled: true,
+        touchEnabled: false,
         accelerometerEnabled: false,
         images:[
           '../examples/shared/background.png',
@@ -35,22 +35,32 @@
           '../examples/buttons/button-down.png'
         ],
         layout:[{
-          type:   "image",
-          image:  0,
-          x:      0,
-          y:      0,
-          width:  320,
-          height: 480
-        }, {
-          type:       "button",
-          handler:    "push",
-          imageUp:    1,
-          imageDown:  2,
-          x:          (320-160)/2-3,
-          y:          (480-160)/2,
-          width:      160,
-          height:     160
-        }]
+            type:   "image",
+            image:  0,
+            x:      0,
+            y:      0,
+            width:  320,
+            height: 480
+          }, {
+            type:       "button",
+            handler:    "push",
+            imageUp:    1,
+            imageDown:  2,
+            x:          (320-160)/2-3,
+            y:          (480-160)/2,
+            width:      160,
+            height:     160
+          }, {
+            type:       "text",
+            text:       "Hello",
+            textSize:   50,
+            color:      "FFFFFF",
+            x:          0,
+            y:          0,
+            width:      320,
+            height:     160
+          }
+        ]
       }
     });
     
@@ -60,20 +70,28 @@
       if(e.id="push"){
         var button = document.getElementById('button');
         button.style.background = "red";
+
+        var controls = e.device.editDesign();
+        controls.layout[0].hidden = true;
+        controls.commit();
       }
     });
     bm.on('buttonup', function(e){
       if(e.id="push"){
         var button = document.getElementById('button');
         button.style.background = "#ffafaf";
+
+        var controls = e.device.editDesign();
+        controls.layout[0].hidden = false;
+        controls.commit();
       }
     });
 
     bm.on('deviceconnected', function (e){
       bm.log("device connected %o", e);
       
-     e.device.enableTouch(true);
-     e.device.setTouchInterval(1/60);
+     //e.device.enableTouch(true);
+     //e.device.setTouchInterval(1/60);
 
      bm.log("device gyro: %b, orientation: %b", e.device.hasCapability("gyroscope"), e.device.hasCapability("orientation"));
     });
@@ -111,6 +129,12 @@
       // Delete the touch from our list of tracked ones
       delete touches[e.id]
     });
+
+    bm.on('controlscheme', function(e) {
+      var controls = e.device.editDesign();
+      controls.layout[2].text = "hello, " + e.device.name;
+      controls.commit();
+    })
     
     function onload(){
       // Initialize canvas to black.      

@@ -13,40 +13,112 @@ function getDataURL(img){
 
 bm.loadImages = function(images,cb){
   // Early out if there were zero images in the list
-  if(images.length==0){
+  if(images.length===0){
     cb([]);
     return;
   }
   
   var imagesLoaded = 0,
       imageData = new Array(images.length);
+      loadHandler = function(j) {
+    var img = new Image();
+    img.onload = function(){
+      imageData[j] = getDataURL(img);
+      imagesLoaded++;
+      if(imagesLoaded==images.length){
+        cb(imageData);
+      }
+    };
+    img.src = images[j];
+  };
       
   for(var i = 0;i<images.length;i++){
-    (function(){
-      var j = i,
-          img = new Image();
-      img.onload=function(){
-        imageData[j] = getDataURL(img);
-        imagesLoaded++;
-        if(imagesLoaded==images.length){
-          cb(imageData);
-        }
-      }
-      img.src = images[j];
-    })();
+    loadHandler(i);
   }
+};
+
+function generateLayoutXml(layout, width, height) {
+  var xml;
+  if(layout.length !== 0){
+    xml = '<Layout>\n';
+    for(var i = 0; i<layout.length; i++) {
+      var elem = layout[i];
+    
+      xml += '<DisplayObject type="'+elem.type+'" top="'+elem.y/height+
+        '" left="'+elem.x/width+'" width="'+elem.width/width+
+        '" height="'+elem.height/height+'"'+
+        ' id="' +(i+1)+ '"';
+      
+      if(elem.handler) {
+        xml += ' functionHandler="'+elem.handler+'"';
+      }
+
+      if(elem.text) {
+        xml += ' text="'+elem.text+'" textSize="' + Number(elem.textSize) / height + '"';
+      }
+
+      if(elem.color !== undefined) {
+        xml += ' color="' + elem.color + '"';
+      }
+
+      if(elem.hidden) {
+        xml += ' hidden="yes"';
+      }
+
+      xml += ' >';
+
+      if(elem.type=="image"){
+        xml+='<Asset name="up" resourceRef="'+(elem.image+1)+'" />';
+      } else {
+        xml+='<Asset name="up" resourceRef="'+(elem.imageUp+1)+'" />';
+        xml+='<Asset name="down" resourceRef="'+(elem.imageDown+1)+'" />';
+      }
+      xml+='</DisplayObject>\n';
+    }
+
+    xml+= '</Layout>\n';
+  } else {
+    // No Layout was supplied
+    xml = '<Layout/>\n';
+  }
+
+  return xml;
 }
 
-function generateXMLFromdesign(design,imageData){
-  
-  var width,height;
-  
-  if(bm.options.design.orientation=="portrait"){
-    width = 320;
-    height = 480;
-  } else{
-    width = 480;
-    height = 320;
+function clone(obj) {
+  var target = {};
+  for (var i in obj) {
+    if (obj.hasOwnProperty(i)) {
+      target[i] = obj[i];
+    }
+  }
+  return target;
+}
+
+function cloneDesign(source) {
+  var out = clone(source),
+      sourceLayout = source.layout,
+      length = sourceLayout.length,
+      clonedLayout = new Array(length);
+
+  while(length--) {
+    clonedLayout[length] = clone(sourceLayout[length]);
+  }
+
+  out.layout = clonedLayout;
+  return out;
+}
+
+bm.cloneDesign = cloneDesign;
+
+bm.generateControllerXML = function(design,imageData) {
+
+  if(design.orientation=="portrait"){
+    design.width = 320;
+    design.height = 480;
+  } else {
+    design.width = 480;
+    design.height = 320;
   }
   
   var xml = '<?xml version="1.0" encoding="utf-8"?>\n'+
@@ -55,56 +127,25 @@ function generateXMLFromdesign(design,imageData){
             '" accelerometerEnabled="'+(design.accelerometerEnabled?'yes':'no')+'">\n';
   
   // Create Resources Section
-  if(imageData.length!=0){ 
+  if(imageData.length!==0){
     xml+= '<Resources>\n';
-    for(var i = 0;i<imageData.length;i++){
-      xml+='<Resource id="'+(i+1)+'" type="image">\n';
-        xml+='<data><![CDATA['+imageData[i]+']]></data>\n';
-      xml+='</Resource>\n';
-    }  
+    for(var i = 0; i<imageData.length;i++){
+      xml+='<Resource id="'+(i+1)+'" type="image"><data><![CDATA['+imageData[i]+']]></data></Resource>\n';
+    }
     xml+= '</Resources>\n';
   } else {
     // No Resources were supplied
     xml+= '<Resources/>\n';
   }
   // Create Layout Section
-  if(design.layout.length!=0){   
-    xml+= '<Layout>\n';
-    for(var i = 0;i<design.layout.length;i++){
-      
-      // NOTE: I ensure all DisplayObjects have handler attributes, but
-      // this may not be necessary. Talk to Shaules/Zach to find out.
-      // For now I do this so that users of the JS SDK don't need to provide something
-      var handler = design.layout[i].handler;
-      if(design.layout[i].type=="image"){
-        handler = "nullHandler";
-      }
-    
-      xml+='<DisplayObject type="'+design.layout[i].type+'" top="'+design.layout[i].y/height+'" left="'+design.layout[i].x/width+'" width="'+design.layout[i].width/width+'" height="'+design.layout[i].height/height+'" functionHandler="'+handler+'">\n';
-      if(design.layout[i].type=="image"){
-        xml+='<Asset name="up" resourceRef="'+(design.layout[i].image+1)+'" />\n';
-      } else {
-        xml+='<Asset name="up" resourceRef="'+(design.layout[i].imageUp+1)+'" />\n';
-        xml+='<Asset name="down" resourceRef="'+(design.layout[i].imageDown+1)+'" />\n';
-      }
-      xml+='</DisplayObject>\n';
-    }  
-    xml+= '</Layout>\n';  
-  } else {
-    // No Layout was supplied
-    xml+= '<Layout/>\n';
-  }
-  xml+='</BMApplicationScheme>';
+  xml += generateLayoutXml(design.layout, design.width, design.height);
   
-  //xml = '<?xml version="1.0" encoding="utf-8"?><BMApplicationScheme version="0.1" orientation="landscape" touchEnabled="yes" accelerometerEnabled="no"><Resources /><Layout /></BMApplicationScheme>';
-  //xml = //xml.replace(/\n/g,'');
-  //console.log(xml);
+  xml+='</BMApplicationScheme>';
   return xml;
-}
+};
 
-bm.generateControllerXML = function(imageData){
-  var xml = generateXMLFromdesign(bm.options.design,imageData);
-  return xml;
-}
+bm.generateUpdateXml = function(design) {
+  return '<BMApplicationScheme>' + generateLayoutXml(design.layout, design.width, design.height) + '</BMApplicationScheme>';
+};
 
 })(BrassMonkey);

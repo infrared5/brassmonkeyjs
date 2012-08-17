@@ -172,6 +172,8 @@ bm.Device = bm.EventEmitter.extend({
 
     return (this.capabilities & capabilityFlags[feature]) !== 0;
   }
+
+
   
 });
 

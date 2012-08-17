@@ -122,6 +122,7 @@ var Connection = bm.Device.extend({
     socket = this.socket = new WebSocket("ws://" + host + ":" + port);
     this.sequence = 0;
     this.capabilities = 0;
+    this.controlsSent = false;
 
     this.touchEnabled = bm.options.design.touchEnabled;
     this.accelerometerEnabled = bm.options.design.accelerometerEnabled;
@@ -196,6 +197,17 @@ var Connection = bm.Device.extend({
       this.gyroInterval = interval;
       this.sendInvoke("setGyroInterval", [['f',interval]]);
     }
+  },
+
+  editDesign : function () {
+    if(this.design === undefined) {
+      this.design = bm.cloneDesign(bm.options.design);
+      var connection = this;
+      this.design.commit = function() {
+        updateControlScheme(connection, this);
+      };
+    }
+    return this.design;
   }
 
 });
@@ -228,8 +240,6 @@ generateSensorMethods('accelerometer');
 generateSensorMethods('orientation');
 
 var notify = function(connection, type, event) {
-  //TODO: remove debug log
-  bm.log("notify: " + type);
   connection.trigger(type, event);
   bm.trigger(type, event);
 };
@@ -241,6 +251,8 @@ cp.onMessage = function(message) {
 
   //bm.log("GOT MESSAGE: " + JSON.stringify(packet));
   if(CHANNEL_MESSAGE === channel) {
+    // TODO: remove this after registry
+    this.name = packet.deviceName;
     this.handleInvoke(packet.message);
   }
   else if(CHANNEL_SHAKE === channel) {
@@ -257,7 +269,6 @@ cp.onMessage = function(message) {
     //        may out weight that.
     var touches = packet.message.touches,
         len = touches.length;
-    console.log(len);
     for(var i = 0; i<len;i++){
       // NOTE:  Touch ids are made from a combination of the device id and the in coming touch id
       //        so that they are unique for clients of the SDK to be able to identify them as unique
@@ -294,6 +305,7 @@ cp.close = function() {
 cp.handleInvoke = function(invoke) {
   switch(invoke.method) {
     case "RequestXML":
+      notify(this, "controlscheme", {device:this});
       this.sendControlScheme();
       break;
 
@@ -352,13 +364,32 @@ cp.handleButtonInvoke = function(invoke) {
   }
 };
 
-cp.sendControlScheme = function() {
-  for(var i = 0; i < controlSchemeChunks.length; ++i) {
-    this.sendPacket({
+var sendChunks = function(connection, chunks) {
+  for(var i = 0; i < chunks.length; ++i) {
+    connection.sendPacket({
       channel : CHANNEL_BYTE,
-      message : controlSchemeChunks[i]
+      message : chunks[i]
     });
   }
+};
+
+var updateControlScheme = function(connection, design) {
+  if(connection.controlsSent) {
+    console.time("update");
+    sendChunks(connection, generateUpdateChunks(bm.generateUpdateXml(design)));
+    console.timeEnd("update");
+  }
+};
+
+cp.sendControlScheme = function() {
+  bm.log(this.design);
+  if(this.design) {
+    sendChunks(this, generateControlChunks(bm.generateControllerXML(this.design, cachedImageData)));
+  }
+  else {
+    sendChunks(this, controlSchemeChunks);
+  }
+  this.controlsSent = true;
 };
 
 cp.sendInvoke = function(method, params) {
@@ -671,7 +702,14 @@ if(INCLUDE_UNUSED_ENCODERS) {
 }
 
 var controlSchemeChunks;
-var generateByteChunks = function(xml) {
+var cachedImageData;
+var generateControlChunks = function(xml) {
+  return generateByteChunks(xml, 'testXML');
+};
+var generateUpdateChunks = function(xml) {
+  return generateByteChunks(xml, 'updateXML');
+};
+var generateByteChunks = function(xml, type) {
   var MAX_CHUNK_SIZE = 1024*32,
     chunks = [],
     xmlLength = xml.length,
@@ -685,7 +723,7 @@ var generateByteChunks = function(xml) {
 
     chunks.push({
       encodeType : ENCODE_BYTE_CHUNK,
-      setId: 'testXML',
+      setId: type,
       startByte: totalBytes,
       chunkSize: chunkSize,
       data: encoded
@@ -730,8 +768,9 @@ function createDebugControls(){
     // to the controller app devices as they connect.
     // TODO: Can we do work in parallel with this?
     bm.loadImages(bm.options.design.images,function(imageData){
-      var xml = bm.generateControllerXML(imageData);
-      controlSchemeChunks = generateByteChunks(xml);
+      cachedImageData = imageData;
+      var xml = bm.generateControllerXML(bm.options.design, imageData);
+      controlSchemeChunks = generateControlChunks(xml);
       start(ipAddress.value);
     });
   };
