@@ -153,7 +153,7 @@ bm.Device = bm.EventEmitter.extend({
   /**
   Checks whether the device supports the following capability
   
-  @method hasCapability
+  @method hasCapabilityaa
   @param {String} the capability to check
     
     **"gyroscope"** Can generate gyroscope events
