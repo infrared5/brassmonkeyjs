@@ -30,12 +30,20 @@ Documentation
 
 Read the (documents online)[http://playbrassmonkey.com/developers/html5/docs/] or locally by opening /docs/index.html
 
-Building the docs
+Building the docs.
 -------------
-* (Requires Node.)[http://nodejs.org/#download]
-* (Install YUIDoc)[http://yui.github.com/yuidoc/]
-* Run './bin/build-docs.sh' (Mac/Linux only for now. I think we'll do cross platform eventually via using pure Node scripts.)
+* Requires (Node)[http://nodejs.org/download/] (Tested at version 0.8.3).
+* Requires (Grunt)[https://github.com/cowboy/grunt].
 
+    sudo npm install -g grunt@0.2.13
+    
+* Requires (YUIDoc)[https://github.com/yui/yuidoc/].
+
+    sudo npm install -g yuidocjs@0.3.19
+
+* Run Grunt task to generate the docs.
+
+    grunt docs
 
 Also checkout the demos for some example code.
 
