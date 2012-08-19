@@ -56,7 +56,9 @@ package
 			// Store the name of the Brass Monkey JS global
 			this.globalName = loaderInfo.parameters['globalName'];
 			
-			ExternalInterface.call("boomBa",10);
+			var func:String = this.getJSFuncName("boomBa");
+			trace("func ("+func+")");
+			ExternalInterface.call(func,10);
 			
 			brassMonkey.addEventListener(DeviceEvent.SLOT_DISPLAY_REQUEST, onSlot);
 			brassMonkey.addEventListener(DeviceEvent.DEVICE_AVAILABLE,this.onDeviceDiscovery);
@@ -106,6 +108,10 @@ package
 			}
 			//flash.utils.setTimeout(ExternalInterface.call,1000,"bm.onFlashLoadedInternal");
 		//	ExternalInterface.call("bm.onFlashLoadedInternal");		
+		}
+		
+		public function getJSFuncName (funcName:String): String{
+			return this.globalName+"."+funcName;
 		}
 		
 		public function setRegistryVersion(maj:int,min:int):void

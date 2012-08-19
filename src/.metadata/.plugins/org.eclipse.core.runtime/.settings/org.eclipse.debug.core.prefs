@@ -1,3 +1,3 @@
-#Tue Aug 14 22:50:18 EDT 2012
-prefWatchExpressions=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?>\n<watchExpressions/>\n
+#Fri Aug 17 17:30:58 EDT 2012
+prefWatchExpressions=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?>\n<watchExpressions>\n<expression enabled\="true" text\="func"/>\n</watchExpressions>\n
 eclipse.preferences.version=1

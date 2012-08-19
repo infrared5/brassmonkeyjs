@@ -53,19 +53,24 @@
           }, {
             type:       "text",
             text:       "Hello",
-            textSize:   50,
+            textSize:   25,
             color:      "FFFFFF",
             x:          0,
             y:          0,
             width:      320,
             height:     160
-          }
+          },{
+            type:       "image",
+            image:      1,
+            x:          0,
+            y:          0,
+            width:      40,
+            height:     40
+          }, 
         ]
       }
     });
     
-
-    // Should fail as 10 isn't a function.
     bm.on('buttondown', function(e){
       if(e.id="push"){
         var button = document.getElementById('button');
@@ -83,13 +88,17 @@
 
         var controls = e.device.editDesign();
         controls.layout[0].hidden = false;
+        controls.layout[2].color = "0000FF";
+        controls.layout[2].x = controls.layout[2].x+10;
         controls.commit();
       }
     });
 
+    var device;
     bm.on('deviceconnected', function (e){
       bm.log("device connected %o", e);
       
+      device = e.device;
      //e.device.enableTouch(true);
      //e.device.setTouchInterval(1/60);
 
@@ -130,11 +139,12 @@
       delete touches[e.id]
     });
 
+
     bm.on('controlscheme', function(e) {
       var controls = e.device.editDesign();
       controls.layout[2].text = "hello, " + e.device.name;
       controls.commit();
-    })
+    });
     
     function onload(){
       // Initialize canvas to black.      
@@ -150,6 +160,36 @@
     bm.on('navstring', function (e){
       bm.log("nav string %s", e.string);
     });
+    
+    var testInterval;
+    function testAnimation (){
+      if(testInterval){
+        clearInterval(testInterval);
+        testInterval = null;
+      }
+      var vx = (Math.random()-0.5)*30,
+          vy = (Math.random()-0.5)*30;
+          
+      // Make the image bounce around on the controller
+      // like a ball
+      testInterval = setInterval(function(){
+        var controls = device.editDesign();
+        controls.layout[3].x = controls.layout[3].x+vx;
+        controls.layout[3].y = controls.layout[3].y+vy;
+        
+        // Bounce of walls
+        if( controls.layout[3].x<0||
+            controls.layout[3].x>(320-40)){
+          vx=-vx;
+        }
+        if( controls.layout[3].y<0||
+            controls.layout[3].y>(480-40)){
+          vy=-vy;
+        }
+        
+        controls.commit();
+      },16);
+    }
 
     
   </script>
@@ -159,12 +199,15 @@
   <canvas id="canvas" width="320px" height="480px"></canvas>
 
 <br><br>
+<input type="button" onClick="testAnimation();" value="Test Animation"/>
+<h4>Set a Controller Mode</h4>
 <ul>
 <li><a href="javascript:void(0)" onClick="bm.allDevices().setMode('keyboard')"> keyboard </a></li>
 <li><a href="javascript:void(0)" onClick="bm.allDevices().setMode('navigation')"> navigation </a></li>
 <li><a href="javascript:void(0)" onClick="bm.allDevices().setMode('gamepad')"> gamepad </a></li>
 <li><a href="javascript:void(0)" onClick="bm.allDevices().setMode('wait')"> wait </a></li>
 </ul>
+
 
 </body>
 </html>
