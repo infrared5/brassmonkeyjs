@@ -12,3 +12,4 @@ src/.metadata/*.cache
 src/.metadata/*s_cache
 src/.metadata/.plugins/com.adobe.flexbuilder.codemodel/searchCache
 node_modules
+src/.metadata/.plugins/*.snap

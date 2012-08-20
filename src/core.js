@@ -327,6 +327,10 @@ var BrassMonkeyClass = EventEmitter.extend({
   
   getDevice: function(id){
     return this.devices[id];
+  },
+  
+  boomBa: function(str){
+    console.log("zabba"+str);
   }
 });
 
@@ -350,10 +354,6 @@ if(console!==undefined && console.log!==undefined) {
   bm.log = function() {console.log.apply(console,arguments);};
 } else {
   bm.log = function() {};
-}
-
-window['boomBa'] = function(slot){
-  console.log(slot);
 }
 
 var makeMethodProxy = function(devices, methodName) {
