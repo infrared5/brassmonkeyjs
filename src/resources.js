@@ -67,9 +67,9 @@ function generateLayoutXml(layout, width, height) {
 
       xml += ' >';
 
-      if(elem.type=="image"){
+      if(elem.type==="image"){
         xml+='<Asset name="up" resourceRef="'+(elem.image+1)+'" />';
-      } else {
+      } else if(elem.type === "button") {
         xml+='<Asset name="up" resourceRef="'+(elem.imageUp+1)+'" />';
         xml+='<Asset name="down" resourceRef="'+(elem.imageDown+1)+'" />';
       }

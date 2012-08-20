@@ -40,9 +40,10 @@ StringBuffer.prototype.toString = function toString()
     return this.buffer.join("");
 };
 
+var codex = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+
 var Base64 =
 {
-    codex : "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
 
     encode : function (input)
     {
@@ -73,7 +74,7 @@ var Base64 =
                 enc4 = 64;
             }
 
-            output.append(this.codex.charAt(enc1) + this.codex.charAt(enc2) + this.codex.charAt(enc3) + this.codex.charAt(enc4));
+            output.append(codex.charAt(enc1) + codex.charAt(enc2) + codex.charAt(enc3) + codex.charAt(enc4));
         }
 
         return [enumerator.byteCount, output.toString()];
@@ -113,6 +114,18 @@ var Base64 =
     }
 };
 
+if(btoa) {
+    bm.log("using btoa");
+    var original = Base64.encode;
+    Base64.encode = function(input) {
+        try {
+            return [input.length, btoa(input)];
+        } catch(e) {
+            bm.log("falling back to normal base64 encoder");
+            return original(input);
+        }
+    };
+}
 
 function Utf8EncodeEnumerator(input)
 {
