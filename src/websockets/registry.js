@@ -129,6 +129,10 @@ rcp.onHostConnected = function(hostInfo) {
   if(hostInfo.device.deviceId == this.clientInfo.device.deviceId){
     this.clientInfo = hostInfo;   
     console.log("Woo Im connected ");
+
+    var slotIndex = Math.max(0, hostInfo.slotId-1) % bm.slotColors.length,
+        slotColor = bm.slotColors[slotIndex];
+    bm.trigger("showslotcolor", {slot: hostInfo.slotId, color: slotColor});
   }
 };
 

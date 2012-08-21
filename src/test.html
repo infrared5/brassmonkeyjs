@@ -71,6 +71,11 @@
         ]
       }
     });
+
+    bm.on('showslotcolor', function(e) {
+      var slot = document.getElementById('slot');
+      slot.style.background = e.color;
+    });
     
     bm.on('buttondown', function(e){
       if(e.id="push"){
@@ -196,6 +201,7 @@
   </script>
 </head>
 <body style="margin:0px" onload="onload();">
+  <div id="slot" style="padding-top: 30px;width:64px;height:64px;background:#000000;"></div>
   <div id="button" style="padding-top: 30px;width:64px;height:64px;background:#ffafaf;"></div>
   <canvas id="canvas" width="320px" height="480px"></canvas>
 
