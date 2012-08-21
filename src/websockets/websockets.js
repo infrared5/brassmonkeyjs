@@ -76,7 +76,7 @@ var localAddress = {
 };
 
 var removeConnection = function(connection) {
-  var index = connections.indexOf(connections);
+  var index = connections.indexOf(connection);
   if(index >= 0)  {
     connections.splice(index, 1);
     bm.removeDevice(connection);
@@ -739,8 +739,6 @@ var generateByteChunks = function(xml, type) {
   return chunks;
 };
 
-
-
 function createDebugControls(){
   // Create a DOM element to hold the elements of the controller layout
   var ui = document.createElement('div');
@@ -762,17 +760,7 @@ function createDebugControls(){
   startButton.onclick = function(){
     // Store IP address
     setCookie("ipaddress",ipAddress.value);
-  
-    // Load all of the controller images and then generate
-    // the base64 encoded version of their data for sending
-    // to the controller app devices as they connect.
-    // TODO: Can we do work in parallel with this?
-    bm.loadImages(bm.options.design.images,function(imageData){
-      cachedImageData = imageData;
-      var xml = bm.generateControllerXML(bm.options.design, imageData);
-      controlSchemeChunks = generateControlChunks(xml);
-      start(ipAddress.value);
-    });
+    start(ipAddress.value);
   };
   ui.appendChild(startButton);
   
@@ -822,6 +810,28 @@ if(bm.detectRuntime()==="websockets"){
   }
 }
 
+var requestConnect = function(deviceInfo) {
+  if(connections.length >= bm.options.maxPlayers) {
+    bm.log("Connections full, not connecting");
+    return;
+  }
+
+  var deviceId = deviceInfo.device.deviceId,
+      deviceName = deviceInfo.device.deviceName,
+      address = deviceInfo.address;
+
+  for(var i = 0; i < connections.length; ++i) {
+    if(connections[i].id === deviceId) {
+      bm.log("already connecting to %s, not connecting", deviceId);
+      return;
+    }
+  }
+
+  var connection = new Connection(deviceId, address.host, address.reliablePort);
+  connection.name = deviceName;
+  connections.push(connection);
+};
+
 bm.WebSocketsRT = bm.Class.extend({
   init:function(){
   },
@@ -829,9 +839,25 @@ bm.WebSocketsRT = bm.Class.extend({
     localDevice.id = options.deviceId;
     localDevice.name = options.name;
     bm.log(options.deviceId);
+
+    var registry = this.registry = new bm.RegistryConnection(options);
+    this.registry.onconnectrequest = requestConnect;
+
+    // Load all of the controller images and then generate
+    // the base64 encoded version of their data for sending
+    // to the controller app devices as they connect.
+    // TODO: Can we do work in parallel with this?
+    bm.loadImages(options.design.images,function(imageData){
+      cachedImageData = imageData;
+      var xml = bm.generateControllerXML(bm.options.design, imageData);
+      controlSchemeChunks = generateControlChunks(xml);
+
+      registry.start();
+    });
   },
   stop: function(){
     stop();
+    this.registry.stop();
   }
 });
 

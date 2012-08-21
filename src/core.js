@@ -270,6 +270,10 @@ var BrassMonkeyClass = EventEmitter.extend({
     var getParams = getQueryParams(document.location.search);
     options.deviceId = getParams.appId || Math.floor(Math.random()*16777215*16777215).toString(16);
     options.portalId = getParams.portalId;
+
+    if(!options.appId) {
+      throw new Error("bm.start: appId is required");
+    }
     
     // Choose the proper communication runtime based on the environment.
     // For now it's basically WebSockets in Mobile Safari otherwise Flash
