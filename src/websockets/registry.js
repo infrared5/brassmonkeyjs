@@ -45,7 +45,7 @@ var RegistryConnection = function(options) {
     appId : options.appId,
     device : new BMDevice(options.deviceId, options.name),
     address : new BMAddress("192.168.2.1", 6666), //< contents of address do not matter
-    slotId : 2,
+    slotId : 1,
     maxPlayers : options.maxPlayers,
     currentPlayers : 0
   };   
