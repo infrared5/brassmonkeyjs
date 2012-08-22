@@ -216,7 +216,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 286,
+            "line": 290,
             "description": "Shutdown Brass Monkey\n\nThis will close all open network connections and disconnect all controllers.",
             "itemtype": "method",
             "name": "stop",
@@ -224,7 +224,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 299,
+            "line": 303,
             "description": "Log to Brass Monkey's console.\n\nTODO: Implement a proper built cross browser debug pannel. For now uses built in console.log \n      where it's available.",
             "itemtype": "method",
             "name": "log",
@@ -232,7 +232,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 340,
+            "line": 348,
             "description": "Log to Brass Monkey's console.\n\nTODO: Implement a proper built cross browser debug pannel. For now uses built in console.log \n      where it's available.",
             "itemtype": "method",
             "name": "log",
@@ -240,7 +240,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 397,
+            "line": 401,
             "description": "Event called when a mobile device successfully established a connection.",
             "itemtype": "event",
             "name": "deviceavailable",
@@ -260,7 +260,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 405,
+            "line": 409,
             "description": "Event called when a mobile device successfully established a connection.",
             "itemtype": "event",
             "name": "deviceconnected",
@@ -280,7 +280,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 413,
+            "line": 417,
             "description": "Event called when a mobile device is disconnected.",
             "itemtype": "event",
             "name": "devicedisconnected",
@@ -300,7 +300,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 422,
+            "line": 426,
             "description": "Event called when the SDK has received it's assigned slot index/color.\n\nThis is the unique color that is displayed in top right of the console, in your game, and \non the device list in the controller app. It's used to help users disambiguate which\nconsole/game they want to connect to, if there is more than one on their network.",
             "itemtype": "event",
             "name": "showslotcolor",
@@ -325,7 +325,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 454,
+            "line": 458,
             "description": "Event representing the latest accelerometer values.\n\n**Note:** \n\n  Accelerometer events must be enabled (See [Device.enableAccelerometer](bm.Device.html#method_enableAccelerometer)) and are sent continuously on the interval specified by [Device.setAccelerometerInterval](bm.Device.html#method_setAccelerometerInterval).",
             "itemtype": "event",
             "name": "acceleration",
@@ -345,7 +345,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 466,
+            "line": 470,
             "description": "Event representing the latest gyroscope values.\n\n**Note:** \n\n  Gyroscope events must be enabled (See [Device.enableGyroscope](bm.Device.html#method_enableGyroscope)) and are sent continuously on the interval specified by [Device.setGyroscopeInterval](bm.Device.html#method_setGyroscopeInterval).",
             "itemtype": "event",
             "name": "gyroscope",
@@ -387,7 +387,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 484,
+            "line": 488,
             "description": "Event representing the latest orientation values.\n\n**Note:** \n\n  Orientation events must be enabled (See [Device.enableOrientation](bm.Device.html#method_enableOrientation)) and are sent continuously on the interval specified by [Device.setOrientationInterval](bm.Device.html#method_setOrientationInterval).",
             "itemtype": "event",
             "name": "orientation",
@@ -434,7 +434,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 505,
+            "line": 509,
             "description": "Event called when a button was pressed down.",
             "itemtype": "event",
             "name": "buttondown",
@@ -454,7 +454,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 513,
+            "line": 517,
             "description": "Event called when a button was released.",
             "itemtype": "event",
             "name": "buttonup",
@@ -474,7 +474,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 521,
+            "line": 525,
             "description": "Event called when a touch has started.",
             "itemtype": "event",
             "name": "touchstart",
@@ -509,7 +509,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 532,
+            "line": 536,
             "description": "Event called when a touch has moved.",
             "itemtype": "event",
             "name": "touchmove",
@@ -544,7 +544,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 543,
+            "line": 547,
             "description": "Event called when a finger has been lifted up.",
             "itemtype": "event",
             "name": "touchend",
@@ -569,7 +569,7 @@
         },
         {
             "file": "src/core.js",
-            "line": 552,
+            "line": 556,
             "description": "Event indicating the user shook their device.\n\n**Note:** Accelerometer/Gyroscope events do not need to enabled, shake events do not take much network traffic so this was unnecessary.",
             "itemtype": "event",
             "name": "shake",
@@ -772,7 +772,7 @@
         },
         {
             "file": "src/device.js",
-            "line": 183,
+            "line": 185,
             "description": "Event called on keyboard input.",
             "itemtype": "event",
             "name": "keyboard",

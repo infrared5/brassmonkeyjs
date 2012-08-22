@@ -270,6 +270,10 @@ var BrassMonkeyClass = EventEmitter.extend({
     var getParams = getQueryParams(document.location.search);
     options.deviceId = getParams.appId || Math.floor(Math.random()*16777215*16777215).toString(16);
     options.portalId = getParams.portalId;
+
+    if(!options.appId) {
+      throw new Error("bm.start: appId is required");
+    }
     
     // Choose the proper communication runtime based on the environment.
     // For now it's basically WebSockets in Mobile Safari otherwise Flash
@@ -327,6 +331,10 @@ var BrassMonkeyClass = EventEmitter.extend({
   
   getDevice: function(id){
     return this.devices[id];
+  },
+  
+  boomBa: function(str){
+    console.log("zabba"+str);
   }
 });
 
@@ -350,10 +358,6 @@ if(console!==undefined && console.log!==undefined) {
   bm.log = function() {console.log.apply(console,arguments);};
 } else {
   bm.log = function() {};
-}
-
-window['boomBa'] = function(slot){
-  console.log(slot);
 }
 
 var makeMethodProxy = function(devices, methodName) {
@@ -602,9 +606,10 @@ StringBuffer.prototype.toString = function toString()
     return this.buffer.join("");
 };
 
+var codex = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+
 var Base64 =
 {
-    codex : "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
 
     encode : function (input)
     {
@@ -635,7 +640,7 @@ var Base64 =
                 enc4 = 64;
             }
 
-            output.append(this.codex.charAt(enc1) + this.codex.charAt(enc2) + this.codex.charAt(enc3) + this.codex.charAt(enc4));
+            output.append(codex.charAt(enc1) + codex.charAt(enc2) + codex.charAt(enc3) + codex.charAt(enc4));
         }
 
         return [enumerator.byteCount, output.toString()];
@@ -675,6 +680,18 @@ var Base64 =
     }
 };
 
+if(btoa) {
+    bm.log("using btoa");
+    var original = Base64.encode;
+    Base64.encode = function(input) {
+        try {
+            return [input.length, btoa(input)];
+        } catch(e) {
+            bm.log("falling back to normal base64 encoder");
+            return original(input);
+        }
+    };
+}
 
 function Utf8EncodeEnumerator(input)
 {
@@ -801,40 +818,112 @@ function getDataURL(img){
 
 bm.loadImages = function(images,cb){
   // Early out if there were zero images in the list
-  if(images.length==0){
+  if(images.length===0){
     cb([]);
     return;
   }
   
   var imagesLoaded = 0,
       imageData = new Array(images.length);
+      loadHandler = function(j) {
+    var img = new Image();
+    img.onload = function(){
+      imageData[j] = getDataURL(img);
+      imagesLoaded++;
+      if(imagesLoaded==images.length){
+        cb(imageData);
+      }
+    };
+    img.src = images[j];
+  };
       
   for(var i = 0;i<images.length;i++){
-    (function(){
-      var j = i,
-          img = new Image();
-      img.onload=function(){
-        imageData[j] = getDataURL(img);
-        imagesLoaded++;
-        if(imagesLoaded==images.length){
-          cb(imageData);
-        }
-      }
-      img.src = images[j];
-    })();
+    loadHandler(i);
   }
+};
+
+function generateLayoutXml(layout, width, height) {
+  var xml;
+  if(layout.length !== 0){
+    xml = '<Layout>\n';
+    for(var i = 0; i<layout.length; i++) {
+      var elem = layout[i];
+    
+      xml += '<DisplayObject type="'+elem.type+'" top="'+elem.y/height+
+        '" left="'+elem.x/width+'" width="'+elem.width/width+
+        '" height="'+elem.height/height+'"'+
+        ' id="' +(i+1)+ '"';
+      
+      if(elem.handler) {
+        xml += ' functionHandler="'+elem.handler+'"';
+      }
+
+      if(elem.text) {
+        xml += ' text="'+elem.text+'" textSize="' + Number(elem.textSize) / height + '"';
+      }
+
+      if(elem.color !== undefined) {
+        xml += ' color="' + elem.color + '"';
+      }
+
+      if(elem.hidden) {
+        xml += ' hidden="yes"';
+      }
+
+      xml += ' >';
+
+      if(elem.type==="image"){
+        xml+='<Asset name="up" resourceRef="'+(elem.image+1)+'" />';
+      } else if(elem.type === "button") {
+        xml+='<Asset name="up" resourceRef="'+(elem.imageUp+1)+'" />';
+        xml+='<Asset name="down" resourceRef="'+(elem.imageDown+1)+'" />';
+      }
+      xml+='</DisplayObject>\n';
+    }
+
+    xml+= '</Layout>\n';
+  } else {
+    // No Layout was supplied
+    xml = '<Layout/>\n';
+  }
+
+  return xml;
 }
 
-function generateXMLFromdesign(design,imageData){
-  
-  var width,height;
-  
-  if(bm.options.design.orientation=="portrait"){
-    width = 320;
-    height = 480;
-  } else{
-    width = 480;
-    height = 320;
+function clone(obj) {
+  var target = {};
+  for (var i in obj) {
+    if (obj.hasOwnProperty(i)) {
+      target[i] = obj[i];
+    }
+  }
+  return target;
+}
+
+function cloneDesign(source) {
+  var out = clone(source),
+      sourceLayout = source.layout,
+      length = sourceLayout.length,
+      clonedLayout = new Array(length);
+
+  while(length--) {
+    clonedLayout[length] = clone(sourceLayout[length]);
+  }
+
+  out.layout = clonedLayout;
+  return out;
+}
+
+bm.cloneDesign = cloneDesign;
+
+bm.generateControllerXML = function(design,imageData) {
+
+  if(design.orientation=="portrait"){
+    design.width = 320;
+    design.height = 480;
+  } else {
+    design.width = 480;
+    design.height = 320;
   }
   
   var xml = '<?xml version="1.0" encoding="utf-8"?>\n'+
@@ -843,57 +932,26 @@ function generateXMLFromdesign(design,imageData){
             '" accelerometerEnabled="'+(design.accelerometerEnabled?'yes':'no')+'">\n';
   
   // Create Resources Section
-  if(imageData.length!=0){ 
+  if(imageData.length!==0){
     xml+= '<Resources>\n';
-    for(var i = 0;i<imageData.length;i++){
-      xml+='<Resource id="'+(i+1)+'" type="image">\n';
-        xml+='<data><![CDATA['+imageData[i]+']]></data>\n';
-      xml+='</Resource>\n';
-    }  
+    for(var i = 0; i<imageData.length;i++){
+      xml+='<Resource id="'+(i+1)+'" type="image"><data><![CDATA['+imageData[i]+']]></data></Resource>\n';
+    }
     xml+= '</Resources>\n';
   } else {
     // No Resources were supplied
     xml+= '<Resources/>\n';
   }
   // Create Layout Section
-  if(design.layout.length!=0){   
-    xml+= '<Layout>\n';
-    for(var i = 0;i<design.layout.length;i++){
-      
-      // NOTE: I ensure all DisplayObjects have handler attributes, but
-      // this may not be necessary. Talk to Shaules/Zach to find out.
-      // For now I do this so that users of the JS SDK don't need to provide something
-      var handler = design.layout[i].handler;
-      if(design.layout[i].type=="image"){
-        handler = "nullHandler";
-      }
-    
-      xml+='<DisplayObject type="'+design.layout[i].type+'" top="'+design.layout[i].y/height+'" left="'+design.layout[i].x/width+'" width="'+design.layout[i].width/width+'" height="'+design.layout[i].height/height+'" functionHandler="'+handler+'">\n';
-      if(design.layout[i].type=="image"){
-        xml+='<Asset name="up" resourceRef="'+(design.layout[i].image+1)+'" />\n';
-      } else {
-        xml+='<Asset name="up" resourceRef="'+(design.layout[i].imageUp+1)+'" />\n';
-        xml+='<Asset name="down" resourceRef="'+(design.layout[i].imageDown+1)+'" />\n';
-      }
-      xml+='</DisplayObject>\n';
-    }  
-    xml+= '</Layout>\n';  
-  } else {
-    // No Layout was supplied
-    xml+= '<Layout/>\n';
-  }
-  xml+='</BMApplicationScheme>';
+  xml += generateLayoutXml(design.layout, design.width, design.height);
   
-  //xml = '<?xml version="1.0" encoding="utf-8"?><BMApplicationScheme version="0.1" orientation="landscape" touchEnabled="yes" accelerometerEnabled="no"><Resources /><Layout /></BMApplicationScheme>';
-  //xml = //xml.replace(/\n/g,'');
-  //console.log(xml);
+  xml+='</BMApplicationScheme>';
   return xml;
-}
+};
 
-bm.generateControllerXML = function(imageData){
-  var xml = generateXMLFromdesign(bm.options.design,imageData);
-  return xml;
-}
+bm.generateUpdateXml = function(design) {
+  return '<BMApplicationScheme>' + generateLayoutXml(design.layout, design.width, design.height) + '</BMApplicationScheme>';
+};
 
 })(BrassMonkey);
 (function(bm){
@@ -1070,6 +1128,8 @@ bm.Device = bm.EventEmitter.extend({
 
     return (this.capabilities & capabilityFlags[feature]) !== 0;
   }
+
+
   
 });
 
@@ -2194,7 +2254,7 @@ var localAddress = {
 };
 
 var removeConnection = function(connection) {
-  var index = connections.indexOf(connections);
+  var index = connections.indexOf(connection);
   if(index >= 0)  {
     connections.splice(index, 1);
     bm.removeDevice(connection);
@@ -2240,6 +2300,7 @@ var Connection = bm.Device.extend({
     socket = this.socket = new WebSocket("ws://" + host + ":" + port);
     this.sequence = 0;
     this.capabilities = 0;
+    this.controlsSent = false;
 
     this.touchEnabled = bm.options.design.touchEnabled;
     this.accelerometerEnabled = bm.options.design.accelerometerEnabled;
@@ -2314,6 +2375,17 @@ var Connection = bm.Device.extend({
       this.gyroInterval = interval;
       this.sendInvoke("setGyroInterval", [['f',interval]]);
     }
+  },
+
+  editDesign : function () {
+    if(this.design === undefined) {
+      this.design = bm.cloneDesign(bm.options.design);
+      var connection = this;
+      this.design.commit = function() {
+        updateControlScheme(connection, this);
+      };
+    }
+    return this.design;
   }
 
 });
@@ -2346,8 +2418,6 @@ generateSensorMethods('accelerometer');
 generateSensorMethods('orientation');
 
 var notify = function(connection, type, event) {
-  //TODO: remove debug log
-  bm.log("notify: " + type);
   connection.trigger(type, event);
   bm.trigger(type, event);
 };
@@ -2359,6 +2429,8 @@ cp.onMessage = function(message) {
 
   //bm.log("GOT MESSAGE: " + JSON.stringify(packet));
   if(CHANNEL_MESSAGE === channel) {
+    // TODO: remove this after registry
+    this.name = packet.deviceName;
     this.handleInvoke(packet.message);
   }
   else if(CHANNEL_SHAKE === channel) {
@@ -2375,7 +2447,6 @@ cp.onMessage = function(message) {
     //        may out weight that.
     var touches = packet.message.touches,
         len = touches.length;
-    console.log(len);
     for(var i = 0; i<len;i++){
       // NOTE:  Touch ids are made from a combination of the device id and the in coming touch id
       //        so that they are unique for clients of the SDK to be able to identify them as unique
@@ -2412,6 +2483,7 @@ cp.close = function() {
 cp.handleInvoke = function(invoke) {
   switch(invoke.method) {
     case "RequestXML":
+      notify(this, "controlscheme", {device:this});
       this.sendControlScheme();
       break;
 
@@ -2470,13 +2542,32 @@ cp.handleButtonInvoke = function(invoke) {
   }
 };
 
-cp.sendControlScheme = function() {
-  for(var i = 0; i < controlSchemeChunks.length; ++i) {
-    this.sendPacket({
+var sendChunks = function(connection, chunks) {
+  for(var i = 0; i < chunks.length; ++i) {
+    connection.sendPacket({
       channel : CHANNEL_BYTE,
-      message : controlSchemeChunks[i]
+      message : chunks[i]
     });
   }
+};
+
+var updateControlScheme = function(connection, design) {
+  if(connection.controlsSent) {
+    console.time("update");
+    sendChunks(connection, generateUpdateChunks(bm.generateUpdateXml(design)));
+    console.timeEnd("update");
+  }
+};
+
+cp.sendControlScheme = function() {
+  bm.log(this.design);
+  if(this.design) {
+    sendChunks(this, generateControlChunks(bm.generateControllerXML(this.design, cachedImageData)));
+  }
+  else {
+    sendChunks(this, controlSchemeChunks);
+  }
+  this.controlsSent = true;
 };
 
 cp.sendInvoke = function(method, params) {
@@ -2789,7 +2880,14 @@ if(INCLUDE_UNUSED_ENCODERS) {
 }
 
 var controlSchemeChunks;
-var generateByteChunks = function(xml) {
+var cachedImageData;
+var generateControlChunks = function(xml) {
+  return generateByteChunks(xml, 'testXML');
+};
+var generateUpdateChunks = function(xml) {
+  return generateByteChunks(xml, 'updateXML');
+};
+var generateByteChunks = function(xml, type) {
   var MAX_CHUNK_SIZE = 1024*32,
     chunks = [],
     xmlLength = xml.length,
@@ -2803,7 +2901,7 @@ var generateByteChunks = function(xml) {
 
     chunks.push({
       encodeType : ENCODE_BYTE_CHUNK,
-      setId: 'testXML',
+      setId: type,
       startByte: totalBytes,
       chunkSize: chunkSize,
       data: encoded
@@ -2818,8 +2916,6 @@ var generateByteChunks = function(xml) {
 
   return chunks;
 };
-
-
 
 function createDebugControls(){
   // Create a DOM element to hold the elements of the controller layout
@@ -2842,16 +2938,7 @@ function createDebugControls(){
   startButton.onclick = function(){
     // Store IP address
     setCookie("ipaddress",ipAddress.value);
-  
-    // Load all of the controller images and then generate
-    // the base64 encoded version of their data for sending
-    // to the controller app devices as they connect.
-    // TODO: Can we do work in parallel with this?
-    bm.loadImages(bm.options.design.images,function(imageData){
-      var xml = bm.generateControllerXML(imageData);
-      controlSchemeChunks = generateByteChunks(xml);
-      start(ipAddress.value);
-    });
+    start(ipAddress.value);
   };
   ui.appendChild(startButton);
   
@@ -2901,6 +2988,28 @@ if(bm.detectRuntime()==="websockets"){
   }
 }
 
+var requestConnect = function(deviceInfo) {
+  if(connections.length >= bm.options.maxPlayers) {
+    bm.log("Connections full, not connecting");
+    return;
+  }
+
+  var deviceId = deviceInfo.device.deviceId,
+      deviceName = deviceInfo.device.deviceName,
+      address = deviceInfo.address;
+
+  for(var i = 0; i < connections.length; ++i) {
+    if(connections[i].id === deviceId) {
+      bm.log("already connecting to %s, not connecting", deviceId);
+      return;
+    }
+  }
+
+  var connection = new Connection(deviceId, address.host, address.reliablePort);
+  connection.name = deviceName;
+  connections.push(connection);
+};
+
 bm.WebSocketsRT = bm.Class.extend({
   init:function(){
   },
@@ -2908,9 +3017,25 @@ bm.WebSocketsRT = bm.Class.extend({
     localDevice.id = options.deviceId;
     localDevice.name = options.name;
     bm.log(options.deviceId);
+
+    var registry = this.registry = new bm.RegistryConnection(options);
+    this.registry.onconnectrequest = requestConnect;
+
+    // Load all of the controller images and then generate
+    // the base64 encoded version of their data for sending
+    // to the controller app devices as they connect.
+    // TODO: Can we do work in parallel with this?
+    bm.loadImages(options.design.images,function(imageData){
+      cachedImageData = imageData;
+      var xml = bm.generateControllerXML(bm.options.design, imageData);
+      controlSchemeChunks = generateControlChunks(xml);
+
+      registry.start();
+    });
   },
   stop: function(){
     stop();
+    this.registry.stop();
   }
 });
 
