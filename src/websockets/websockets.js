@@ -58,6 +58,7 @@ var controlModes = {
 
 
 var connections = [];
+var registry;
 
 var packedVersion = packVersion({major:1, minor:4});
 
@@ -80,6 +81,7 @@ var removeConnection = function(connection) {
   if(index >= 0)  {
     connections.splice(index, 1);
     bm.removeDevice(connection);
+    registry.setPlayerCount(connections.length);
   }
 };
 
@@ -100,18 +102,6 @@ var makeInvoke = function(methodName, params) {
 
 var start = function(ipAddress) {
   bm.log("start");
-  
-  connections.push(new Connection("deviceId", ipAddress, 9011));
-};
-
-var stop = function() {
-  var i;
-  for(i = 0; i < connections.length; ++i) {
-    bm.removeDevice(connections[i]); // < Should this be done?
-    connections[i].close();
-  }
-  connections.length = 0;
-  bm.log("stop");
 };
 
 var Connection = bm.Device.extend({
@@ -208,6 +198,11 @@ var Connection = bm.Device.extend({
       };
     }
     return this.design;
+  },
+
+  waitForNewHost : function(deviceToWaitFor) {
+      this.sendInvoke("WaitForNewHost", [['*',deviceToWaitFor]]);
+      this.mode = "wait";
   }
 
 });
@@ -375,9 +370,7 @@ var sendChunks = function(connection, chunks) {
 
 var updateControlScheme = function(connection, design) {
   if(connection.controlsSent) {
-    console.time("update");
     sendChunks(connection, generateUpdateChunks(bm.generateUpdateXml(design)));
-    console.timeEnd("update");
   }
 };
 
@@ -760,7 +753,7 @@ function createDebugControls(){
   startButton.onclick = function(){
     // Store IP address
     setCookie("ipaddress",ipAddress.value);
-    start(ipAddress.value);
+    connections.push(new Connection("deviceId", ipAddress.value, 9011));
   };
   ui.appendChild(startButton);
   
@@ -830,6 +823,7 @@ var requestConnect = function(deviceInfo) {
   var connection = new Connection(deviceId, address.host, address.reliablePort);
   connection.name = deviceName;
   connections.push(connection);
+  registry.setPlayerCount(connections.length);
 };
 
 bm.WebSocketsRT = bm.Class.extend({
@@ -840,8 +834,8 @@ bm.WebSocketsRT = bm.Class.extend({
     localDevice.name = options.name;
     bm.log(options.deviceId);
 
-    var registry = this.registry = new bm.RegistryConnection(options);
-    this.registry.onconnectrequest = requestConnect;
+    registry = new bm.RegistryConnection(options);
+    registry.onconnectrequest = requestConnect;
 
     // Load all of the controller images and then generate
     // the base64 encoded version of their data for sending
@@ -855,9 +849,17 @@ bm.WebSocketsRT = bm.Class.extend({
       registry.start();
     });
   },
-  stop: function(){
-    stop();
-    this.registry.stop();
+  setVisibility : function(visible) {
+    registry.setVisibility(visible);
+  },
+  stop: function() {
+    for(var i = 0; i < connections.length; ++i) {
+      bm.removeDevice(connections[i]); // < Should this be done?
+      connections[i].close();
+    }
+    connections.length = 0;
+    bm.log("stop");
+    registry.stop();
   }
 });
 

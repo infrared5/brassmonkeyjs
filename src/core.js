@@ -315,6 +315,15 @@ var BrassMonkeyClass = EventEmitter.extend({
       console.log.apply(console,arguments);
     }
   },
+
+  /**
+  Sets whether the game can be seen by controllers.
+  
+  @method setVisibility
+  **/
+  setVisibility : function(visible) {
+    this.runtime.setVisibility(visible);
+  },
   
   addDevice: function(device){
     this.devices[device.id] = device;

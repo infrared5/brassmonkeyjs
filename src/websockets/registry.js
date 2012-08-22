@@ -6,6 +6,7 @@ var BMInvoke = function (method,returnMethod,data){
   this.methodName = method;
   this.returnMethod = returnMethod;
   this.data = data;
+  this.ws=32;
 };
 
 var BMAddress = function(host, port) {
@@ -38,6 +39,21 @@ var bind = function(func, target) {
   };
 };
 
+var debounce = function(func, wait, immediate) {
+  var timeout;
+  return function() {
+    var context = this, args = arguments;
+    var later = function() {
+      timeout = null;
+      if (!immediate) func.apply(context, args);
+    };
+    var callNow = immediate && !timeout;
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+    if (callNow) func.apply(context, args);
+  };
+};
+
 var RegistryConnection = function(options) {   
   this.uri = registryUrl;
   this.websocket = null;
@@ -48,7 +64,8 @@ var RegistryConnection = function(options) {
     slotId : 1,
     maxPlayers : options.maxPlayers,
     currentPlayers : 0
-  };   
+  };
+  this.update = debounce(bind(this.update, this), 500);
 };
 
 var rcp = RegistryConnection.prototype;
@@ -59,28 +76,38 @@ rcp.start = function() {
   websocket.onclose = bind(this.onClose, this);
   websocket.onmessage = bind(this.onMessage, this);
   websocket.onerror = bind(this.onError, this);
-  console.log("connecting to registry ");
+  console.log("connecting to registry " + this.uri);
+  this.cancelRetry();
 };
 
 rcp.stop = function() {
   var websocket = this.websocket;
   websocket.onopen = websocket.onclose = websocket.onmessage = websocket.onerror = null;
   websocket.close();
+  this.cancelRetry();
+};
+
+rcp.cancelRetry = function () {
+  if(typeof this.retry === "number") {
+    clearTimeout(this.retry);
+    delete this.retry;
+  }
 };
 
 rcp.onOpen = function(event){
   //event.open
-  var invoke = new BMInvoke("registry.register", "onRegister" , [this.clientInfo]);
-  invoke.ws=32;
-  var payload=JSON.stringify(invoke); 
+  var invoke = new BMInvoke("registry.register", "onRegister" , [this.clientInfo]),
+      payload = JSON.stringify(invoke); 
 
   this.websocket.send(payload);
-  console.log("sent register request "+payload);
+  console.log("sent register request %s", payload);
 };
 
 rcp.onClose = function(event){
   // TODO: event.close
   console.log("registry closed");
+  bm.trigger("registrydisconnected", {});
+  this.retry = setTimeout(bind(this.start, this), 1500);
 };
 
 rcp.onError = function(event){
@@ -88,30 +115,33 @@ rcp.onError = function(event){
   console.log("registry error");
 };
 
-rcp.onMessage = function(event){
-  console.log(event.data);
+var paramValues = function(data) {
+  var length = data.length,
+      i = 0,
+      parameters = [];
+            
+  for (; i < length; ++i) {
+    parameters[i] = data[i].value;  
+  }
+  return parameters;
+};
+
+rcp.onMessage = function(event) {
+  //console.log(event.data);
   //event.message
-  var myObject = JSON.parse(event.data);
+  var message = JSON.parse(event.data);
 
   switch (myObject.ws) {
 
   case 32://invoke
-    var i = myObject.data.length;
-    var j = 0;
-    var parameters = [];
-            
-    while (j < i) {
-      t = myObject.data[j++].value;       
-      parameters.push(t);
-    }
-    
-    fn = this[myObject.methodName];
+    var parameters = paramValues(message.data),
+        fn = this[myObject.methodName];
+
     if(typeof fn === 'function') {        
         fn.apply(this, parameters);
-    }else{
+    } else {
       console.log('RegistryConnection function "%s" not found', myObject.methodName);
     }
-
     break;
 
   case 35://ping      
@@ -123,6 +153,21 @@ rcp.onRegister = function(result) {
   if(!result){//failed, dispatch now. success, dispatch at onHostConnected
     console.log("Failed to register");
   }
+};
+
+rcp.setVisibility = function(visible) {
+  var invoke = new BMInvoke("registry.setVisible", "", [{value:visible}, {value:true}]);
+  this.websocket.send(JSON.stringify(invoke));
+};
+
+rcp.update = function() {
+  var invoke = new BMInvoke("registry.register", "onRegister" , [this.clientInfo]);
+  this.websocket.send(SON.stringify(invoke));
+};
+
+rcp.setPlayerCount = function(playerCount) {
+  this.clientInfo.currentPlayers = playerCount;
+  this.update();
 };
 
 rcp.onHostConnected = function(hostInfo) {

@@ -42,82 +42,77 @@ StringBuffer.prototype.toString = function toString()
 
 var codex = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 
-var Base64 =
+var encode = function (input)
 {
+    var output = new StringBuffer();
 
-    encode : function (input)
+    var enumerator = new Utf8EncodeEnumerator(input);
+    while (enumerator.moveNext())
     {
-        var output = new StringBuffer();
+        var chr1 = enumerator.current;
 
-        var enumerator = new Utf8EncodeEnumerator(input);
-        while (enumerator.moveNext())
+        enumerator.moveNext();
+        var chr2 = enumerator.current;
+
+        enumerator.moveNext();
+        var chr3 = enumerator.current;
+
+        var enc1 = chr1 >> 2;
+        var enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+        var enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
+        var enc4 = chr3 & 63;
+
+        if (isNaN(chr2))
         {
-            var chr1 = enumerator.current;
-
-            enumerator.moveNext();
-            var chr2 = enumerator.current;
-
-            enumerator.moveNext();
-            var chr3 = enumerator.current;
-
-            var enc1 = chr1 >> 2;
-            var enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
-            var enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
-            var enc4 = chr3 & 63;
-
-            if (isNaN(chr2))
-            {
-                enc3 = enc4 = 64;
-            }
-            else if (isNaN(chr3))
-            {
-                enc4 = 64;
-            }
-
-            output.append(codex.charAt(enc1) + codex.charAt(enc2) + codex.charAt(enc3) + codex.charAt(enc4));
+            enc3 = enc4 = 64;
+        }
+        else if (isNaN(chr3))
+        {
+            enc4 = 64;
         }
 
-        return [enumerator.byteCount, output.toString()];
-    },
-
-    decode : function (input)
-    {
-        var output = new StringBuffer();
-
-        var enumerator = new Base64DecodeEnumerator(input);
-        while (enumerator.moveNext())
-        {
-            var charCode = enumerator.current;
-
-            if (charCode < 128)
-                output.append(String.fromCharCode(charCode));
-            else if ((charCode > 191) && (charCode < 224))
-            {
-                enumerator.moveNext();
-                var charCode2 = enumerator.current;
-
-                output.append(String.fromCharCode(((charCode & 31) << 6) | (charCode2 & 63)));
-            }
-            else
-            {
-                enumerator.moveNext();
-                var charCode2 = enumerator.current;
-
-                enumerator.moveNext();
-                var charCode3 = enumerator.current;
-
-                output.append(String.fromCharCode(((charCode & 15) << 12) | ((charCode2 & 63) << 6) | (charCode3 & 63)));
-            }
-        }
-
-        return output.toString();
+        output.append(codex.charAt(enc1) + codex.charAt(enc2) + codex.charAt(enc3) + codex.charAt(enc4));
     }
+
+    return [enumerator.byteCount, output.toString()];
+};
+
+var decode = function (input) {
+    var output = new StringBuffer();
+
+    var enumerator = new Base64DecodeEnumerator(input);
+    while (enumerator.moveNext())
+    {
+        var charCode = enumerator.current;
+
+        if (charCode < 128)
+            output.append(String.fromCharCode(charCode));
+        else if ((charCode > 191) && (charCode < 224))
+        {
+            enumerator.moveNext();
+            var charCode2 = enumerator.current;
+
+            output.append(String.fromCharCode(((charCode & 31) << 6) | (charCode2 & 63)));
+        }
+        else
+        {
+            enumerator.moveNext();
+            var charCode2 = enumerator.current;
+
+            enumerator.moveNext();
+            var charCode3 = enumerator.current;
+
+            output.append(String.fromCharCode(((charCode & 15) << 12) | ((charCode2 & 63) << 6) | (charCode3 & 63)));
+        }
+    }
+
+    return output.toString();
 };
 
 if(btoa) {
     bm.log("using btoa");
-    var original = Base64.encode;
-    Base64.encode = function(input) {
+    var original = encode;
+    encode = function(input) {
         try {
             return [input.length, btoa(input)];
         } catch(e) {
@@ -234,6 +229,6 @@ Base64DecodeEnumerator.prototype =
     }
 };
 
-bm.Base64 = Base64;
+bm.Base64 = {encode:encode};
 
 })(BrassMonkey);
