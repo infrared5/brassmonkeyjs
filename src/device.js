@@ -179,7 +179,7 @@ bm.Device = bm.EventEmitter.extend({
 
   TODO: is this appropriate to document publicly?
   
-  @method waitForHost
+  @method waitForNewHost
   @param {String} hostId The device id of the host to connect to.
   
   **/
