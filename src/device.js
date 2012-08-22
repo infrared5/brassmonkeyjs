@@ -1,10 +1,10 @@
 (function(bm){
 /**
-Each connected device is represented by an instance of this class. 
+Each connected device is represented by an instance of this class.
 
 Communicating with a particular device is done through this class' methods.
 
-@class bm.Device 
+@class bm.Device
 @extends bm.EventEmitter
 **/
 
@@ -15,9 +15,9 @@ bm.Device = bm.EventEmitter.extend({
     /**
     Display name of the user associated with this device.
     
-    If the user is logged in on their device this will be their profile name, otherwise it will be the name they gave their device. 
+    If the user is logged in on their device this will be their profile name, otherwise it will be the name they gave their device.
     
-    @property name 
+    @property name
     @type String
     **/
     this.name = "Name";
@@ -25,7 +25,7 @@ bm.Device = bm.EventEmitter.extend({
     /**
     The unique identifier of this device.
     
-    @property id 
+    @property id
     @type String
     **/
     this.id = "fad2fd2fda2f2f";
@@ -49,7 +49,7 @@ bm.Device = bm.EventEmitter.extend({
   /**
   Enable/Disable touch events.
   
-  Touch events are off by default to reduce network traffic and should only be enabled if you are doing touch based controls. 
+  Touch events are off by default to reduce network traffic and should only be enabled if you are doing touch based controls.
   
   @method enableTouch
   @param {Bool} enable If 'true' touches are enabled, if 'false' touches are disabled.
@@ -61,14 +61,14 @@ bm.Device = bm.EventEmitter.extend({
   
   
   @method setTouchInterval
-  @param {Float} interval The interval in seconds at which touch events will be sent. 
+  @param {Float} interval The interval in seconds at which touch events will be sent.
   
   **/
   
   /**
   Enable/Disable accelerometer events.
   
-  Accelerometer events are off by default to reduce network traffic and should only be enabled if you are doing accelerometer based controls. 
+  Accelerometer events are off by default to reduce network traffic and should only be enabled if you are doing accelerometer based controls.
   
   @method enableAccelerometer
   @param {Bool} enable If 'true' accelerometer events are enabled, if 'false' accelerometer events are disabled.
@@ -80,14 +80,14 @@ bm.Device = bm.EventEmitter.extend({
   
   
   @method setAccelerometerInterval
-  @param {Float} interval The interval in seconds at which accelerometer events will be sent. 
+  @param {Float} interval The interval in seconds at which accelerometer events will be sent.
   
   **/
   
   /**
   Enable/Disable gyroscope events.
   
-  Gyroscope events are off by default to reduce network traffic and should only be enabled if you are doing gyroscope based controls. 
+  Gyroscope events are off by default to reduce network traffic and should only be enabled if you are doing gyroscope based controls.
   
   @method enableGyroscope
   @param {Bool} enable If 'true' gyroscope events are enabled, if 'false' gyroscope events are disabled.
@@ -99,14 +99,14 @@ bm.Device = bm.EventEmitter.extend({
   
   
   @method setGyroscopeInterval
-  @param {Float} interval The interval in seconds at which gyroscope events will be sent. 
+  @param {Float} interval The interval in seconds at which gyroscope events will be sent.
   
   **/
   
   /**
   Enable/Disable orientation events.
   
-  Touch events are off by default to reduce network traffic and should only be enabled if you are doing touch based controls. 
+  Touch events are off by default to reduce network traffic and should only be enabled if you are doing touch based controls.
   
   @method enableOrientation
   @param {Bool} enable If 'true' orientation events are enabled, if 'false' orientation events are disabled.
@@ -118,7 +118,7 @@ bm.Device = bm.EventEmitter.extend({
   
   
   @method setOrientationInterval
-  @param {Float} interval The interval in seconds at which orientation events will be sent. 
+  @param {Float} interval The interval in seconds at which orientation events will be sent.
   
   **/
   
@@ -135,7 +135,7 @@ bm.Device = bm.EventEmitter.extend({
     
     **"navigation"** Show the built in navigation input layout.
   
-    **"wait"** Show the waiting/loading screen. 
+    **"wait"** Show the waiting/loading screen.
   
   **/
   
@@ -173,6 +173,16 @@ bm.Device = bm.EventEmitter.extend({
     return (this.capabilities & capabilityFlags[feature]) !== 0;
   }
 
+/**
+  Tells the device to connect to a host with the given id after it
+  shows up in the device list.
+
+  TODO: is this appropriate to document publicly?
+  
+  @method waitForHost
+  @param {String} hostId The device id of the host to connect to.
+  
+  **/
 
   
 });
