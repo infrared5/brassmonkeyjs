@@ -162,7 +162,7 @@ rcp.setVisibility = function(visible) {
 
 rcp.update = function() {
   var invoke = new BMInvoke("registry.register", "onRegister" , [this.clientInfo]);
-  this.websocket.send(SON.stringify(invoke));
+  this.websocket.send(JSON.stringify(invoke));
 };
 
 rcp.setPlayerCount = function(playerCount) {

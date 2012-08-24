@@ -60,7 +60,8 @@ var controlModes = {
 var connections = [];
 var registry;
 
-var packedVersion = packVersion({major:1, minor:4});
+var version = {major:1, minor:5},
+    minimumVersion = version;
 
 var localDevice = {
   id : "sadkldsjadsjladsjklsaklasdkljsadla",
@@ -100,10 +101,6 @@ var makeInvoke = function(methodName, params) {
   };
 };
 
-var start = function(ipAddress) {
-  bm.log("start");
-};
-
 var Connection = bm.Device.extend({
   init : function(deviceId, host, port) {
     var socket;
@@ -135,7 +132,7 @@ var Connection = bm.Device.extend({
   },
 
   onOpen : function() {
-    var handshake = [packedVersion, packedVersion];
+    var handshake = [packVersion(version), packVersion(minimumVersion)];
     this.socket.send(JSON.stringify(handshake));
     bm.log("CONNECTED");
   },
@@ -143,7 +140,6 @@ var Connection = bm.Device.extend({
   onVersion : function(message) {
     var json = JSON.parse(message.data);
     bm.log("GOT VERSION");
-
     // TODO: verify version
     this.sendPacket({
       type : PACKET_ACK,
@@ -419,6 +415,10 @@ function unpackVersion(packed) {
     major: (packed >> 24)&0xFF,
     minor: (packed >> 16)&0xFF
   };
+}
+
+function compareVersion(version, minimum) {
+  return version.major === minimum.major && version.minor >= minimum.minor;
 }
 
 var INCLUDE_UNUSED_ENCODERS = false;
@@ -836,6 +836,11 @@ bm.WebSocketsRT = bm.Class.extend({
 
     registry = new bm.RegistryConnection(options);
     registry.onconnectrequest = requestConnect;
+
+    var minimum = options.minimumVersion;
+    if(minimum && compareVersion(minimum, minimumVersion)) {
+      minimumVersion = minimum;
+    }
 
     // Load all of the controller images and then generate
     // the base64 encoded version of their data for sending

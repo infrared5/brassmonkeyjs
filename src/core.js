@@ -572,4 +572,5 @@ Event indicating the user shook their device.
 @param {bm.Device} device Device that generated this event.
 **/
 
+
 })();
