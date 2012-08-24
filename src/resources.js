@@ -80,11 +80,25 @@ var loadImages = function(images, callback){
 
 bm.loadImages = loadImages;
 
+var getResourceId = function(resources, name) {
+  if(!name) {
+    return -1;
+  }
+
+  var index = resources.indexOf(name);
+  if(index < 0) {
+    index = resources.length;
+    resources.push(name);
+  }
+  return index+1;
+};
+
 function generateLayoutXml(design) {
   var layout = design.layout,
       width = design.width,
       height = design.height,
-      lastId = design.lastObjectId || 0;
+      resources = design._resources;
+      lastId = design._lastObjectId || 0;
 
   var xml;
   if(layout.length !== 0){
@@ -118,10 +132,10 @@ function generateLayoutXml(design) {
       xml += ' >';
 
       if(elem.type==="image"){
-        xml+='<Asset name="up" resourceRef="'+(elem.image+1)+'" />';
+        xml+='<Asset name="up" resourceRef="'+getResourceId(resources, elem.src)+'" />';
       } else if(elem.type === "button") {
-        xml+='<Asset name="up" resourceRef="'+(elem.imageUp+1)+'" />';
-        xml+='<Asset name="down" resourceRef="'+(elem.imageDown+1)+'" />';
+        xml+='<Asset name="up" resourceRef="'+getResourceId(resources, elem.srcUp)+'" />';
+        xml+='<Asset name="down" resourceRef="'+getResourceId(resources, elem.srcDown)+'" />';
       }
       xml+='</DisplayObject>\n';
     }
@@ -132,7 +146,7 @@ function generateLayoutXml(design) {
     xml = '<Layout/>\n';
   }
 
-  design.lastObjectId = lastId;
+  design._lastObjectId = lastId;
 
   return xml;
 }
@@ -157,11 +171,49 @@ function cloneDesign(source) {
     clonedLayout[length] = clone(sourceLayout[length]);
   }
 
+  if(out._resources) {
+    out._resources = out._resources.slice();
+  }
+
   out.layout = clonedLayout;
   return out;
 }
 
 bm.cloneDesign = cloneDesign;
+
+var collectResources = function(design) {
+  var layout = design.layout,
+      resources = design._resources;
+
+  resources = resources || (design.preload ? design.preload.slice() : []);
+
+  for(var i = 0; i<layout.length; i++) {
+    var elem = layout[i];
+
+    if(elem.type==="image"){
+      getResourceId(resources, elem.src);
+    } else if(elem.type === "button") {
+      getResourceId(resources, elem.srcUp);
+      getResourceId(resources, elem.srcDown);
+    }
+  }
+
+  design._resources = resources;
+  return resources;
+};
+
+var generateResourceXml = function(design, imageData) {
+
+  var lastResource = design._lastResource || 0;
+  var xml = '<Resources>\n';
+  for(var i = lastResource; i<imageData.length;i++){
+    xml += '<Resource id="'+(i+1)+'" type="image"><data><![CDATA['+imageData[i]+']]></data></Resource>\n';
+  }
+  xml += '</Resources>\n';
+
+  design.lastResource = imageData.length;
+  return xml;
+};
 
 var buildControllerXML = function(design,imageData) {
 
@@ -177,27 +229,20 @@ var buildControllerXML = function(design,imageData) {
             '<BMApplicationScheme version="0.1" orientation="'+design.orientation+
             '" touchEnabled="'+(design.touchEnabled?'yes':'no')+
             '" accelerometerEnabled="'+(design.accelerometerEnabled?'yes':'no')+'">\n';
-  
-  // Create Resources Section
-  if(imageData.length!==0){
-    xml+= '<Resources>\n';
-    for(var i = 0; i<imageData.length;i++){
-      xml+='<Resource id="'+(i+1)+'" type="image"><data><![CDATA['+imageData[i]+']]></data></Resource>\n';
-    }
-    xml+= '</Resources>\n';
-  } else {
-    // No Resources were supplied
-    xml+= '<Resources/>\n';
-  }
-  // Create Layout Section
+
+  xml += generateResourceXml(design, imageData);
   xml += generateLayoutXml(design);
   
   xml+='</BMApplicationScheme>';
   return xml;
 };
 
+bm.preloadDesignImages = function(design) {
+  loadImages(collectResources(design));
+};
+
 bm.generateControllerXML = function(design, callback) {
-  loadImages(design.images, function(imageData) {
+  loadImages(collectResources(design), function(imageData) {
     callback(buildControllerXML(design, imageData));
   });
 };

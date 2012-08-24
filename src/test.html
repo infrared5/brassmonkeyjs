@@ -32,14 +32,10 @@
         orientation: "portrait",
         touchEnabled: false,
         accelerometerEnabled: false,
-        images:[
-          '../examples/shared/background.png',
-          '../examples/buttons/button-up.png',
-          '../examples/buttons/button-down.png'
-        ],
+        preload:[],
         layout:[{
             type:   "image",
-            image:  0,
+            src:  '../examples/shared/background.png',
             x:      0,
             y:      0,
             width:  320,
@@ -47,8 +43,8 @@
           }, {
             type:       "button",
             handler:    "push",
-            imageUp:    1,
-            imageDown:  2,
+            srcUp:      '../examples/buttons/button-up.png',
+            srcDown:    '../examples/buttons/button-down.png',
             x:          (320-160)/2-3,
             y:          (480-160)/2,
             width:      160,
@@ -64,7 +60,7 @@
             height:     160
           },{
             type:       "image",
-            image:      1,
+            src:        '../examples/buttons/button-up.png',
             x:          0,
             y:          0,
             width:      40,
@@ -148,11 +144,11 @@
     });
 
 
-    bm.on('controlscheme', function(e) {
+    /*bm.on('controlscheme', function(e) {
       var controls = e.device.editDesign();
       controls.layout[2].text = "hello, " + e.device.name;
       controls.commit();
-    });
+    });*/
     
     function onload(){
       // Initialize canvas to black.      

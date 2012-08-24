@@ -852,11 +852,7 @@ bm.WebSocketsRT = bm.Class.extend({
       minimumVersion = minimum;
     }
 
-    // Load all of the controller images and then generate
-    // the base64 encoded version of their data for sending
-    // to the controller app devices as they connect.
-    // TODO: Can we do work in parallel with this?
-    bm.loadImages(options.design.images);
+    bm.preloadDesignImages(options.design);
     registry.start();
   },
   setVisibility : function(visible) {
