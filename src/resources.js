@@ -11,29 +11,70 @@ function getDataURL(img){
   return str;
 }
 
-bm.loadImages = function(images,cb){
-  // Early out if there were zero images in the list
-  if(images.length===0){
-    cb([]);
+var cachedImages = {};
+var requests = [];
+var pendingImages = {};
+
+var hasImages = function(request) {
+  for(var i = request.length-1; i >= 0; --i) {
+    if(!(request[i] in cachedImages)) {
+      return false;
+    }
+  }
+
+  return true;
+};
+
+var gatherImages = function(request) {
+  var out = [];
+  for(var i = 0; i < request.length; ++i) {
+    out[i] = cachedImages[request[i]];
+  }
+
+  return out;
+};
+
+var checkCallbacks = function() {
+  for(var i = requests.length-1; i >= 0 ; --i) {
+    var images = requests[i].images;
+
+    if(hasImages(images)) {
+      requests[i].callback(gatherImages(images));
+      requests.splice(i, 1);
+    }
+  }
+};
+
+var loadImage = function(url) {
+  if(url in cachedImages || url in pendingImages) {
     return;
   }
-  
-  var imagesLoaded = 0,
-      imageData = new Array(images.length);
-      loadHandler = function(j) {
-    var img = new Image();
-    img.onload = function(){
-      imageData[j] = getDataURL(img);
-      imagesLoaded++;
-      if(imagesLoaded==images.length){
-        cb(imageData);
-      }
-    };
-    img.src = images[j];
+
+  pendingImages[url] = true;
+
+  var image = new Image();
+  image.onload = function(){
+    pendingImages[url] = false;
+    cachedImages[url] = getDataURL(image);
+    checkCallbacks();
   };
-      
+  image.src = url;
+};
+
+bm.loadImages = function(images, callback){
+  if(hasImages(images)){
+    if(callback) {
+      callback(gatherImages(images));
+    }
+    return;
+  }
+
+  if(callback) {
+    requests.push({images:images, callback:callback});
+  }
+
   for(var i = 0;i<images.length;i++){
-    loadHandler(i);
+    loadImage(images[i]);
   }
 };
 
