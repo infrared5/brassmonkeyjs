@@ -97,8 +97,8 @@ function generateLayoutXml(design) {
   var layout = design.layout,
       width = design.width,
       height = design.height,
-      resources = design._resources;
-      lastId = design._lastObjectId || 0;
+      resources = design.__resources__;
+      lastId = design.__lastObjectId__ || 0;
 
   var xml;
   if(layout.length !== 0){
@@ -106,15 +106,15 @@ function generateLayoutXml(design) {
     for(var i = 0; i<layout.length; i++) {
       var elem = layout[i];
       
-      elem.id = elem.id || ++lastId;
+      elem.__id__ = elem.__id__ || ++lastId;
     
       xml += '<DisplayObject type="'+elem.type+'" top="'+elem.y/height+
         '" left="'+elem.x/width+'" width="'+elem.width/width+
         '" height="'+elem.height/height+'"'+
-        ' id="' +elem.id+ '"';
+        ' id="' +elem.__id__+ '"';
       
-      if(elem.handler) {
-        xml += ' functionHandler="'+elem.handler+'"';
+      if(elem.type === "button" && elem.id) {
+        xml += ' functionHandler="'+elem.id+'"';
       }
 
       if(elem.text) {
@@ -146,7 +146,7 @@ function generateLayoutXml(design) {
     xml = '<Layout/>\n';
   }
 
-  design._lastObjectId = lastId;
+  design.__lastObjectId__ = lastId;
 
   return xml;
 }
@@ -171,8 +171,8 @@ function cloneDesign(source) {
     clonedLayout[length] = clone(sourceLayout[length]);
   }
 
-  if(out._resources) {
-    out._resources = out._resources.slice();
+  if(out.__resources__) {
+    out.__resources__ = out.__resources__.slice();
   }
 
   out.layout = clonedLayout;
@@ -183,7 +183,7 @@ bm.cloneDesign = cloneDesign;
 
 var collectResources = function(design) {
   var layout = design.layout,
-      resources = design._resources;
+      resources = design.__resources__;
 
   resources = resources || (design.preload ? design.preload.slice() : []);
 
@@ -198,20 +198,20 @@ var collectResources = function(design) {
     }
   }
 
-  design._resources = resources;
+  design.__resources__ = resources;
   return resources;
 };
 
 var generateResourceXml = function(design, imageData) {
 
-  var lastResource = design._lastResource || 0;
+  var lastResource = design.__lastResource__ || 0;
   var xml = '<Resources>\n';
   for(var i = lastResource; i<imageData.length;i++){
     xml += '<Resource id="'+(i+1)+'" type="image"><data><![CDATA['+imageData[i]+']]></data></Resource>\n';
   }
   xml += '</Resources>\n';
 
-  design.lastResource = imageData.length;
+  design.__lastResource__ = imageData.length;
   return xml;
 };
 
