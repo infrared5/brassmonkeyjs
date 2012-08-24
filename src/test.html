@@ -35,6 +35,7 @@
         preload:[],
         layout:[{
             type:   "image",
+            id:     "bg",
             src:    '../examples/shared/background.png',
             x:      0,
             y:      0,
@@ -76,22 +77,22 @@
     });
     
     bm.on('buttondown', function(e){
-      if(e.id="push"){
+      if(e.id === "push"){
         var button = document.getElementById('button');
         button.style.background = "red";
 
         var controls = e.device.editDesign();
-        controls.layout[0].hidden = true;
+        controls.get('bg').hidden = true;
         controls.commit();
       }
     });
     bm.on('buttonup', function(e){
-      if(e.id="push"){
+      if(e.id === "push"){
         var button = document.getElementById('button');
         button.style.background = "#ffafaf";
 
         var controls = e.device.editDesign();
-        controls.layout[0].hidden = false;
+        controls.get('bg').hidden = false;
         controls.layout[2].color = "0000FF";
         controls.layout[2].x = controls.layout[2].x+10;
         controls.commit();

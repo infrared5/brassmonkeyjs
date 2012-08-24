@@ -192,6 +192,7 @@ var Connection = bm.Device.extend({
       this.design.commit = function() {
         updateControlScheme(connection, this);
       };
+      this.design.get = controlSchemeGet;
     }
     return this.design;
   },
@@ -202,6 +203,17 @@ var Connection = bm.Device.extend({
   }
 
 });
+
+var controlSchemeGet = function(id) {
+  var layout = this.layout;
+  for(var i = 0; i < layout.length; ++i) {
+    if(layout[i].id === id) {
+      return layout[i];
+    }
+  }
+
+  throw new Error("could not find control scheme element with id " + id);
+};
 
 var cp = Connection.prototype;
 
@@ -348,10 +360,10 @@ cp.handleButtonInvoke = function(invoke) {
   var value = invoke.params[0][1];
 
   if(value === "up") {
-    notify(this, "buttonup", {device:this, button:invoke.method});
+    notify(this, "buttonup", {device:this, id:invoke.method});
   }
   else if(value === "down") {
-    notify(this, "buttondown", {device:this, button:invoke.method});
+    notify(this, "buttondown", {device:this, id:invoke.method});
   }
 };
 
