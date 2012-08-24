@@ -1,6 +1,6 @@
 (function(bm) {
 
-var registryUrl = "ws://76.104.235.243:6262/registry";
+var registryUrl = "ws://qaregistry.monkeysecurity.com:6262/registry";
 
 var BMInvoke = function (method,returnMethod,data){
   this.methodName = method;
@@ -131,16 +131,16 @@ rcp.onMessage = function(event) {
   //event.message
   var message = JSON.parse(event.data);
 
-  switch (myObject.ws) {
+  switch (message.ws) {
 
   case 32://invoke
     var parameters = paramValues(message.data),
-        fn = this[myObject.methodName];
+        fn = this[message.methodName];
 
     if(typeof fn === 'function') {        
         fn.apply(this, parameters);
     } else {
-      console.log('RegistryConnection function "%s" not found', myObject.methodName);
+      console.log('RegistryConnection function "%s" not found', message.methodName);
     }
     break;
 
@@ -161,7 +161,7 @@ rcp.setVisibility = function(visible) {
 };
 
 rcp.update = function() {
-  var invoke = new BMInvoke("registry.register", "onRegister" , [this.clientInfo]);
+  var invoke = new BMInvoke("registry.update", "" , [this.clientInfo]);
   this.websocket.send(JSON.stringify(invoke));
 };
 
