@@ -8,7 +8,7 @@ function getDataURL(img){
   ctx.drawImage(img,0,0);
   
   var str = cvs.toDataURL().replace('data:image/png;base64,','');
-  return str;
+  return {data:str, width:img.width, height:img.height};
 }
 
 var cachedImages = {};
@@ -28,7 +28,7 @@ var hasImages = function(request) {
 var gatherImages = function(request) {
   var out = [];
   for(var i = 0; i < request.length; ++i) {
-    out[i] = cachedImages[request[i]];
+    out[i] = cachedImages[request[i]].data;
   }
 
   return out;
@@ -104,9 +104,23 @@ function generateLayoutXml(design) {
   if(layout.length !== 0){
     xml = '<Layout>\n';
     for(var i = 0; i<layout.length; i++) {
-      var elem = layout[i];
+      var elem = layout[i],
+          src = elem.src || elem.srcUp;
       
       elem.__id__ = elem.__id__ || ++lastId;
+
+      if(elem.width === undefined) {
+          elem.width = cachedImages[src].width;
+      }
+      if(elem.height === undefined) {
+          elem.height = cachedImages[src].height;
+      }
+      if(elem.x === undefined) {
+          elem.x = 0;
+      }
+      if(elem.y === undefined) {
+          elem.y = 0;
+      }
     
       xml += '<DisplayObject type="'+elem.type+'" top="'+elem.y/height+
         '" left="'+elem.x/width+'" width="'+elem.width/width+
