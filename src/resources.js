@@ -37,17 +37,24 @@ bm.loadImages = function(images,cb){
   }
 };
 
-function generateLayoutXml(layout, width, height) {
+function generateLayoutXml(design) {
+  var layout = design.layout,
+      width = design.width,
+      height = design.height,
+      lastId = design.lastObjectId || 0;
+
   var xml;
   if(layout.length !== 0){
     xml = '<Layout>\n';
     for(var i = 0; i<layout.length; i++) {
       var elem = layout[i];
+      
+      elem.id = elem.id || ++lastId;
     
       xml += '<DisplayObject type="'+elem.type+'" top="'+elem.y/height+
         '" left="'+elem.x/width+'" width="'+elem.width/width+
         '" height="'+elem.height/height+'"'+
-        ' id="' +(i+1)+ '"';
+        ' id="' +elem.id+ '"';
       
       if(elem.handler) {
         xml += ' functionHandler="'+elem.handler+'"';
@@ -81,6 +88,8 @@ function generateLayoutXml(layout, width, height) {
     // No Layout was supplied
     xml = '<Layout/>\n';
   }
+
+  design.lastObjectId = lastId;
 
   return xml;
 }
@@ -138,14 +147,14 @@ bm.generateControllerXML = function(design,imageData) {
     xml+= '<Resources/>\n';
   }
   // Create Layout Section
-  xml += generateLayoutXml(design.layout, design.width, design.height);
+  xml += generateLayoutXml(design);
   
   xml+='</BMApplicationScheme>';
   return xml;
 };
 
 bm.generateUpdateXml = function(design) {
-  return '<BMApplicationScheme>' + generateLayoutXml(design.layout, design.width, design.height) + '</BMApplicationScheme>';
+  return '<BMApplicationScheme>' + generateLayoutXml(design) + '</BMApplicationScheme>';
 };
 
 })(BrassMonkey);

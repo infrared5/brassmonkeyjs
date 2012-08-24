@@ -60,7 +60,7 @@ var controlModes = {
 var connections = [];
 var registry;
 
-var version = {major:1, minor:5},
+var version = {major:1, minor:4},
     minimumVersion = version;
 
 var localDevice = {
