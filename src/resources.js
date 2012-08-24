@@ -61,7 +61,7 @@ var loadImage = function(url) {
   image.src = url;
 };
 
-bm.loadImages = function(images, callback){
+var loadImages = function(images, callback){
   if(hasImages(images)){
     if(callback) {
       callback(gatherImages(images));
@@ -77,6 +77,8 @@ bm.loadImages = function(images, callback){
     loadImage(images[i]);
   }
 };
+
+bm.loadImages = loadImages;
 
 function generateLayoutXml(design) {
   var layout = design.layout,
@@ -161,7 +163,7 @@ function cloneDesign(source) {
 
 bm.cloneDesign = cloneDesign;
 
-bm.generateControllerXML = function(design,imageData) {
+var buildControllerXML = function(design,imageData) {
 
   if(design.orientation=="portrait"){
     design.width = 320;
@@ -192,6 +194,12 @@ bm.generateControllerXML = function(design,imageData) {
   
   xml+='</BMApplicationScheme>';
   return xml;
+};
+
+bm.generateControllerXML = function(design, callback) {
+  loadImages(design.images, function(imageData) {
+    callback(buildControllerXML(design, imageData));
+  });
 };
 
 bm.generateUpdateXml = function(design) {

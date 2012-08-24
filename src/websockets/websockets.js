@@ -362,6 +362,8 @@ var sendChunks = function(connection, chunks) {
       message : chunks[i]
     });
   }
+
+  connection.controlsSent = true;
 };
 
 var updateControlScheme = function(connection, design) {
@@ -371,14 +373,23 @@ var updateControlScheme = function(connection, design) {
 };
 
 cp.sendControlScheme = function() {
-  bm.log(this.design);
-  if(this.design) {
-    sendChunks(this, generateControlChunks(bm.generateControllerXML(this.design, cachedImageData)));
+  var self = this,
+      design = this.design;
+
+  if(design) {
+    bm.generateControllerXML(design, function(xml) {
+      sendChunks(self, generateControlChunks(xml));
+    });
   }
-  else {
+  else if(controlSchemeChunks) {
     sendChunks(this, controlSchemeChunks);
   }
-  this.controlsSent = true;
+  else {
+    bm.generateControllerXML(bm.options.design, function(xml) {
+      controlSchemeChunks = generateControlChunks(xml);
+      sendChunks(self, controlSchemeChunks);
+    });
+  }
 };
 
 cp.sendInvoke = function(method, params) {
@@ -695,7 +706,6 @@ if(INCLUDE_UNUSED_ENCODERS) {
 }
 
 var controlSchemeChunks;
-var cachedImageData;
 var generateControlChunks = function(xml) {
   return generateByteChunks(xml, 'testXML');
 };
@@ -846,13 +856,8 @@ bm.WebSocketsRT = bm.Class.extend({
     // the base64 encoded version of their data for sending
     // to the controller app devices as they connect.
     // TODO: Can we do work in parallel with this?
-    bm.loadImages(options.design.images,function(imageData){
-      cachedImageData = imageData;
-      var xml = bm.generateControllerXML(bm.options.design, imageData);
-      controlSchemeChunks = generateControlChunks(xml);
-
-      registry.start();
-    });
+    bm.loadImages(options.design.images);
+    registry.start();
   },
   setVisibility : function(visible) {
     registry.setVisibility(visible);
