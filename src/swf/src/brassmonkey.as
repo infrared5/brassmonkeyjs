@@ -28,7 +28,7 @@ package
 	{
 		internal static var PARAM_CONTROLLER_XML:String="bmControllerXML"
 		
-			
+		
 		private var brassMonkey:BMApplication=new BMApplication(loaderInfo.parameters); 
 		private var _canCall:Boolean=true;
 		private var controlIndex:int=0;
@@ -45,7 +45,7 @@ package
 		{		
 			Security.allowDomain("*");
 			loaderInfo.addEventListener(Event.COMPLETE, onLoaded);
-	
+			
 		}
 		
 		private function onLoaded(event:Event):void
@@ -59,7 +59,7 @@ package
 			var func:String = this.getJSFuncName("boomBa");
 			trace("func ("+func+")");
 			ExternalInterface.call(func,10);
-			
+			brassMonkey.addEventListener(DeviceEvent.CAN_NOT_CONNECT, onDeviceUnreachable);
 			brassMonkey.addEventListener(DeviceEvent.SLOT_DISPLAY_REQUEST, onSlot);
 			brassMonkey.addEventListener(DeviceEvent.DEVICE_AVAILABLE,this.onDeviceDiscovery);
 			brassMonkey.addEventListener(DeviceEvent.DEVICE_LOADED,this.onDeviceConnected);
@@ -83,10 +83,10 @@ package
 				
 			}
 			if(loaderInfo.parameters['bmMaxPlayers'])
-			  nump = loaderInfo.parameters['bmMaxPlayers']
+				nump = loaderInfo.parameters['bmMaxPlayers']
 			
 			brassMonkey.initiate("Brass Monkey",nump,appId);
-
+			
 			ExternalInterface.addCallback("setRegistryVersion", setRegistryVersion);
 			ExternalInterface.addCallback("getRegistryVersion", getRegistryVersion);
 			ExternalInterface.addCallback("getLanDevices", getLanDevices);
@@ -107,7 +107,7 @@ package
 				
 			}
 			//flash.utils.setTimeout(ExternalInterface.call,1000,"bm.onFlashLoadedInternal");
-		//	ExternalInterface.call("bm.onFlashLoadedInternal");		
+			//	ExternalInterface.call("bm.onFlashLoadedInternal");		
 		}
 		
 		public function getJSFuncName (funcName:String): String{
@@ -141,7 +141,7 @@ package
 			var dev:Device = brassMonkey.session.registry.getDevice(deviceId);
 			if(!dev)
 				return;
-	
+			
 			dev.sendPing();
 			
 		}
@@ -185,7 +185,7 @@ package
 			{
 				loadPrivateResources(calback);
 			}
-
+			
 		}
 		
 		private function parseJsonObject(sjodec:Object):void
@@ -226,15 +226,15 @@ package
 			ExternalInterface.addCallback("getDevice", getDevice);	
 			ExternalInterface.addCallback("setWaitMode", setWaitMode);	
 			
-
-		
+			
+			
 			ExternalInterface.addCallback("updateControlPad", updateControlPad);			
 			ExternalInterface.addCallback("closeDevice", closeDevice);
-
+			
 			
 		}
 		
-
+		
 		
 		public function loadPrivateResources(callback:String):void
 		{
@@ -256,7 +256,7 @@ package
 			
 			var lq:LoaderQueue=e.target as LoaderQueue;
 			lq.element.data=lq.base64;
-
+			
 			
 			if(--privateResourcesToLoad == 0)
 			{
@@ -420,14 +420,14 @@ package
 			}
 			if(name==DeviceEvent.NAVIGATION || name==DeviceEvent.KEYBOARD )
 			{
-
+				
 				
 				brassMonkey.addEventListener(name, onCallBack);		
 				callBacks[devId][name]=val;
-						
+				
 			}
 		}
-
+		
 		private function onCallBack(e:DeviceEvent):void
 		{
 			var dev:Device = e.device;
@@ -437,14 +437,14 @@ package
 			
 			
 			var ser:Object={event:e.type,
-					value:e.value,
-					buttons:brassMonkey.clientButtonStates[dev.deviceId],
-					controlSchemeIndex:dev.controlSchemeIndex,
-					deviceId:de.device.deviceId,
-					controlMode:dev.controlMode,
-					deviceName:de.device.deviceName,
-					textContent:de.device.textContent,
-					attributes:de.device.attributes
+				value:e.value,
+				buttons:brassMonkey.clientButtonStates[dev.deviceId],
+				controlSchemeIndex:dev.controlSchemeIndex,
+				deviceId:de.device.deviceId,
+				controlMode:dev.controlMode,
+				deviceName:de.device.deviceName,
+				textContent:de.device.textContent,
+				attributes:de.device.attributes
 			};
 			for(var prop:String in ser.buttons)
 			{
@@ -458,7 +458,7 @@ package
 			ExternalInterface.call(func,ser);
 		}
 		
-
+		
 		
 		public function setCookie(devId:String,name:String,val:String):void
 		{
@@ -479,7 +479,7 @@ package
 				callBacks[dev.deviceId]['onCookie']=callBack
 				dev.attributes.onCookie=callBack;
 				if(!dev.willTrigger(DeviceEvent.GOT_COOKIE))
-				dev.addEventListener(DeviceEvent.GOT_COOKIE, onCookie);
+					dev.addEventListener(DeviceEvent.GOT_COOKIE, onCookie);
 				
 				brassMonkey.session.getCookie(dev,name);
 			}
@@ -623,13 +623,10 @@ package
 		private function onDeviceDiscovery(evt:DeviceEvent):void 
 		{
 			evt.device.controlSchemeIndex=controlIndex;
-
-		
-			
 			
 			evt.device.controlMode=Device.MODE_NAVIGATION;
 			var ser:Object={				
-					deviceId:evt.device.deviceId,
+				deviceId:evt.device.deviceId,
 					deviceName:evt.device.deviceName,
 					controlSchemeIndex:evt.device.controlSchemeIndex,
 					controlMode:evt.device.controlMode,
@@ -640,19 +637,24 @@ package
 			
 			if(results )
 			{
-					trace(results);
-					evt.device.controlMode=results.controlMode;
-					evt.device.controlSchemeIndex=results.controlSchemeIndex;
-					
-					for(var prop:String in results.attributes){
-						evt.device.attributes[prop]=results.attributes[prop];
-					}
+				trace(results);
+				evt.device.controlMode=results.controlMode;
+				evt.device.controlSchemeIndex=results.controlSchemeIndex;
+				
+				for(var prop:String in results.attributes){
+					evt.device.attributes[prop]=results.attributes[prop];
+				}
 			}
 			
 			
 			
 			
 			this.brassMonkey.session.connectDevice(evt.device);	
+		}
+		
+		protected function onDeviceUnreachable(event:DeviceEvent):void
+		{
+			ExternalInterface.call("bm.onDeviceUnreachableInternal",event.device.deviceId);
 		}
 		
 		public function SetNavMode(deviceId:String=""):void
