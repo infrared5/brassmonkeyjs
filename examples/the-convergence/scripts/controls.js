@@ -88,13 +88,6 @@ bm.init({
   }
 });
 
-// Once the device becomes available set it GamePad Mode to
-// show us our custom game controller
-bm.onDeviceAvailable(function(device){  		
-	device.controlMode=bm.MODE_GAMEPAD;
-	return device;
-});
-
 // Listen for button events 
 bm.onInvocation(function(invoke, deviceId){
   // Is the button up or down now

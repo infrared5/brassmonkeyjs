@@ -17,11 +17,6 @@
         accelerometerEnabled: true
       }
     });
-    
-  	bm.onDeviceAvailable(function(device){  		
-  		device.controlMode=bm.MODE_GAMEPAD;
-  		return device;
-  	});
   	
     bm.onBrassMonkeyLoaded(function(a){
     	bm.start();

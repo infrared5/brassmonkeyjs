@@ -27,11 +27,6 @@
         }]
       }
     });
-    
-  	bm.onDeviceAvailable(function(device){  		
-  		device.controlMode=bm.MODE_GAMEPAD;
-  		return device;
-  	});
   	
     bm.onShowSlot(function(color){
       document.getElementById('slot-color').style.background = color;

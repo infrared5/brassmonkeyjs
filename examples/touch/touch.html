@@ -67,13 +67,6 @@
       document.getElementById('slot-color').style.background = color;
     });
     
-    
-  	bm.onDeviceAvailable(function(device){  		
-  		device.controlMode=bm.MODE_GAMEPAD;
-  		return device;
-  	});
-  	
-
     var devicePaintColor = {};
     
     bm.onDeviceConnected(function(device){

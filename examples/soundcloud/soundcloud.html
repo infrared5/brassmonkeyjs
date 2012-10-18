@@ -113,12 +113,6 @@
     bm.onLog(function(str){
       console.log(str);
     });
-    
-  	bm.onDeviceAvailable(function(device){  		
-  		device.controlMode=bm.MODE_GAMEPAD;
-  		return device;
-  	});
-  	
 
     bm.onDeviceConnected(function(device){
       if(window.location.hash=="#groups"){

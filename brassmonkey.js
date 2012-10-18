@@ -250,7 +250,7 @@ function I()
 }
 
 
-bm={version:"0.4.0"};
+bm={version:"0.5.0"};
 bm.MODE_GAMEPAD=0;	
 bm.MODE_KEYBOARD=1;		
 bm.MODE_NAVIGATION=2;		
@@ -395,7 +395,7 @@ bm.onDeviceAvailableInternal=function(a)
 {
 	//console.log('onDeviceAvailableInternal '+ a.deviceId);
 	//portal defaults to nav. 
-	a.controlMode=bm.MODE_NAVIGATION;
+	a.controlMode=bm.MODE_GAMEPAD;
 	
 	for(var i=0;i<bm.da.length;i++)
 	{

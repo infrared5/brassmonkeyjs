@@ -16,11 +16,6 @@
         accelerometerEnabled: false
       }
     });
-    
-  	bm.onDeviceAvailable(function(device){  		
-  		device.controlMode=bm.MODE_GAMEPAD;
-  		return device;
-  	});
   	    
     bm.onDeviceConnected(function(device){
       document.getElementById('log').innerHTML += '<p>A Device Connected: "'+device.deviceName+'" | "'+device.deviceId+'"</p>';

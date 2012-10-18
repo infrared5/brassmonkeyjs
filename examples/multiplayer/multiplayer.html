@@ -17,11 +17,6 @@
         accelerometerEnabled: false
       }
     });
-    
-  	bm.onDeviceAvailable(function(device){  		
-  		device.controlMode=bm.MODE_GAMEPAD;
-  		return device;
-  	});    
 
     var players = {},
         initialMessage = "Connect to 'Multiplayer - SDK Examples' (Requires 2 players)";//with at least 2 players.";

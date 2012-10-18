@@ -610,11 +610,8 @@ package
 		private function onDeviceDiscovery(evt:DeviceEvent):void 
 		{
 			evt.device.controlSchemeIndex=controlIndex;
-
-		
 			
-			
-			evt.device.controlMode=Device.MODE_NAVIGATION;
+			evt.device.controlMode=Device.MODE_GAMEPAD;
 			var ser:Object={				
 					deviceId:evt.device.deviceId,
 					deviceName:evt.device.deviceName,
@@ -635,9 +632,6 @@ package
 						evt.device.attributes[prop]=results.attributes[prop];
 					}
 			}
-			
-			
-			
 			
 			this.brassMonkey.session.connectDevice(evt.device);	
 		}

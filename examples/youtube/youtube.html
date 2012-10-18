@@ -63,11 +63,6 @@
 		  bm.onLog(function(str){
 		    console.log(str);
 		  });
-	    
-	  	bm.onDeviceAvailable(function(device){  		
-	  		device.controlMode=bm.MODE_KEYBOARD;
-	  		return device;
-	  	});
 	  	
 		  bm.onNavigationString(function(deviceId,str){
         if(str=="backDown"){
