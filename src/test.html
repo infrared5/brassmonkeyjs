@@ -25,46 +25,35 @@
       
       appId:"62e822bc0e6b9f22fc158763591845be",
       swfURL: "swf/bin/brassmonkey.swf",
+
+      minimumVersion: {major: 1, minor: 4},
       
       design: {
         orientation: "portrait",
         touchEnabled: false,
         accelerometerEnabled: false,
-        images:[
-          '../examples/shared/background.png',
-          '../examples/buttons/button-up.png',
-          '../examples/buttons/button-down.png'
-        ],
+        preload:[],
         layout:[{
             type:   "image",
-            image:  0,
-            x:      0,
-            y:      0,
-            width:  320,
-            height: 480
+            id:     "bg",
+            src:    '../examples/shared/background.png'
           }, {
             type:       "button",
-            handler:    "push",
-            imageUp:    1,
-            imageDown:  2,
+            id:         "push",
+            srcUp:      '../examples/buttons/button-up.png',
+            srcDown:    '../examples/buttons/button-down.png',
             x:          (320-160)/2-3,
             y:          (480-160)/2,
-            width:      160,
-            height:     160
           }, {
             type:       "text",
             text:       "Hello",
             textSize:   25,
             color:      "FFFFFF",
-            x:          0,
-            y:          0,
             width:      320,
             height:     160
           },{
             type:       "image",
-            image:      1,
-            x:          0,
-            y:          0,
+            src:        '../examples/buttons/button-up.png',
             width:      40,
             height:     40
           }, 
@@ -78,22 +67,22 @@
     });
     
     bm.on('buttondown', function(e){
-      if(e.id="push"){
+      if(e.id === "push"){
         var button = document.getElementById('button');
         button.style.background = "red";
 
         var controls = e.device.editDesign();
-        controls.layout[0].hidden = true;
+        controls.get('bg').hidden = true;
         controls.commit();
       }
     });
     bm.on('buttonup', function(e){
-      if(e.id="push"){
+      if(e.id === "push"){
         var button = document.getElementById('button');
         button.style.background = "#ffafaf";
 
         var controls = e.device.editDesign();
-        controls.layout[0].hidden = false;
+        controls.get('bg').hidden = false;
         controls.layout[2].color = "0000FF";
         controls.layout[2].x = controls.layout[2].x+10;
         controls.commit();
@@ -146,11 +135,11 @@
     });
 
 
-    bm.on('controlscheme', function(e) {
+    /*bm.on('controlscheme', function(e) {
       var controls = e.device.editDesign();
       controls.layout[2].text = "hello, " + e.device.name;
       controls.commit();
-    });
+    });*/
     
     function onload(){
       // Initialize canvas to black.      

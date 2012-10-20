@@ -8,49 +8,127 @@ function getDataURL(img){
   ctx.drawImage(img,0,0);
   
   var str = cvs.toDataURL().replace('data:image/png;base64,','');
-  return str;
+  return {data:str, width:img.width, height:img.height};
 }
 
-bm.loadImages = function(images,cb){
-  // Early out if there were zero images in the list
-  if(images.length===0){
-    cb([]);
-    return;
+var cachedImages = {};
+var requests = [];
+var pendingImages = {};
+
+var hasImages = function(request) {
+  for(var i = request.length-1; i >= 0; --i) {
+    if(!(request[i] in cachedImages)) {
+      return false;
+    }
   }
-  
-  var imagesLoaded = 0,
-      imageData = new Array(images.length);
-      loadHandler = function(j) {
-    var img = new Image();
-    img.onload = function(){
-      imageData[j] = getDataURL(img);
-      imagesLoaded++;
-      if(imagesLoaded==images.length){
-        cb(imageData);
-      }
-    };
-    img.src = images[j];
-  };
-      
-  for(var i = 0;i<images.length;i++){
-    loadHandler(i);
+
+  return true;
+};
+
+var gatherImages = function(request) {
+  var out = [];
+  for(var i = 0; i < request.length; ++i) {
+    out[i] = cachedImages[request[i]].data;
+  }
+
+  return out;
+};
+
+var checkCallbacks = function() {
+  for(var i = requests.length-1; i >= 0 ; --i) {
+    var images = requests[i].images;
+
+    if(hasImages(images)) {
+      requests[i].callback(gatherImages(images));
+      requests.splice(i, 1);
+    }
   }
 };
 
-function generateLayoutXml(layout, width, height) {
+var loadImage = function(url) {
+  if(url in cachedImages || url in pendingImages) {
+    return;
+  }
+
+  pendingImages[url] = true;
+
+  var image = new Image();
+  image.onload = function(){
+    pendingImages[url] = false;
+    cachedImages[url] = getDataURL(image);
+    checkCallbacks();
+  };
+  image.src = url;
+};
+
+var loadImages = function(images, callback){
+  if(hasImages(images)){
+    if(callback) {
+      callback(gatherImages(images));
+    }
+    return;
+  }
+
+  if(callback) {
+    requests.push({images:images, callback:callback});
+  }
+
+  for(var i = 0;i<images.length;i++){
+    loadImage(images[i]);
+  }
+};
+
+bm.loadImages = loadImages;
+
+var getResourceId = function(resources, name) {
+  if(!name) {
+    return -1;
+  }
+
+  var index = resources.indexOf(name);
+  if(index < 0) {
+    index = resources.length;
+    resources.push(name);
+  }
+  return index+1;
+};
+
+function generateLayoutXml(design) {
+  var layout = design.layout,
+      width = design.width,
+      height = design.height,
+      resources = design.__resources__;
+      lastId = design.__lastObjectId__ || 0;
+
   var xml;
   if(layout.length !== 0){
     xml = '<Layout>\n';
     for(var i = 0; i<layout.length; i++) {
-      var elem = layout[i];
+      var elem = layout[i],
+          src = elem.src || elem.srcUp;
+      
+      elem.__id__ = elem.__id__ || ++lastId;
+
+      if(elem.width === undefined) {
+          elem.width = cachedImages[src].width;
+      }
+      if(elem.height === undefined) {
+          elem.height = cachedImages[src].height;
+      }
+      if(elem.x === undefined) {
+          elem.x = 0;
+      }
+      if(elem.y === undefined) {
+          elem.y = 0;
+      }
     
       xml += '<DisplayObject type="'+elem.type+'" top="'+elem.y/height+
         '" left="'+elem.x/width+'" width="'+elem.width/width+
         '" height="'+elem.height/height+'"'+
-        ' id="' +(i+1)+ '"';
+        ' id="' +elem.__id__+ '"';
       
-      if(elem.handler) {
-        xml += ' functionHandler="'+elem.handler+'"';
+      if(elem.type === "button" && elem.id) {
+        xml += ' functionHandler="'+elem.id+'"';
       }
 
       if(elem.text) {
@@ -68,10 +146,10 @@ function generateLayoutXml(layout, width, height) {
       xml += ' >';
 
       if(elem.type==="image"){
-        xml+='<Asset name="up" resourceRef="'+(elem.image+1)+'" />';
+        xml+='<Asset name="up" resourceRef="'+getResourceId(resources, elem.src)+'" />';
       } else if(elem.type === "button") {
-        xml+='<Asset name="up" resourceRef="'+(elem.imageUp+1)+'" />';
-        xml+='<Asset name="down" resourceRef="'+(elem.imageDown+1)+'" />';
+        xml+='<Asset name="up" resourceRef="'+getResourceId(resources, elem.srcUp)+'" />';
+        xml+='<Asset name="down" resourceRef="'+getResourceId(resources, elem.srcDown)+'" />';
       }
       xml+='</DisplayObject>\n';
     }
@@ -81,6 +159,8 @@ function generateLayoutXml(layout, width, height) {
     // No Layout was supplied
     xml = '<Layout/>\n';
   }
+
+  design.__lastObjectId__ = lastId;
 
   return xml;
 }
@@ -105,13 +185,51 @@ function cloneDesign(source) {
     clonedLayout[length] = clone(sourceLayout[length]);
   }
 
+  if(out.__resources__) {
+    out.__resources__ = out.__resources__.slice();
+  }
+
   out.layout = clonedLayout;
   return out;
 }
 
 bm.cloneDesign = cloneDesign;
 
-bm.generateControllerXML = function(design,imageData) {
+var collectResources = function(design) {
+  var layout = design.layout,
+      resources = design.__resources__;
+
+  resources = resources || (design.preload ? design.preload.slice() : []);
+
+  for(var i = 0; i<layout.length; i++) {
+    var elem = layout[i];
+
+    if(elem.type==="image"){
+      getResourceId(resources, elem.src);
+    } else if(elem.type === "button") {
+      getResourceId(resources, elem.srcUp);
+      getResourceId(resources, elem.srcDown);
+    }
+  }
+
+  design.__resources__ = resources;
+  return resources;
+};
+
+var generateResourceXml = function(design, imageData) {
+
+  var lastResource = design.__lastResource__ || 0;
+  var xml = '<Resources>\n';
+  for(var i = lastResource; i<imageData.length;i++){
+    xml += '<Resource id="'+(i+1)+'" type="image"><data><![CDATA['+imageData[i]+']]></data></Resource>\n';
+  }
+  xml += '</Resources>\n';
+
+  design.__lastResource__ = imageData.length;
+  return xml;
+};
+
+var buildControllerXML = function(design,imageData) {
 
   if(design.orientation=="portrait"){
     design.width = 320;
@@ -125,27 +243,26 @@ bm.generateControllerXML = function(design,imageData) {
             '<BMApplicationScheme version="0.1" orientation="'+design.orientation+
             '" touchEnabled="'+(design.touchEnabled?'yes':'no')+
             '" accelerometerEnabled="'+(design.accelerometerEnabled?'yes':'no')+'">\n';
-  
-  // Create Resources Section
-  if(imageData.length!==0){
-    xml+= '<Resources>\n';
-    for(var i = 0; i<imageData.length;i++){
-      xml+='<Resource id="'+(i+1)+'" type="image"><data><![CDATA['+imageData[i]+']]></data></Resource>\n';
-    }
-    xml+= '</Resources>\n';
-  } else {
-    // No Resources were supplied
-    xml+= '<Resources/>\n';
-  }
-  // Create Layout Section
-  xml += generateLayoutXml(design.layout, design.width, design.height);
+
+  xml += generateResourceXml(design, imageData);
+  xml += generateLayoutXml(design);
   
   xml+='</BMApplicationScheme>';
   return xml;
 };
 
+bm.preloadDesignImages = function(design) {
+  loadImages(collectResources(design));
+};
+
+bm.generateControllerXML = function(design, callback) {
+  loadImages(collectResources(design), function(imageData) {
+    callback(buildControllerXML(design, imageData));
+  });
+};
+
 bm.generateUpdateXml = function(design) {
-  return '<BMApplicationScheme>' + generateLayoutXml(design.layout, design.width, design.height) + '</BMApplicationScheme>';
+  return '<BMApplicationScheme>' + generateLayoutXml(design) + '</BMApplicationScheme>';
 };
 
 })(BrassMonkey);

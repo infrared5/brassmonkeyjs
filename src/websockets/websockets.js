@@ -60,7 +60,8 @@ var controlModes = {
 var connections = [];
 var registry;
 
-var packedVersion = packVersion({major:1, minor:4});
+var version = {major:1, minor:4},
+    minimumVersion = version;
 
 var localDevice = {
   id : "sadkldsjadsjladsjklsaklasdkljsadla",
@@ -100,10 +101,6 @@ var makeInvoke = function(methodName, params) {
   };
 };
 
-var start = function(ipAddress) {
-  bm.log("start");
-};
-
 var Connection = bm.Device.extend({
   init : function(deviceId, host, port) {
     var socket;
@@ -135,7 +132,7 @@ var Connection = bm.Device.extend({
   },
 
   onOpen : function() {
-    var handshake = [packedVersion, packedVersion];
+    var handshake = [packVersion(version), packVersion(minimumVersion)];
     this.socket.send(JSON.stringify(handshake));
     bm.log("CONNECTED");
   },
@@ -143,7 +140,6 @@ var Connection = bm.Device.extend({
   onVersion : function(message) {
     var json = JSON.parse(message.data);
     bm.log("GOT VERSION");
-
     // TODO: verify version
     this.sendPacket({
       type : PACKET_ACK,
@@ -196,6 +192,7 @@ var Connection = bm.Device.extend({
       this.design.commit = function() {
         updateControlScheme(connection, this);
       };
+      this.design.get = controlSchemeGet;
     }
     return this.design;
   },
@@ -206,6 +203,17 @@ var Connection = bm.Device.extend({
   }
 
 });
+
+var controlSchemeGet = function(id) {
+  var layout = this.layout;
+  for(var i = 0; i < layout.length; ++i) {
+    if(layout[i].id === id) {
+      return layout[i];
+    }
+  }
+
+  throw new Error("could not find control scheme element with id " + id);
+};
 
 var cp = Connection.prototype;
 
@@ -352,10 +360,10 @@ cp.handleButtonInvoke = function(invoke) {
   var value = invoke.params[0][1];
 
   if(value === "up") {
-    notify(this, "buttonup", {device:this, button:invoke.method});
+    notify(this, "buttonup", {device:this, id:invoke.method});
   }
   else if(value === "down") {
-    notify(this, "buttondown", {device:this, button:invoke.method});
+    notify(this, "buttondown", {device:this, id:invoke.method});
   }
 };
 
@@ -366,6 +374,8 @@ var sendChunks = function(connection, chunks) {
       message : chunks[i]
     });
   }
+
+  connection.controlsSent = true;
 };
 
 var updateControlScheme = function(connection, design) {
@@ -375,14 +385,23 @@ var updateControlScheme = function(connection, design) {
 };
 
 cp.sendControlScheme = function() {
-  bm.log(this.design);
-  if(this.design) {
-    sendChunks(this, generateControlChunks(bm.generateControllerXML(this.design, cachedImageData)));
+  var self = this,
+      design = this.design;
+
+  if(design) {
+    bm.generateControllerXML(design, function(xml) {
+      sendChunks(self, generateControlChunks(xml));
+    });
   }
-  else {
+  else if(controlSchemeChunks) {
     sendChunks(this, controlSchemeChunks);
   }
-  this.controlsSent = true;
+  else {
+    bm.generateControllerXML(bm.options.design, function(xml) {
+      controlSchemeChunks = generateControlChunks(xml);
+      sendChunks(self, controlSchemeChunks);
+    });
+  }
 };
 
 cp.sendInvoke = function(method, params) {
@@ -419,6 +438,10 @@ function unpackVersion(packed) {
     major: (packed >> 24)&0xFF,
     minor: (packed >> 16)&0xFF
   };
+}
+
+function compareVersion(version, minimum) {
+  return version.major === minimum.major && version.minor >= minimum.minor;
 }
 
 var INCLUDE_UNUSED_ENCODERS = false;
@@ -695,7 +718,6 @@ if(INCLUDE_UNUSED_ENCODERS) {
 }
 
 var controlSchemeChunks;
-var cachedImageData;
 var generateControlChunks = function(xml) {
   return generateByteChunks(xml, 'testXML');
 };
@@ -837,17 +859,13 @@ bm.WebSocketsRT = bm.Class.extend({
     registry = new bm.RegistryConnection(options);
     registry.onconnectrequest = requestConnect;
 
-    // Load all of the controller images and then generate
-    // the base64 encoded version of their data for sending
-    // to the controller app devices as they connect.
-    // TODO: Can we do work in parallel with this?
-    bm.loadImages(options.design.images,function(imageData){
-      cachedImageData = imageData;
-      var xml = bm.generateControllerXML(bm.options.design, imageData);
-      controlSchemeChunks = generateControlChunks(xml);
+    var minimum = options.minimumVersion;
+    if(minimum && compareVersion(minimum, minimumVersion)) {
+      minimumVersion = minimum;
+    }
 
-      registry.start();
-    });
+    bm.preloadDesignImages(options.design);
+    registry.start();
   },
   setVisibility : function(visible) {
     registry.setVisibility(visible);
