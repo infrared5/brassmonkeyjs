@@ -87,6 +87,20 @@ html{
   width: 732px;
 }
 
+.note{
+  float: right;
+}
+
+.note a{
+  color: #DA6323;
+}
+
+.examples p{
+  color: #efefef;
+  margin:10px 0px 10px 0px;
+  line-height: 20px; 
+}
+
 .example .wrapper{
 }
 
@@ -266,13 +280,17 @@ a.example{
   
 }
 
-.sdk-intro h1{
+.sdk-intro h1,.section-header{
   color: white;
   padding: 0px 0px 0px 0px;
   position: relative;
   top: 10px;
   font-size: 32px;
   clear: both;
+}
+
+.section-header{
+  padding-bottom: 20px;
 }
 
 .sdk-intro h2{
