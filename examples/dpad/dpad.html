@@ -34,12 +34,67 @@
     bm.onShowSlot(function(color){
       document.getElementById('slot-color').style.background = color;
     });
+    
+    var x = 320,
+        y = 240,
+        lastUpdate = (new Date).getTime();
+    setInterval(function(){
+      var curTime = (new Date).getTime(),
+          timeElapsed = curTime-lastUpdate;
+      lastUpdate = curTime;
+    
+      // Let the DPad update it's states
+      dpad.update();
+      
+      // Display the DPad's latest state
+      document.getElementById('dpad').src = dpad.getCurrentStateImage();
+      
+      if(dpad.getState('right')){
+        x+=4; 
+      }
+      if(dpad.getState('left')){
+        x-=4; 
+      }
+      if(dpad.getState('up')){
+        y-=4; 
+      }
+      if(dpad.getState('down')){
+        y+=4; 
+      }
+      
+      document.getElementById('character').style.marginLeft = x+"px";
+      document.getElementById('character').style.marginTop = y+"px";
+      
+    },1000/30);
 
   </script>
+  <style>
+    #dpad{
+      width: 100px;
+      height: 100px;
+      float: left;
+    }
+    #world{
+      clear: both;
+      width: 640px;
+      height: 480px;
+      background: black;
+    }
+    #character{
+      width: 16px;
+      height: 16px;
+      background: red;
+      position: absolute;
+    }
+  </style>
 </head>
 <body style="margin:0px;background:white;">
-  <div id="slot-color" style="width:100px;height:100px;text-align:center;line-height:100px;font-family:Arial;">Slot Color</div>
+  <div id="slot-color" style="float: left;width:100px;height:100px;text-align:center;line-height:100px;font-family:Arial;">Slot Color</div>
+  <img id="dpad" src="dpad.png" />
   <div id="log"></div>
+  <div id="world">
+    <div id="character"></div>
+  </div>
 </body>
 </html>
 
