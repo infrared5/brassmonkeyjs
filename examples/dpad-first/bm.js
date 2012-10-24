@@ -244,7 +244,6 @@ C()&&y(a,b,c,e)},removeSWF:function(a){g.w3&&B(a)},createCSS:function(a,b,c,f){g
 			e+="<Layout/>\n";
 		}
 		e+="</BMApplicationScheme>";
-		console.log(e.length);
 		return e;
 	}
 				

@@ -1,18 +1,24 @@
 (function(){
+      
   DPad = function(images,layout){
+    // Configurations
     var dpadOffsetX = 41,
         dpadOffsetY = 144,
-        arrowWidth = 130,
-        arrowHeight = 114,
-        // Inner hit rects
-        smallerDpadOffsetX = dpadOffsetX+114,
-        smallerDpadOffsetY = dpadOffsetY+114,
-        smallerArrowWidth = 46,
-        smallerArrowHeight = 42,
+        dpadWidth = 358,
+        dpadHeight = 358,
+        dpadDeadZone = 32,
+        dpadHalfDeadZone = dpadDeadZone/2,
+        dpadCenterX = dpadOffsetX+dpadWidth/2,
+        dpadCenterY = dpadOffsetY+dpadHeight/2,
+        // Hitzone Generation Vars
+        smallestSize = 8,
+        largestSize = 256,
+        dpadRangeWidth = dpadOffsetX*2+dpadWidth,
+        dpadRangeHeight = 640,
         // Draw Mode
         //    "normal" Draws Regularly
         //    "hitrects" Makes the controller display the HitRects of all Rects
-        drawMode = "normal",
+        drawMode = "hitrects",        
         // 
         states = {
           // State that is mutated as BM events come in
@@ -37,110 +43,8 @@
             up:false,
             down:false
           }
-        },
-        // All arrow positions are relative to the dpad's
-        // origin (dpadOffsetX,dpadOffsetY)
-        arrows = {
-          upleft:{
-            x:          0+dpadOffsetX,
-            y:          0+dpadOffsetY,
-            width:      114,
-            height:     114
-          },
-          up:{
-            x:          114+dpadOffsetX,
-            y:          0+dpadOffsetY,
-            width:      130,
-            height:     114
-          },
-          upright:{
-            x:          244+dpadOffsetX,
-            y:          0+dpadOffsetY,
-            width:      114,
-            height:     114
-          },
-          right:{
-            x:          244+dpadOffsetX,
-            y:          114+dpadOffsetY,
-            width:      114,
-            height:     130
-          },
-          downright:{
-            x:          244+dpadOffsetX,
-            y:          244+dpadOffsetY,
-            width:      114,
-            height:     114
-          },
-          down:{
-            x:          114+dpadOffsetX,
-            y:          244+dpadOffsetY,
-            width:      130,
-            height:     114
-          },
-          downleft:{
-            x:          0+dpadOffsetX,
-            y:          244+dpadOffsetY,
-            width:      114,
-            height:     114
-          },
-          left:{
-            x:          0+dpadOffsetX,
-            y:          114+dpadOffsetY,
-            width:      114,
-            height:     130
-          },
-          
-          // Small
-          upleftsmall:{
-            x:          0+smallerDpadOffsetX,
-            y:          0+smallerDpadOffsetY,
-            width:      42,
-            height:     42
-          },
-          upsmall:{
-            x:          42+smallerDpadOffsetX,
-            y:          0+smallerDpadOffsetY,
-            width:      46,
-            height:     42
-          },
-          uprightsmall:{
-            x:          88+smallerDpadOffsetX,
-            y:          0+smallerDpadOffsetY,
-            width:      42,
-            height:     42
-          },
-          rightsmall:{
-            x:          88+smallerDpadOffsetX,
-            y:          42+smallerDpadOffsetY,
-            width:      42,
-            height:     46
-          },
-          downrightsmall:{
-            x:          88+smallerDpadOffsetX,
-            y:          88+smallerDpadOffsetY,
-            width:      42,
-            height:     42
-          },
-          downsmall:{
-            x:          42+smallerDpadOffsetX,
-            y:          88+smallerDpadOffsetY,
-            width:      46,
-            height:     42
-          },
-          downleftsmall:{
-            x:          0+smallerDpadOffsetX,
-            y:          88+smallerDpadOffsetY,
-            width:      42,
-            height:     42
-          },
-          leftsmall:{
-            x:          0+smallerDpadOffsetX,
-            y:          42+smallerDpadOffsetY,
-            width:      42,
-            height:     46
-          }
         };
-  
+        
     // Add Resources
     images.push('dpad.png');
     images.push('dpad-upleft.png');
@@ -151,8 +55,21 @@
     images.push('dpad-down.png');
     images.push('dpad-downleft.png');
     images.push('dpad-left.png');
-    images.push('hitrect.png');
     images.push('transparent.png');
+    
+    // Hitrect Draw Mode images
+    if(drawMode=="hitrects"){
+      images.push('red.png');
+      images.push('green.png');
+      images.push('hitrect-up.png');
+      images.push('hitrect-upright.png');
+      images.push('hitrect-right.png');
+      images.push('hitrect-downright.png');
+      images.push('hitrect-down.png');
+      images.push('hitrect-downleft.png');
+      images.push('hitrect-left.png');
+      images.push('hitrect-upleft.png');
+    }
     
     // We'll make the neutral state of the dpad
     // be the in the background and the downstate
@@ -160,64 +77,14 @@
     // are active
     layout.push({
       type:   "image",
-      image:  getImageIndex('dpad.png'),
+      image:  getImageIndex('dpad.png',images),
       x:      dpadOffsetX,
       y:      dpadOffsetY,
-      width:  358,
-      height: 358
+      width:  dpadWidth,
+      height: dpadHeight
     });
     
-    // Add HitRect Image if we're in the
-    if(drawMode=="hitrects"){
-      images.push('hitrect.png'); 
-    }
-    
-    for(var arrow in arrows){
-      var elem = {
-            type:       "button",
-            handler:    arrow
-          },
-          // Strip off the 'small' part of the arrow's field name
-          // so we know which state image it goes with
-          realName = arrow.replace('small');
-    
-      // Normal Draw Mode?
-      if(drawMode=="normal"){
-        elem.imageUp    = getImageIndex('transparent.png');
-        elem.imageDown  = getImageIndex('dpad-'+realName+'.png');
-        elem.x          = dpadOffsetX;
-        elem.y          = dpadOffsetY;
-        elem.width      = 358;
-        elem.height     = 358;
-        elem.hitRect    = {
-          x: arrows[arrow].x,
-          y: arrows[arrow].y,
-          width: arrows[arrow].width,
-          height: arrows[arrow].height
-        };
-      } 
-      // Hitrect Draw Mode
-      else{
-        elem.imageUp    = getImageIndex('hitrect.png');
-        elem.imageDown  = getImageIndex('transparent.png');
-        elem.x          = arrows[arrow].x;
-        elem.y          = arrows[arrow].y;
-        elem.width      = arrows[arrow].width;
-        elem.height     = arrows[arrow].height;
-      }
-    
-      // Add this button to the Layout
-      layout.push(elem);
-    }
-    
-    
-    function getImageIndex(url){
-      for(var i = 0;i<images.length;i++){
-        if(images[i]==url){
-          return i;
-        }
-      }
-    }
+    generateHitRects();
     
     this.getState = function(which){
       return states.current[which];
@@ -251,7 +118,6 @@
         str = "dpad-"+str+".png";
       }
       
-      console.log(str);
       return str;
     }
     
@@ -300,5 +166,148 @@
         }
       }
     });
+    
+    function generateHitRects(){
+      for(var y=0; y<dpadRangeHeight;y+=largestSize){
+        for(var x=0; x<dpadRangeWidth;x+=largestSize){
+          splitHitRect(x,y,largestSize);
+        }
+      }
+      console.log("There are "+layout.length+" layout elements.");
+    }
+    
+    function splitHitRect(x,y,size){
+      var cls = classifyHitRect(x,y,size);
+      
+      // Don't create any buttons in the deadzone
+      if(cls=="deadzone")
+        return;
+      
+      // Either split up the rect or generate a
+      // Button if it's cleanly in a angle hitzone
+      if(cls=="split"){
+        // Split into four new hit rects
+          // Top Left
+        splitHitRect(x,y,size/2);
+          // Top Right
+        splitHitRect(x+size/2,y,size/2);
+          // Bottom Right
+        splitHitRect(x+size/2,y+size/2,size/2);
+          // Bottom Left
+        splitHitRect(x,y+size/2,size/2);
+      } else {
+        var elem = {
+              type:       "button",
+              handler:    cls
+            };
+    
+        // Normal Draw Mode?
+        if(drawMode=="normal"){
+          elem.imageUp    = getImageIndex('transparent.png',images);
+          elem.imageDown  = getImageIndex('dpad-'+cls+'.png',images);
+          elem.x          = dpadOffsetX;
+          elem.y          = dpadOffsetY;
+          elem.width      = dpadWidth;
+          elem.height     = dpadHeight;
+          elem.hitRect    = {
+              x: x,
+              y: y,
+              width: size,
+              height: size
+            };
+        } 
+        // Hitrect Draw Mode
+        else{
+          elem.imageUp    = getImageIndex('hitrect-'+cls+'.png',images);
+          elem.imageDown  = getImageIndex('transparent.png',images);
+          elem.x          = x;
+          elem.y          = y;
+          elem.width      = size;
+          elem.height     = size;
+        }
+        
+        // Add this button to the Layout
+        layout.push(elem);
+      }
+    }
+    function classifyHitRect(x,y,size){
+      // If the deadzone intersects the rect we need to split
+      if( !(x>(dpadCenterX+dpadHalfDeadZone)||
+          (x+size)<(dpadCenterX-dpadHalfDeadZone)||
+          y>(dpadCenterY+dpadHalfDeadZone)||
+          (y+size)<(dpadCenterY-dpadHalfDeadZone))){
+          
+        // If we're already at smallest allowed hitrect
+        // size then just drop this hitrect
+        return size>smallestSize?"split":"deadzone";
+      }
+    
+      // Classify all the points
+      var cls = [
+          classifyPoint(x,y),           // Top Left
+          classifyPoint(x+size,y),      // Top Right
+          classifyPoint(x+size,y+size), // Bottom Right
+          classifyPoint(x,y+size)       // Bottom Left
+        ];
+          
+      // Are they all the same?
+      if( cls[0]==cls[1]&&
+          cls[1]==cls[2]&&
+          cls[2]==cls[3] ){
+        return cls[0];
+      } 
+      // If they aren't all the same split them up,
+      // unless we're already at size=smallestSize, in which case
+      // we stop tesselating and just pick whatever it's
+      // center point classifies as
+      else {
+        if(size==smallestSize){
+          var newCls = classifyPoint(x+size/2,y+size/2);
+          return newCls;  
+        } else {
+          return "split";
+        }
+      }
+    }
+    
+    function getAngle(x,y){
+      return Math.floor(
+        360-((Math.atan2(x,y)/Math.PI*180)+180)  
+      );
+    }
+    
+    function getZone(degrees){
+      // Special Case for Up Zone
+      if( degrees>(360-24) || degrees<23 ){
+        return 0;
+      } 
+      return Math.floor((degrees-22)/45)+1;
+    }
+    
+    function classifyPoint(x,y){
+      var zonesLookUp = [
+        "up",
+        "upright",
+        "right",
+        "downright",
+        "down",
+        "downleft",
+        "left",
+        "upleft",
+        "up"
+      ];
+    
+      var angleInDegrees = getAngle(x-dpadCenterX,y-dpadCenterY),
+          zone = getZone(angleInDegrees);
+      return zonesLookUp[zone];
+    }
+    
+    function getImageIndex(url){
+      for(var i = 0;i<images.length;i++){
+        if(images[i]==url){
+          return i;
+        }
+      }
+    }
   }
 })();
