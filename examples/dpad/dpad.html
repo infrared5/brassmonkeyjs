@@ -37,11 +37,12 @@
   <p id="angle">0</p>
   <div id="slot-color" style="float: left;width:100px;height:100px;text-align:center;line-height:100px;font-family:Arial;">Slot Color</div>
   <img id="dpad" src="dpad.png" />
-  <div id="log"></div>
+  
   <div id="world">
     <canvas id="canvas" width="640" height="480"></canvas>
     <div id="character"></div>
   </div>
+  <div id="log"></div>
   <script>
     var images = [],
         layout = [],
@@ -49,6 +50,14 @@
         // so that some resources/elements can be procedurally
         // added to them
         dpad = new DPad(images,layout);
+        
+    
+  
+    dpad.on(function(which,isKeyDown){
+      var log = document.getElementById('log');
+      //log.innerHTML = (which+' '+(isKeyDown?"pressed":"released"))+'<br>'+log.innerHTML
+//      console.log();
+    });
   
     bm.init({
       name: "DPad - SDK Examples",
@@ -70,10 +79,11 @@
     
     var x = 320-8,
         y = 240-8,
-        lastUpdate = (new Date).getTime();
+        lastUpdate = (new Date).getTime(),
+        speed = 110;
     setInterval(function(){
       var curTime = (new Date).getTime(),
-          timeElapsed = curTime-lastUpdate;
+          timeElapsed = (curTime-lastUpdate)/1000;// Convert to seconds
       lastUpdate = curTime;
     
       // Let the DPad update it's states
@@ -83,16 +93,16 @@
       document.getElementById('dpad').src = dpad.getCurrentStateImage();
       
       if(dpad.getState('right')){
-        x+=4; 
+        x+=speed*timeElapsed; 
       }
       if(dpad.getState('left')){
-        x-=4; 
+        x-=speed*timeElapsed; 
       }
       if(dpad.getState('up')){
-        y-=4; 
+        y-=speed*timeElapsed; 
       }
       if(dpad.getState('down')){
-        y+=4; 
+        y+=speed*timeElapsed; 
       }
       
       document.getElementById('character').style.marginLeft = x+"px";
@@ -146,7 +156,7 @@
     document.getElementById('world').onmousemove = function(e){
       var angle = getAngle(e.clientX-320,e.clientY-240-135),
           zone = getZone(angle);
-      document.getElementById('angle').innerHTML = ""+angle+"  "+zone+" "+zonesLookUp[zone];
+      //document.getElementById('angle').innerHTML = ""+angle+"  "+zone+" "+zonesLookUp[zone];
     };
     angle
   </script>

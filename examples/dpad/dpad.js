@@ -11,14 +11,14 @@
         dpadCenterX = dpadOffsetX+dpadWidth/2,
         dpadCenterY = dpadOffsetY+dpadHeight/2,
         // Hitzone Generation Vars
-        smallestSize = 8,
+        smallestSize = 32,
         largestSize = 256,
         dpadRangeWidth = dpadOffsetX*2+dpadWidth,
         dpadRangeHeight = 640,
         // Draw Mode
         //    "normal" Draws Regularly
         //    "hitrects" Makes the controller display the HitRects of all Rects
-        drawMode = "hitrects",        
+        drawMode = "hitrects",
         // 
         states = {
           // State that is mutated as BM events come in
@@ -26,13 +26,17 @@
             left:0,
             right:0,
             up:0,
-            down:0
+            down:0,
+            a:0,
+            b:0
           },
           current:{
             left:false,
             right:false,
             up:false,
-            down:false
+            down:false,
+            a:false,
+            b:false
           },
           // Shadow state is updated each game loop
           // to hold the previous states of the dpad
@@ -41,8 +45,22 @@
             left:false,
             right:false,
             up:false,
-            down:false
+            down:false,
+            a:false,
+            b:false
           }
+        },
+        allStates = {
+          up:1,
+          upright:1,
+          right:1,
+          downright:1,
+          down:1,
+          downleft:1,
+          left:1,
+          upleft:1,
+          a:1,
+          b:1
         };
         
     // Add Resources
@@ -55,6 +73,10 @@
     images.push('dpad-down.png');
     images.push('dpad-downleft.png');
     images.push('dpad-left.png');
+    images.push('a-up.png');
+    images.push('a-down.png');
+    images.push('b-up.png');
+    images.push('b-down.png');
     images.push('transparent.png');
     
     // Hitrect Draw Mode images
@@ -84,7 +106,41 @@
       height: dpadHeight
     });
     
-    generateHitRects();
+    // Generate Controller elements
+    generateDPad();
+    // Add A/B buttons
+    layout.push({
+      type:       "button",
+      handler:    "b",
+      imageUp:    getImageIndex('b-up.png',images),
+      imageDown:  getImageIndex('b-down.png',images),
+      x:          508,
+      y:          346,
+      width:      180,
+      height:     180,
+      hitRect: {
+        x:          465,
+        y:          219,
+        width:      256,
+        height:     422
+      }
+    });
+    layout.push({
+      type:       "button",
+      handler:    "a",
+      imageUp:    getImageIndex('a-up.png',images),
+      imageDown:  getImageIndex('a-down.png',images),
+      x:          712,
+      y:          346,
+      width:      180,
+      height:     180,
+      hitRect: {
+        x:          679,
+        y:          218,
+        width:      281,
+        height:     422
+      }
+    });
     
     this.getState = function(which){
       return states.current[which];
@@ -150,6 +206,11 @@
     }
     
     bm.onInvocation(function(invoke, deviceId){
+      // Ignore Buttons we didn't generate
+      if(typeof allStates[invoke.methodName]=='undefined'){
+        return;
+      }
+    
       var keyDown = invoke.parameters[0].Value=="down",
           realName = invoke.methodName.replace('small');
      
@@ -167,7 +228,7 @@
       }
     });
     
-    function generateHitRects(){
+    function generateDPad(){
       for(var y=0; y<dpadRangeHeight;y+=largestSize){
         for(var x=0; x<dpadRangeWidth;x+=largestSize){
           splitHitRect(x,y,largestSize);
