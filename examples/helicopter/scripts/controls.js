@@ -61,7 +61,7 @@ bm.init({
     
 // When a controller connects, turn up accelerometer sampling to 60hz
 bm.onDeviceConnected(function(device){
-  bm.enableAccelerometer(device.deviceId,true,1.0/60.0);
+  bm.enableAccelerometer(device.deviceId,true,1.0/30.0);
 });
 
 var acceleration = {x:0,y:0,z:0};
