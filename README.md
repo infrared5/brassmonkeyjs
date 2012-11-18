@@ -30,8 +30,8 @@ Documentation
 
 Read the (documents online)[http://playbrassmonkey.com/developers/html5/docs/] or locally by opening /docs/index.html
 
-Building the docs.
--------------
+Build Requirements
+=============
 * Requires (Node)[http://nodejs.org/download/] (Tested at version 0.8.3).
 * Requires (Grunt)[https://github.com/cowboy/grunt].
 
@@ -41,16 +41,20 @@ Building the docs.
 
     sudo npm install -g yuidocjs@0.3.19
 
-* Run Grunt task to generate the docs.
+
+Building the docs
+-------------
+
+Run Grunt task to generate the docs.
 
     grunt docs
-
-Also checkout the demos for some example code.
-
+    
 Running the demos locally
-=============
+-------------
 
-* Get the SDK as mentioned above.
-* Files must be hosted in order to work.
-* On Mac/Linux you can just run './server' from the brassmonkeyjs folder and then open http://localhost:8080/
-* If on Windows you'll have to put the brassmonkeyjs folder somewhere and then navigate to whereever index.html ends up.
+Run server to host the examples and documentation.
+
+    grunt server
+        
+
+*If on Windows you'll have to host the brassmonkeyjs folder somewhere and then navigate to whereever index.html ends up. (Because of security restrictions of browsers and flash our SDK can not be hosted on the file:/// protocol.)

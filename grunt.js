@@ -39,7 +39,6 @@ module.exports = function(grunt) {
     }
   });
 
-
   // Create yuidoc task, this is based on https://github.com/gcpantazis/grunt-yuidocs/blob/master/tasks/grunt-yuidocs.js
   // which worked better than the built in yuidoc task in https://github.com/gruntjs/grunt-contrib/blob/master/docs/yuidoc.md.
   // TODO: Revisit this and use newer maintained version if possible by figuring out why it was only building the parsedata
@@ -104,7 +103,25 @@ module.exports = function(grunt) {
   // Minify the SDK
   grunt.registerTask('minify', 'concat min');
   
-  
   // Minify the SDK and Build SDK Documentation
   grunt.registerTask('default', 'concat min docs');
+  
+  // Start a basic server for hosting the examples and documentation.
+  grunt.registerTask('server', 'Start a custom static web server.', function() {
+    // Make it an asynchronous task so that the server doesn't close immediately.
+		var done = this.async();
+    
+    var express = require('express'),
+        app = express.createServer();
+    
+    app.configure(function(){
+      app.use(express.bodyParser());
+      app.use(express.methodOverride());
+      app.use(express.static(__dirname + '/'));
+    });
+    
+    grunt.log.writeln('Starting static web server on port 8080.');
+    grunt.log.writeln('    \nPress Control+C to Quit');
+    app.listen(8080);
+  });
 };

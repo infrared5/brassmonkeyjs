@@ -362,6 +362,10 @@ var BrassMonkeyClass = EventEmitter.extend({
     var getParams = getQueryParams(document.location.search);
     options.deviceId = getParams.appId || Math.floor(Math.random()*16777215*16777215).toString(16);
     options.portalId = getParams.portalId;
+
+    if(!options.appId) {
+      throw new Error(&quot;bm.start: appId is required&quot;);
+    }
     
     &#x2F;&#x2F; Choose the proper communication runtime based on the environment.
     &#x2F;&#x2F; For now it&#x27;s basically WebSockets in Mobile Safari otherwise Flash
@@ -419,6 +423,10 @@ var BrassMonkeyClass = EventEmitter.extend({
   
   getDevice: function(id){
     return this.devices[id];
+  },
+  
+  boomBa: function(str){
+    console.log(&quot;zabba&quot;+str);
   }
 });
 
@@ -442,10 +450,6 @@ if(console!==undefined &amp;&amp; console.log!==undefined) {
   bm.log = function() {console.log.apply(console,arguments);};
 } else {
   bm.log = function() {};
-}
-
-window[&#x27;boomBa&#x27;] = function(slot){
-  console.log(slot);
 }
 
 var makeMethodProxy = function(devices, methodName) {

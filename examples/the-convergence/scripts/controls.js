@@ -1,16 +1,16 @@
 
 // Initialize Brass Monkey
-bm.init({
+bm.start({
   // The Name that will be displayed on phone when
   // trying to connect to the game to control it.
   name: "The Convergence",
   
   // This game is single player, set it's max players accordingly
-  bmMaxPlayers:1,
+  maxPlayers:1,
   
   // Use this appID for now. We are building our developer portal
   // back end as we speak.
-  bmAppId:"dfbc9769ef641e415aac8ee86224c9fa",
+  appId:"dfbc9769ef641e415aac8ee86224c9fa",
   
   // Location of the brassmonkey.swf the SDK depends on.
   // Coming soon this dependency will be removed for platforms
@@ -88,40 +88,17 @@ bm.init({
   }
 });
 
-// Once the device becomes available set it GamePad Mode to
-// show us our custom game controller
-bm.onDeviceAvailable(function(device){  		
-	device.controlMode=bm.MODE_GAMEPAD;
-	return device;
+// Listen for button events 
+bm.on('buttondown',function(e){
+  // Special logic for starting the game if we're
+  // on the home screen and the user presses the 'flip' button
+  if(e.button=="flip"&&startGame()){
+    return;
+  }
+  emulatedKeyDown(e.button);
 });
 
 // Listen for button events 
-bm.onInvocation(function(invoke, deviceId){
-  // Is the button up or down now
-  var isDown  = invoke.parameters[0].Value=="down";
-  
-  // Which button was it? ('left', 'right', or 'flip')
-  var button  = invoke.methodName;
-      
-  // Special logic for starting the game if we're
-  // on the home screen and the user presses the 'flip' button
-  if(button=="flip"&&isDown&&startGame()){
-    return;
-  }
-  
-  // Button Down  
-  if(isDown){
-    emulatedKeyDown(button);
-  } else {
-  // Button Up
-    emulatedKeyUp(button);
-  }
-});
-
-
-bm.onShowSlot(function(color){
-  // Todo: Display the slot color somewhere on the game's screen. 
-  // This is the color that shows up in the device list on the controller for
-  // selecting what game/pc to connect to in order to control it.
-  // It's a CSS hex style color (ie. #ff0000)
+bm.on('buttonup',function(e){
+  emulatedKeyUp(e.button);
 });

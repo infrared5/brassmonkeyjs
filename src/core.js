@@ -264,8 +264,8 @@ var BrassMonkeyClass = EventEmitter.extend({
       // This could be the case for when certain hosts like the website only
       // use the built in controllers (Keyboard Mode, Navigation Mode, and any future
       // ones)
-    //bm.options.design.images =  options.design.images?options.design.images:[];
-    //bm.options.design.layout =  options.design.layout?options.design.layout:[];
+    bm.options.design.images =  options.design.images?options.design.images:[];
+    bm.options.design.layout =  options.design.layout?options.design.layout:[];
     
     var getParams = getQueryParams(document.location.search);
     options.deviceId = getParams.appId || Math.floor(Math.random()*16777215*16777215).toString(16);
