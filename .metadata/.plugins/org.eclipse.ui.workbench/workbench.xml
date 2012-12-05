@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<workbench progressCount="53" version="2.0">
+<workbench progressCount="59" version="2.0">
 <workbenchAdvisor/>
 <window height="768" maximized="true" width="1024" x="21" y="56">
 <fastViewData fastViewLocation="1024"/>
@@ -34,11 +34,11 @@
 </folder>
 </info>
 </editorArea>
-<editor id="com.adobe.flexbuilder.editors.actionscript.ActionScriptEditor" name="brassmonkey.as" partName="brassmonkey.as" path="/Users/francois/Dev/playbrassmonkey.com/www/developers/html5/src/swf/src/brassmonkey.as" title="brassmonkey.as" tooltip="swf/src/brassmonkey.as" workbook="DefaultEditorWorkbook">
+<editor focus="true" id="com.adobe.flexbuilder.editors.actionscript.ActionScriptEditor" name="brassmonkey.as" partName="brassmonkey.as" path="/Users/francois/Dev/playbrassmonkey.com/www/developers/html5/src/swf/src/brassmonkey.as" title="brassmonkey.as" tooltip="swf/src/brassmonkey.as" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/swf/src/brassmonkey.as"/>
 <editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="1058" selectionTopPixel="0"/>
 </editor>
-<editor focus="true" id="com.adobe.flexbuilder.editors.actionscript.ActionScriptEditor" name="connectionhelper.as" partName="connectionhelper.as" path="/Users/francois/Dev/playbrassmonkey.com/www/developers/html5/src/connection-helper/src/connectionhelper.as" title="connectionhelper.as" tooltip="connection-helper/src/connectionhelper.as" workbook="DefaultEditorWorkbook">
+<editor id="com.adobe.flexbuilder.editors.actionscript.ActionScriptEditor" name="connectionhelper.as" partName="connectionhelper.as" path="/Users/francois/Dev/playbrassmonkey.com/www/developers/html5/src/connection-helper/src/connectionhelper.as" title="connectionhelper.as" tooltip="connection-helper/src/connectionhelper.as" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/connection-helper/src/connectionhelper.as"/>
 <editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="0" selectionTopPixel="0"/>
 </editor>
@@ -46,9 +46,6 @@
 <views>
 <view id="org.eclipse.ui.views.ProblemView" partName="Problems">
 <viewState PRIMARY_SORT_FIELD="org.eclipse.ui.ide.severityAndDescriptionField" categoryGroup="org.eclipse.ui.ide.severity" markerContentGenerator="org.eclipse.ui.ide.problemsGenerator" partName="Problems">
-<expanded>
-<category IMemento.internal.id="Errors"/>
-</expanded>
 <columnWidths org.eclipse.ui.ide.locationField="90" org.eclipse.ui.ide.markerType="90" org.eclipse.ui.ide.pathField="120" org.eclipse.ui.ide.resourceField="90" org.eclipse.ui.ide.severityAndDescriptionField="777"/>
 <visible IMemento.internal.id="org.eclipse.ui.ide.severityAndDescriptionField"/>
 <visible IMemento.internal.id="org.eclipse.ui.ide.resourceField"/>
@@ -62,12 +59,6 @@
 </view>
 <view id="com.adobe.flexbuilder.packageexplorer" partName="Package Explorer">
 <viewState LINK_NAVIGATOR_TO_EDITOR="0" fpeIsFlat="0" fpeSortBy="1" sorter="1">
-<fpeExpanded>
-<fpeElement fpePath="/connection-helper/src"/>
-<fpeElement fpePath="/connection-helper/src/%typeDefaultPackage"/>
-<fpeElement fpePath="/connection-helper/bin"/>
-<fpeElement fpePath="/swf"/>
-</fpeExpanded>
 <fpeSelection>
 <fpeElement fpePath="/swf"/>
 </fpeSelection>
@@ -91,9 +82,6 @@
 <filter element="*.class" isEnabled="false"/>
 <filter element=".*" isEnabled="false"/>
 </filters>
-<expanded>
-<element path="/swf"/>
-</expanded>
 <selection>
 <element path="/swf"/>
 </selection>
@@ -106,9 +94,6 @@
 <viewState/>
 </view>
 <view id="org.eclipse.ui.views.ContentOutline" partName="Outline">
-<viewState/>
-</view>
-<view id="com.adobe.flexbuilder.as.editor.asdocviewer" partName="ASDoc">
 <viewState/>
 </view>
 </views>
@@ -178,10 +163,9 @@
 <view id="com.adobe.flexbuilder.packageexplorer"/>
 <view id="org.eclipse.ui.views.ContentOutline"/>
 <view id="org.eclipse.ui.views.ProblemView"/>
-<view id="com.adobe.flexbuilder.dcrad.views.DataServicesView"/>
 <view id="org.eclipse.ui.console.ConsoleView"/>
+<view id="com.adobe.flexbuilder.dcrad.views.DataServicesView"/>
 <view id="com.adobe.flexbuilder.monitors.network.view.NetworkMonitorView"/>
-<view id="com.adobe.flexbuilder.as.editor.asdocviewer"/>
 <fastViewBars/>
 <layout>
 <mainWindow>
@@ -216,17 +200,16 @@
 <info folder="true" part="bottomLayout" ratio="0.52854514" ratioLeft="574" ratioRight="512" relationship="4" relative="org.eclipse.ui.editorss">
 <folder activePageID="org.eclipse.ui.console.ConsoleView" appearance="2" expanded="2">
 <page content="org.eclipse.ui.views.ProblemView" label="Problems"/>
-<page content="com.adobe.flexbuilder.as.editor.asdocviewer" label="ASDoc"/>
 <page content="org.eclipse.ui.console.ConsoleView" label="Console"/>
 <page content="com.adobe.flexbuilder.dcrad.views.DataServicesView" label="Data/Services"/>
 <page content="com.adobe.flexbuilder.monitors.network.view.NetworkMonitorView" label="Network Monitor"/>
+<page content="com.adobe.flexbuilder.as.editor.asdocviewer" label="LabelNotFound"/>
 <page content="com.adobe.flexbuilder.mxml.editor.design.internal.errors.view.DesignModeProblemsView" label="LabelNotFound"/>
 <presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
 <part id="0"/>
 <part id="1"/>
 <part id="2"/>
 <part id="3"/>
-<part id="4"/>
 </presentation>
 </folder>
 </info>
@@ -244,7 +227,14 @@
 </perspective>
 </perspectives>
 <workingSets/>
-<navigationHistory/>
+<navigationHistory>
+<editors>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.adobe.flexbuilder.editors.actionscript.ActionScriptEditor" path="/swf/src/brassmonkey.as"/>
+</editors>
+<item active="true" historyLabel="brassmonkey.as" index="0">
+<position info="not_deleted" x="1058" y="0"/>
+</item>
+</navigationHistory>
 <input factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/" type="8"/>
 </page>
 <workbenchWindowAdvisor/>
@@ -262,14 +252,14 @@
 </trimLayout>
 </window>
 <mruList>
+<file factoryID="com.adobe.flexbuilder.editors.derived.ui.startpage.StartPageEditorInput" id="com.adobe.flexbuilder.ui.StartPage" name="Web Browser" tooltip="Flash Builder Welcome Screen">
+<persistable iconpath="platform:/plugin/com.adobe.flexbuilder.ui/icons/fb_app_16.png" style="20" tooltip="Flash Builder Welcome Screen" url="file:/Applications/Adobe Flash Builder 4.6/eclipse/plugins/com.adobe.flexbuilder.ui_4.6.1.335153/welcome/index.html?firstLaunch=false&amp;edition=prem&amp;version=460"/>
+</file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.adobe.flexbuilder.editors.actionscript.ActionScriptEditor" name="Main.as" tooltip="connection-helper/src/Main.as">
 <persistable path="/connection-helper/src/Main.as"/>
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.adobe.flexbuilder.editors.actionscript.ActionScriptEditor" name="brassmonkey.as" tooltip="swf/src/brassmonkey.as">
 <persistable path="/swf/src/brassmonkey.as"/>
-</file>
-<file factoryID="com.adobe.flexbuilder.editors.derived.ui.startpage.StartPageEditorInput" id="com.adobe.flexbuilder.ui.StartPage" name="Web Browser" tooltip="Flash Builder Welcome Screen">
-<persistable iconpath="platform:/plugin/com.adobe.flexbuilder.ui/icons/fb_app_16.png" style="20" tooltip="Flash Builder Welcome Screen" url="file:/Applications/Adobe Flash Builder 4.6/eclipse/plugins/com.adobe.flexbuilder.ui_4.6.1.335153/welcome/index.html?firstLaunch=false&amp;edition=prem&amp;version=460"/>
 </file>
 </mruList>
 </workbench>
