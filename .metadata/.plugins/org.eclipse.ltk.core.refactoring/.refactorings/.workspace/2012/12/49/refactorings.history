@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;Connection-Helper&apos; to &apos;connection-helper&apos;" description="Rename resource &apos;Connection-Helper&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="/Connection-Helper" name="connection-helper" stamp="1354668481295" updateReferences="true"/>
+</session>

@@ -6,3 +6,6 @@ src/.metadata/.plugins/com.adobe.flexide.editorcore/imageCache
 src/.metadata/.plugins/com.adobe.flexbuilder.codemodel/SwcCache/
 src/.metadata/.plugins/org.eclipse.core.resources/.root
 src/.metadata/.plugins/com.adobe.flexbuilder.codemodel/searchCache
+
+.metadata/.plugins/com.adobe.flexbuilder.codemodel/SwcCache
+.metadata/.plugins/com.adobe.flexbuilder.codemodel/searchCache

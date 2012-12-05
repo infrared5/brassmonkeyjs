@@ -1,0 +1,138 @@
+<html>
+<head>
+  <title>Connection Helper - HTML5 SDK for Brass Monkey</title>
+  
+  <script type="text/javascript" src="../../brassmonkey.js"></script>
+  
+  <script>
+    bm.init({
+    	name: "Connection Helper",
+      bmMaxPlayers:1,
+      swfURL:"../../src/swf/bin/brassmonkey.swf",
+      design: {
+        orientation: "portrait",
+        touchEnabled: false,
+        accelerometerEnabled: false,
+        images:[
+          '../shared/background.png',
+          'bananas.png',
+          'pineapple.png',
+          'watermelon.png'
+        ],
+        layout:[{
+          type:   "image",
+          image:  0,
+          x:      0,
+          y:      0,
+          width:  320,
+          height: 480
+        },{
+          type:   "image",
+          image:  1,
+          x:      9,
+          y:      16,
+          width:  128,
+          height: 128
+        },{
+          type:   "image",
+          image:  2,
+          x:      110,
+          y:      170,
+          width:  128,
+          height: 128
+        },{
+          type:   "image",
+          image:  3,
+          x:      181,
+          y:      336,
+          width:  128,
+          height: 128
+        }]
+      }
+    });
+    
+  	bm.onDeviceAvailable(function(a){  		
+  		a.controlMode=bm.MODE_GAMEPAD;
+  		return a;
+  	});
+    
+    bm.onShowSlot(function(color){
+  	
+    });
+    
+    bm.helper={};
+    
+    bm.helper.onShowSlot=function(val){
+
+        var flash =	document.getElementById("ConnectionHelper");
+        flash.setSlot(val);    	
+      };
+   
+      
+    bm.helper.helperTick=function(msg ){
+
+        var flash =	document.getElementById("ConnectionHelper");
+        flash.onTick(msg);  
+   };
+   
+    bm.helper.printHelp=function(msg ){
+        var flash =	document.getElementById("ConnectionHelper");
+        flash.printHelp(msg); 
+    }
+    
+    
+    bm.connectionSuccess=function(deviceId ){   
+   	
+   } 
+    
+    bm.helper.setState= function (value){    	      
+    	var flash =	document.getElementById("ConnectionHelper");
+        flash.setState(value);      
+    };
+    
+  </script>
+  
+   <script type="text/javascript" src="helperobject.js"></script>
+  
+</head>
+<body style="margin:0px;background:black;text-align:center;overflow:visible;">
+     <script type="text/javascript">
+            <!-- For version detection, set to min. required Flash Player version, or 0 (or 0.0.0), for no version detection. --> 
+            var swfVersionStr = "0.0.0";
+            <!-- To use express install, set to playerProductInstall.swf, otherwise the empty string. -->
+            var xiSwfUrlStr = "";
+            var flashvars = {};
+            var params = {};
+            params.quality = "high";
+            params.bgcolor = "#000000";
+            params.allowscriptaccess = "always";
+            params.allowFullScreen = "false";
+            var attributes = {};
+            attributes.id = "ConnectionHelper";
+            attributes.name = "ConnectionHelper";
+            attributes.align = "middle";
+            swfobject.embedSWF(
+                "../../src/connection-helper/bin/connectionhelper.swf", "ConnectionHelper", 
+                "1024", "768", 
+                swfVersionStr, xiSwfUrlStr, 
+                flashvars, params, attributes);
+			<!-- JavaScript enabled so display the flashContent div in case it is not replaced with a swf object. -->
+			//swfobject.createCSS("#ConnectionHelper", "display:block;text-align:center;overflow:visible;");
+     </script> 
+
+    <div id="ConnectionHelper" style="margin:0px;background:black;text-align:center;overflow:visible;">
+            <p>
+                To view this page ensure that Adobe Flash Player is installed 
+                
+            </p>
+            
+            <script type="text/javascript"> 
+                var pageHost = ((document.location.protocol == "https:") ? "https://" : "http://"); 
+                document.write("<a href='http://www.adobe.com/go/getflashplayer'><img src='" 
+                                + pageHost + "www.adobe.com/images/shared/download_buttons/get_flash_player.gif' alt='Get Adobe Flash player' /></a>" ); 
+            </script> 
+     </div>
+  
+</body>
+</html>
+

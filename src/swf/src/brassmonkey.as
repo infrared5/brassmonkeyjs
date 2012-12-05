@@ -1,6 +1,7 @@
 package
 {
 	import com.adobe.serialization.json.JSONDecoder;
+	import com.adobe.serialization.json.JSONEncoder;
 	import com.brassmonkey.BMApplication;
 	import com.brassmonkey.BrassMonkey;
 	import com.brassmonkey.SettingsManager;
@@ -21,11 +22,21 @@ package
 	import flash.events.Event;
 	import flash.external.ExternalInterface;
 	import flash.system.Security;
+	import flash.utils.clearInterval;
 	import flash.utils.setTimeout;
 	
+	import mx.resources.IResourceManager;
+	import mx.resources.ResourceManager;
+	
 	[SWF(width="1", height="1")]
+	
+	[ResourceBundle("helper")]
 	public class brassmonkey extends Sprite
 	{
+		
+		private var resourceManager:IResourceManager =ResourceManager.getInstance();
+		
+		
 		internal static var PARAM_CONTROLLER_XML:String="bmControllerXML"
 		
 			
@@ -39,23 +50,148 @@ package
 		private var resources:Array=[];
 		private var resourceQue:Array=[];
 		private var resourcesToLoad:int=0;
+		private var isStarted:Boolean=false;
 		
+		private var interation:int = 0;
+		private var error:Boolean=false;
+		private var conn:Boolean=false;
+		private var _updateTicker:uint=0;
+		private var _clockTicker:uint=0;
+
+		
+		public static var install_device:String;
+		public static var see_device:String;
+		public static var try_device:String;
+		public static var failed:String;
+		public static var success:String;
+		public var clients:Array=[];
 		public function brassmonkey()
 		{		
+			install_device=(resourceManager.getString("helper","install_device"));
+			see_device=(resourceManager.getString("helper","see_device"));
+			try_device=(resourceManager.getString("helper","try_device"));
+			failed=(resourceManager.getString("helper","failed"));
+			success=(resourceManager.getString("helper","success"));
+			
+		
+			
 			Security.allowDomain("*");
 			loaderInfo.addEventListener(Event.COMPLETE, onLoaded);
+			
+			trace(resourceManager.getLocales());
 	
+		}
+		
+		private function startHelper():void
+		{
+			if(_updateTicker!=0)
+				return;
+			doUpdate();
+			this.interation=0;
+			_updateTicker=flash.utils.setInterval(doUpdate, 10000);
+			_clockTicker=flash.utils.setInterval(onTick, 1000);
+		}
+		
+		private function shutDownHelper():void
+		{
+			flash.utils.clearInterval(_updateTicker);
+			flash.utils.clearInterval(_clockTicker);
+			_updateTicker=0;
+			_clockTicker=0;
+		}
+		protected function onDevice(event:DeviceEvent):void
+		{
+			trace(event.type);
+			switch(event.type)
+			{
+				case DeviceEvent.DEVICES_DISCOVERED:
+					
+					clients=[];
+					
+					for each (var device:BMRegistryInfo in event.devices)
+					{
+					
+						if(device.slotId>0)
+						{
+							continue;
+						}
+					
+						clients.push({deviceName:device.device.deviceName});
+					}
+					
+					if(clients.length==0)
+					{						
+						ExternalInterface.call("bm.helper.onShowSlot",0);
+						generateState(event.type,clients)
+						
+					}
+					else
+					{
+						
+						ExternalInterface.call("bm.helper.onShowSlot",brassMonkey.getInfo().slotId);
+					}
+					if(!conn && !error && clients.length > 0 && brassMonkey.session.registry.devices.length==0){
+						//this.idInfo.text='If you see "Select Me" on your device, tap it with your finger.' ;
+						printHelp(see_device );
+						generateState(event.type,clients)
+					
+					}
+					else if(!conn &&!error && brassMonkey.session.registry.devices.length==0){
+						//this.idInfo.text='Start up the Brass Monkey application now. If it is currently running and you do not see it after the timer refreshes, your device is using a different gateway to reach the internet than this computer.' ;
+						printHelp(install_device);
+						generateState(event.type,clients)
+					
+					}
+					
+					
+					//this.idDevices.dataProvider=new ArrayCollection(clients);
+					break;
+				
+				case DeviceEvent.DEVICE_AVAILABLE:
+					if( brassMonkey.session.registry.devices.length==0)
+					{
+						//idInfo.text='Okay, Lets see if we can connect your device over your local lan.' ;
+						printHelp(try_device );
+						conn=true;
+						event.device.addEventListener(DeviceEvent.CAN_NOT_CONNECT, onDevice);						
+					
+						generateState(event.type,clients)
+					}
+					break;
+				
+				case DeviceEvent.CAN_NOT_CONNECT:
+					trace("cant connect");
+					conn=false;
+					error=true;
+					//this.idInfo.text='No! Unfortunalty, your LAN configuration is preventing the connection. Reconfigure your LAN and please try again.' ;
+					printHelp(failed);
+					generateState(event.type,clients)
+					break;	
+				
+				case DeviceEvent.DEVICE_CONNECTED:
+					event.device.removeEventListener(DeviceEvent.CAN_NOT_CONNECT, onDevice);
+					conn=false;
+					
+					brassMonkey.session.setNavMode(event.device);
+					
+					printHelp(success);										
+					//this.idInfo.text='Success! You are now ready to play games!' ;
+					generateState(event.type,clients);
+					ExternalInterface.call("bm.connectionSuccess",event.device.deviceId);
+					break;
+			}
+			
 		}
 		
 		private function onLoaded(event:Event):void
 		{	
-			//if(loaderInfo.parameters.debug && ( loaderInfo.parameters.debug=="true" || loaderInfo.parameters.debug==true))
-			brassMonkey.debugger=this;
-			
+			brassMonkey.debugger=this;			
 			
 			
 			brassMonkey.addEventListener(DeviceEvent.SLOT_DISPLAY_REQUEST, onSlot);
 			brassMonkey.addEventListener(DeviceEvent.DEVICE_AVAILABLE,this.onDeviceDiscovery);
+			brassMonkey.addEventListener(DeviceEvent.DEVICES_DISCOVERED, onDevice);
+			brassMonkey.addEventListener(DeviceEvent.DEVICE_CONNECTED, onDevice);
 			brassMonkey.addEventListener(DeviceEvent.DEVICE_LOADED,this.onDeviceConnected);
 			brassMonkey.addEventListener(DeviceEvent.DEVICE_DISCONNECTED, this.onDeviceDisconnected);
 			brassMonkey.addEventListener(DeviceEvent.NAVIGATION, onNavigationString);
@@ -63,8 +199,7 @@ package
 			brassMonkey.addEventListener(VersionPacketEvent.VERSION, onVersion);
 			brassMonkey.addEventListener(TouchEvent.TOUCHES_RECEIVED,this.onTouchesReceived);
 			brassMonkey.addEventListener(AccelerationEvent.ACCELERATION,this.onAccelReceived);
-			
-			
+
 			brassMonkey.addEventListener(DeviceEvent.KEYBOARD,this.onKeyString);
 			
 			var appId:String = "a65971f24694b9c47a9bcd01";
@@ -80,7 +215,11 @@ package
 			  nump = loaderInfo.parameters['bmMaxPlayers']
 			
 			brassMonkey.initiate("Brass Monkey",nump,appId);
-
+			
+			ExternalInterface.addCallback("startHelper", startHelper);
+			
+			ExternalInterface.addCallback("shutDownHelper", shutDownHelper);
+			
 			ExternalInterface.addCallback("setRegistryVersion", setRegistryVersion);
 			ExternalInterface.addCallback("getRegistryVersion", getRegistryVersion);
 			ExternalInterface.addCallback("getLanDevices", getLanDevices);
@@ -100,8 +239,8 @@ package
 				start();
 				
 			}
-			flash.utils.setTimeout(ExternalInterface.call,1000,"bm.onFlashLoadedInternal");
-		//	ExternalInterface.call("bm.onFlashLoadedInternal");		
+			flash.utils.setTimeout(ExternalInterface.call,500,"bm.onFlashLoadedInternal");
+	
 		}
 		
 		public function setRegistryVersion(maj:int,min:int):void
@@ -125,6 +264,7 @@ package
 			
 			if(updateDevice)
 				brassMonkey.session.updateControlScheme(dev,appScheme.pageToString(dev.attributes.controlPage));
+			
 		}
 		public function measurePing(deviceId:String):void
 		{
@@ -138,8 +278,6 @@ package
 		public function setControlpadPage(deviceId:String, i:int):void
 		{
 			var dev:Device = brassMonkey.session.registry.getDevice(deviceId);
-			
-			//dev.sendPing();
 			
 			var appScheme:AppScheme=BMControls.appSchemes[dev.controlSchemeIndex];
 			dev.attributes.controlPage=i;
@@ -193,7 +331,10 @@ package
 		}
 		
 		public function start():void{
+			if(isStarted)
+				return;
 			
+			isStarted=true;
 			brassMonkey.start();
 			
 			ExternalInterface.addCallback("SetVisibility", SetVisibility);
@@ -345,7 +486,6 @@ package
 		}
 		public function setWaitMode(guid:String):void
 		{
-			brassMonkey.addEventListener(DeviceEvent.DEVICES_DISCOVERED, onDevicesDiscovered);
 			
 			brassMonkey.session.refreshDeviceList();
 			
@@ -464,7 +604,7 @@ package
 			trace('getCookie',devId);
 			var dev:Device=this.brassMonkey.session.registry.getDevice(devId);
 			if(dev)
-			{
+			{ 
 				trace('got device',devId);
 				callBacks[dev.deviceId]['onCookie']=callBack
 				dev.attributes.onCookie=callBack;
@@ -505,6 +645,11 @@ package
 		{
 			trace("onSlot");
 			ExternalInterface.call("bm.showSlotInternal",brassMonkey.session.getSlotDisplay().slot);
+			
+			printHelp(install_device );
+
+			startHelper();
+			
 		}
 		protected function SetVisibility(isVisible:Boolean, doNotify:Boolean):void
 		{
@@ -599,10 +744,13 @@ package
 		
 		private function onDeviceDisconnected(evt:DeviceEvent):void{
 			
-			trace("DEVICE LOST!!!");
+			
 			var dev:Object={deviceId:evt.device.deviceId,deviceName:evt.device.deviceName};
 			ExternalInterface.call("bm.onDeviceDisconnectedInternal", dev);
 			
+			if(this.brassMonkey.session.registry.devices.length==0){
+				startHelper();
+			}
 			
 		} 
 		
@@ -610,8 +758,19 @@ package
 		private function onDeviceDiscovery(evt:DeviceEvent):void 
 		{
 			evt.device.controlSchemeIndex=controlIndex;
+
+			if( brassMonkey.session.registry.devices.length==0)
+			{
+				//idInfo.text='Okay, Lets see if we can connect your device over your local lan.' ;
+				printHelp(try_device );
+				conn=true;
+				evt.device.addEventListener(DeviceEvent.CAN_NOT_CONNECT, onDevice);						
+				
+				generateState(evt.type,clients)
+			}
 			
-			evt.device.controlMode=Device.MODE_GAMEPAD;
+			
+			evt.device.controlMode=Device.MODE_NAVIGATION;
 			var ser:Object={				
 					deviceId:evt.device.deviceId,
 					deviceName:evt.device.deviceName,
@@ -632,6 +791,9 @@ package
 						evt.device.attributes[prop]=results.attributes[prop];
 					}
 			}
+			
+			
+			
 			
 			this.brassMonkey.session.connectDevice(evt.device);	
 		}
@@ -684,7 +846,7 @@ package
 			evt.device.addEventListener(DeviceEvent.ECHO, onEcho);
 			var dev:Object={deviceId:evt.device.deviceId,deviceName:evt.device.deviceName};
 			callBacks[evt.device.deviceId]={};
-			//SetGamepadMode();
+			brassMonkey.session.setNavMode(evt.device);
 			ExternalInterface.call("bm.onDeviceConnectedInternal", dev);
 			
 		}
@@ -706,8 +868,7 @@ package
 			
 			var obj:Object = new Object();			
 			obj.acceleration = evt.acceleration;	
-			obj.deviceId = evt.deviceId;
-			//Not using accelerometer for this example
+			obj.deviceId = evt.deviceId;			
 			ExternalInterface.call("bm.onAccelReceivedInternal", obj);
 		}
 		
@@ -734,6 +895,37 @@ package
 			
 		}
 		
+		private function onTick():void
+		{
+			interation ++;
+			interation>10?10:interation;
+			ExternalInterface.call("bm.helper.helperTick",(10 - interation).toString());	
+		}
+		
+		private function printHelp(msg:String):void
+		{
+			ExternalInterface.call("bm.helper.printHelp",msg);
+		}
+		
+		private function doUpdate():void
+		{
+			interation=0;
+			brassMonkey.session.registry.discoveryService.getList();
+		}
+		
+		private function generateState(type:String, localDevices:Array):void
+		{
+			var ret:Object={ type:type,devices:localDevices};
+			ret.registry={devices:[]};
+			var dd:*=brassMonkey.session.registry.devices;
+			
+			for each(var dev:Device in brassMonkey.session.registry.devices){
+			
+					ret.registry.devices.push({deviceName:dev.deviceName})
+			}
+					
+			ExternalInterface.call("bm.helper.setState", new JSONEncoder(ret).getString());
+		}
 		
 		
 		

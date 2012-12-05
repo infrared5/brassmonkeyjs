@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="com.adobe.flexbuilder.help.ModulesPropertyPage">
+		<item value="125" key="outputSWFColumnWidth"/>
+		<item value="0" key="sortColumnIndex"/>
+		<item value="225" key="moduleColumnWidth"/>
+		<item value="true" key="sortColumnAscending"/>
+		<item value="125" key="optimizeColumnWidth"/>
+	</section>
+</section>
