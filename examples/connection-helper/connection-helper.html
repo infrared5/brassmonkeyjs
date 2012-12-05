@@ -6,7 +6,7 @@
   
   <script>
     bm.init({
-    	name: "Brass Monkey",
+      name: "Brass Monkey",
       bmMaxPlayers:1,
       swfURL:"../../src/swf/bin/brassmonkey.swf",
       design: {
@@ -16,49 +16,45 @@
       }
     });
     
-  	bm.onDeviceAvailable(function(a){  		
-  		a.controlMode=bm.MODE_GAMEPAD;
-  		return a;
-  	});
+    bm.onDeviceAvailable(function(a){     
+      a.controlMode=bm.MODE_GAMEPAD;
+      return a;
+    });
     
     bm.onShowSlot(function(color){
-  	
+    
     });
     
     bm.helper={};
     
     bm.helper.onShowSlot=function(val){
 
-        var flash =	document.getElementById("ConnectionHelper");
-        flash.setSlot(val);    	
+        var flash = document.getElementById("ConnectionHelper");
+        flash.setSlot(val);     
       };
    
       
     bm.helper.helperTick=function(msg ){
 
-        var flash =	document.getElementById("ConnectionHelper");
+        var flash = document.getElementById("ConnectionHelper");
         flash.onTick(msg);  
    };
    
     bm.helper.printHelp=function(msg ){
-        var flash =	document.getElementById("ConnectionHelper");
+        var flash = document.getElementById("ConnectionHelper");
         flash.printHelp(msg); 
     }
     
     
     bm.connectionSuccess=function(deviceId ){   
-   	
-   } 
+    }
     
-    bm.helper.setState= function (value){    	      
-    	var flash =	document.getElementById("ConnectionHelper");
-        flash.setState(value);      
+    bm.helper.setState= function (value){           
+      var flash = document.getElementById("ConnectionHelper");
+      flash.setState(value);
     };
     
   </script>
-  
-   <script type="text/javascript" src="helperobject.js"></script>
-  
 </head>
 <body style="margin:0px;background:black;text-align:center;overflow:visible;">
      <script type="text/javascript">
@@ -81,8 +77,8 @@
                 "1024", "768", 
                 swfVersionStr, xiSwfUrlStr, 
                 flashvars, params, attributes);
-			<!-- JavaScript enabled so display the flashContent div in case it is not replaced with a swf object. -->
-			//swfobject.createCSS("#ConnectionHelper", "display:block;text-align:center;overflow:visible;");
+      <!-- JavaScript enabled so display the flashContent div in case it is not replaced with a swf object. -->
+      //swfobject.createCSS("#ConnectionHelper", "display:block;text-align:center;overflow:visible;");
      </script> 
 
     <div id="ConnectionHelper" style="margin:0px;background:black;text-align:center;overflow:visible;">
