@@ -29,16 +29,23 @@
 		<item value="425" key="DIALOG_Y_ORIGIN"/>
 		<item value="665" key="DIALOG_X_ORIGIN"/>
 	</section>
-	<section name="WORKBENCH_SETTINGS">
-		<list key="ENABLED_TRANSFERS">
-		</list>
-	</section>
 	<section name="ExternalProjectImportWizard">
 		<item value="false" key="WizardProjectsImportPage.STORE_ARCHIVE_SELECTED"/>
 		<item value="false" key="WizardProjectsImportPage.STORE_COPY_PROJECT_ID"/>
 	</section>
+	<section name="WORKBENCH_SETTINGS">
+		<list key="ENABLED_TRANSFERS">
+		</list>
+	</section>
 	<section name="ResourceNavigator">
 		<item value="" key="ResourceWorkingSetFilter.STORE_WORKING_SET"/>
 		<item value="2" key="ResourceViewer.STORE_SORT_TYPE"/>
+	</section>
+	<section name="CleanDialogSettings">
+		<item value="484" key="DIALOG_WIDTH"/>
+		<item value="373" key="DIALOG_Y_ORIGIN"/>
+		<item value="354" key="DIALOG_HEIGHT"/>
+		<item value="718" key="DIALOG_X_ORIGIN"/>
+		<item value="false" key="TOGGLE_SELECTED"/>
 	</section>
 </section>

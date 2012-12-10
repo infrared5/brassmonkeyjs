@@ -1,4 +1,7 @@
-#Tue Dec 04 19:47:24 EST 2012
+#Sun Dec 09 19:27:01 EST 2012
+org.eclipse.debug.ui.switch_perspective_on_suspend=always
+pref_state_memento.org.eclipse.debug.ui.DebugVieworg.eclipse.debug.ui.DebugView=<?xml version\="1.0" encoding\="UTF-8"?>\n<DebugViewMemento org.eclipse.debug.ui.BREADCRUMB_DROPDOWN_AUTO_EXPAND\="false"/>
 eclipse.preferences.version=1
+preferredDetailPanes=DefaultDetailPane\:DefaultDetailPane|
 preferredTargets=default\:default|
 org.eclipse.debug.ui.PREF_LAUNCH_PERSPECTIVES=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?>\n<launchPerspectives/>\n

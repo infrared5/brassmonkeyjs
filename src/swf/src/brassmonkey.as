@@ -649,7 +649,6 @@ package
 			printHelp(install_device );
 
 			startHelper();
-			
 		}
 		protected function SetVisibility(isVisible:Boolean, doNotify:Boolean):void
 		{
