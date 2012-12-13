@@ -2,6 +2,7 @@
 
 #-----Flash Builder----
 */.metadata/.plugins/
+!*/.metadata/.plugins/org.eclipse.core.resources/
 */.metadata/.mylyn/
 */.metadata/.lock
 */.metadata/.log
