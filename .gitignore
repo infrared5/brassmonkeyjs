@@ -1,14 +1,7 @@
 .DS_Store
 
-#Flash Builder Ignores
-src/.metadata/.plugins/com.adobe.flexbuilder.codemodel/searchCache/
-src/.metadata/.plugins/com.adobe.flexide.editorcore/imageCache
-src/.metadata/.plugins/com.adobe.flexbuilder.codemodel/SwcCache/
-src/.metadata/.plugins/org.eclipse.core.resources/.root
-src/.metadata/.plugins/com.adobe.flexbuilder.codemodel/searchCache
-
-.metadata/.plugins/com.adobe.flexbuilder.codemodel/SwcCache
-.metadata/.plugins/com.adobe.flexbuilder.codemodel/searchCache
-.metadata/.plugins/com.adobe.flexbuilder.codemodel
-.metadata/.plugins/org.eclipse.core.resources/
-.metadata/.plugins/com.adobe.flexide.editorcore
+#-----Flash Builder----
+*/.metadata/.plugins/
+*/.metadata/.mylyn/
+*/.metadata/.lock
+*/.metadata/.log
