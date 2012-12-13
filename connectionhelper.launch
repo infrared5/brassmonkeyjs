@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="com.adobe.flexbuilder.debug.launchConfigurationType.flash">
+<stringAttribute key="com.adobe.flexbuilder.debug.ATTR_APPLICATION" value="src/connectionhelper.as"/>
+<stringAttribute key="com.adobe.flexbuilder.debug.ATTR_PROJECT" value="connection-helper"/>
+<stringAttribute key="com.adobe.flexbuilder.debug.ATTR_RUN_URL" value="http://localhost:8080/examples/connectionhelper/connectionhelper.html"/>
+<booleanAttribute key="com.adobe.flexbuilder.debug.ATTR_USE_DEFAULT_URLS" value="false"/>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+<listEntry value="/connection-helper"/>
+<listEntry value="/connection-helper/src/connectionhelper.as"/>
+</listAttribute>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+<listEntry value="4"/>
+<listEntry value="1"/>
+</listAttribute>
+</launchConfiguration>
