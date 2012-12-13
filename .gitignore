@@ -1,14 +1,8 @@
 .DS_Store
 
 #-----Flash Builder----
-## Ignore everything in .plugins/
-## Include .plugins/org.eclipse.core.resources/
-## Ignore everything in ./plugins/org.eclipse.core.resources/
-## Include .plugins/org.eclipse.core.resources/.projects/
-*/.metadata/.plugins/*
-!*/.metadata/.plugins/org.eclipse.core.resources/
-*/.metadata/.plugins/org.eclipse.core.resources/*
-!*/.metadata/.plugins/org.eclipse.core.resources/.projects/
+*/.metadata/.plugins/*/*
+!*/.metadata/.plugins/org.eclipse.core.resources/.project/
 */.metadata/.mylyn/
 */.metadata/.lock
 */.metadata/.log
