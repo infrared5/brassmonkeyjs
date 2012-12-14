@@ -1,14 +1,11 @@
 package
 {
-	import com.brassmonkey.controls.SlotDisplay;
-	
-	import flash.display.Loader;
+	import flash.display.Graphics;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.external.ExternalInterface;
-	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	import flash.net.navigateToURL;
 
@@ -19,8 +16,6 @@ package
 	public class connectionhelper extends Sprite
 	{
 		public var helper:Connector;
-		
-		public var slotDisplay:SlotDisplay=new SlotDisplay();
 
 		public function connectionhelper()
 		{
@@ -79,20 +74,14 @@ package
 		}
 		public function setSlot(val:String):void
 		{
-			
-			trace("setSlot"+val);
-			slotDisplay.x=360;
-			slotDisplay.y=575;
-			slotDisplay.slot=parseInt(val);
-			if(slotDisplay.slot>0)
-			{
-				addChild(slotDisplay);
-			}
-			else
-			{
-				if(contains(slotDisplay))
-					removeChild(slotDisplay);
-			}
+			var colors:Array = [0xff6600, 0xffcc00, 0xff3399, 0xff0066, 0xcc00ff, 0x999900, 0x9999cc, 0x00cc99, 0x287200, 0x00ccff, 0x003366, 0x99ff00, 0xcc0000, 0x80cd68, 0x6600ff];
+			var index:int = Math.max( 0, parseInt(val)-1 ) % colors.length;
+			var color:uint = colors[ index ];
+			var g:Graphics = (helper.phone.slot as MovieClip).graphics;
+			g.clear();
+			g.beginFill( color );
+			g.drawRoundRect( 0, 0, 18, 17, 10.0, 10.0 );
+			g.endFill();
 		}
 		public function onTick(val:int):void
 		{
