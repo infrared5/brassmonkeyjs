@@ -33,6 +33,9 @@ connectionHelper.init = function(swf,parentElemId){
       flashvars, params, attributes,
       function(e){
         if( e.success===true ){
+          var flashObj = document.getElementById(connectionHelper.flashObjectId);
+          flashObj.style.position = "absolute";
+          
           if(isVisible){
             connectionHelper.show();
           } else {
