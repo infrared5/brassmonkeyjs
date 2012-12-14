@@ -65,6 +65,7 @@ package
 		public function printHelp( val:String):void
 		{
 			helper._info.text=val;
+			helper._info.selectable = true;
 		}
 		public function setState( val:String):void
 		{
