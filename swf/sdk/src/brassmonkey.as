@@ -89,6 +89,8 @@ package
 				return;
 			doUpdate();
 			this.interation=0;
+			//	TODO: Check with server guys about length of update check
+			//	TODO: Reduce length of update check if possible to 5000 or below
 			_updateTicker=flash.utils.setInterval(doUpdate, 10000);
 			_clockTicker=flash.utils.setInterval(onTick, 1000);
 		}
