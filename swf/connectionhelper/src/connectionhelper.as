@@ -34,6 +34,7 @@ package
 			helper.helpBtn.addEventListener(MouseEvent.MOUSE_UP,onGetHelp);
 			//https://itunes.apple.com/us/app/brass-monkey/id455013514
 			
+			
 			ExternalInterface.addCallback("onTick",onTick);
 			ExternalInterface.addCallback("setState",setState);
 			ExternalInterface.addCallback("setSlot",setSlot);
