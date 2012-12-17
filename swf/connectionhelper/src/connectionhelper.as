@@ -52,11 +52,8 @@ package
 			helper.helpBtn.addEventListener(MouseEvent.MOUSE_UP,onGetHelp);
 			//https://itunes.apple.com/us/app/brass-monkey/id455013514
 			
-<<<<<<< HEAD
-=======
 			helper.needAppBtn.addEventListener( MouseEvent.MOUSE_UP, onNeedApp, false, 0, true );
 			helper.needWifiBtn.addEventListener( MouseEvent.MOUSE_UP, onNeedWifi, false, 0, true );
->>>>>>> New screens added to connection helper
 			
 			ExternalInterface.addCallback("onTick",onTick);
 			ExternalInterface.addCallback("setState",setState);
@@ -146,6 +143,7 @@ package
 			helper._deviceList.visible = false;
 			helper.popup.gotoAndStop( 1 );
 			helper.popup.visible = false;
+			helper.phone.visible = false;
 			
 			helper.helpBtn.visible = true;
 			helper.quotes.visible = true;
@@ -167,6 +165,7 @@ package
 			helper.hideButtons();
 			
 			helper._deviceList.visible = false;
+			helper.phone.visible = false;
 			
 			helper.helpBtn.visible = true;
 			helper.quotes.visible = true;
