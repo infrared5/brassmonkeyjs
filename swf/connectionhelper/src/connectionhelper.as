@@ -4,6 +4,8 @@ package
 	import flash.display.Graphics;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
+	import flash.display.StageAlign;
+	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.external.ExternalInterface;
@@ -31,6 +33,8 @@ package
 		{
 			prevVisibleElements = new Vector.<DisplayObject>();
 			stage.addEventListener(Event.RESIZE, onResize);
+			stage.scaleMode = StageScaleMode.NO_SCALE;
+			stage.align = StageAlign.TOP_LEFT;
 			
 			resourceManager = ResourceManager.getInstance();
 			
