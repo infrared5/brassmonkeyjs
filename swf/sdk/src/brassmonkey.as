@@ -65,22 +65,30 @@ package
 		public static var try_device:String;
 		public static var failed:String;
 		public static var success:String;
+		public static var device_detected:String;
+		public static var no_device_detected:String;
+		public static var select_device:String;
+		public static var ios_instructions:String;
+		public static var android_instructions:String;
+		
 		public var clients:Array=[];
 		public function brassmonkey()
 		{		
-			install_device=(resourceManager.getString("helper","install_device"));
-			see_device=(resourceManager.getString("helper","see_device"));
-			try_device=(resourceManager.getString("helper","try_device"));
-			failed=(resourceManager.getString("helper","failed"));
-			success=(resourceManager.getString("helper","success"));
-			
-		
+			install_device			= (resourceManager.getString( "helper", "install_device" ));
+			see_device				= (resourceManager.getString( "helper", "see_device" ));
+			try_device				= (resourceManager.getString( "helper", "try_device" ));
+			failed					= (resourceManager.getString( "helper", "failed" ));
+			success					= (resourceManager.getString( "helper", "success" ));
+			device_detected			= (resourceManager.getString( "helper", "device_detected" ));
+			no_device_detected		= (resourceManager.getString( "helper", "no_device_detected" ));
+			select_device			= (resourceManager.getString( "helper", "select_device" ));
+			ios_instructions		= (resourceManager.getString( "helper", "ios_instructions" ));
+			android_instructions	= (resourceManager.getString( "helper", "android_instructions" ));
 			
 			Security.allowDomain("*");
 			loaderInfo.addEventListener(Event.COMPLETE, onLoaded);
 			
 			trace(resourceManager.getLocales());
-	
 		}
 		
 		private function startHelper():void
@@ -130,20 +138,23 @@ package
 					}
 					else
 					{
-						
 						ExternalInterface.call("bm.helper.onShowSlot",brassMonkey.getInfo().slotId);
 					}
-					if(!conn && !error && clients.length > 0 && brassMonkey.session.registry.devices.length==0){
-						//this.idInfo.text='If you see "Select Me" on your device, tap it with your finger.' ;
-						printHelp(see_device );
-						generateState(event.type,clients)
 					
-					}
-					else if(!conn &&!error && brassMonkey.session.registry.devices.length==0){
-						//this.idInfo.text='Start up the Brass Monkey application now. If it is currently running and you do not see it after the timer refreshes, your device is using a different gateway to reach the internet than this computer.' ;
-						printHelp(install_device);
-						generateState(event.type,clients)
-					
+					if( !conn && !error )
+					{
+						if( clients.length > 0 && brassMonkey.session.registry.devices.length==0 )
+						{
+							//this.idInfo.text='If you see "Select Me" on your device, tap it with your finger.' ;
+							printHelp(see_device );
+							generateState(event.type,clients)
+						}
+						else if( brassMonkey.session.registry.devices.length==0 )
+						{
+							//this.idInfo.text='Start up the Brass Monkey application now. If it is currently running and you do not see it after the timer refreshes, your device is using a different gateway to reach the internet than this computer.' ;
+							printHelp(install_device);
+							generateState(event.type,clients)
+						}
 					}
 					
 					

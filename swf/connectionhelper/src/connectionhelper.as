@@ -1,5 +1,6 @@
 package
 {
+	import flash.display.DisplayObject;
 	import flash.display.Graphics;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
@@ -8,6 +9,9 @@ package
 	import flash.external.ExternalInterface;
 	import flash.net.URLRequest;
 	import flash.net.navigateToURL;
+	
+	import mx.resources.IResourceManager;
+	import mx.resources.ResourceManager;
 
 
 	[SWF(width="1024" ,height="768")]
@@ -16,11 +20,21 @@ package
 	public class connectionhelper extends Sprite
 	{
 		public var helper:Connector;
-
+		
+		protected var prevVisibleElements:Vector.<DisplayObject>;
+		protected var resourceManager:IResourceManager;
+		
+		protected var install_device:String;
+		
+		[ResourceBundle("connecter")]
 		public function connectionhelper()
 		{
-		
+			prevVisibleElements = new Vector.<DisplayObject>();
 			stage.addEventListener(Event.RESIZE, onResize);
+			
+			resourceManager = ResourceManager.getInstance();
+			
+			install_device			= resourceManager.getString( "connecter", "install_device" );
 			
 			helper=new Connector();
 			helper.nodeviceBtn.visible = false;
@@ -28,12 +42,21 @@ package
 			helper._deviceList.visible = false;
 			helper._timer.visible = true;			
 			helper.nodeviceBtn.visible = false;
+			helper.needAppBtn.visible = false;
+			helper.needWifiBtn.visible = false;
+			helper.popup.visible = false;
+			
 			helper.download_ios.addEventListener(MouseEvent.MOUSE_UP, onGetIos);
 			helper.download_android.addEventListener(MouseEvent.MOUSE_UP,onGetAndroid);
 			helper.nodeviceBtn.addEventListener(MouseEvent.MOUSE_UP,onGetHelp);
 			helper.helpBtn.addEventListener(MouseEvent.MOUSE_UP,onGetHelp);
 			//https://itunes.apple.com/us/app/brass-monkey/id455013514
 			
+<<<<<<< HEAD
+=======
+			helper.needAppBtn.addEventListener( MouseEvent.MOUSE_UP, onNeedApp, false, 0, true );
+			helper.needWifiBtn.addEventListener( MouseEvent.MOUSE_UP, onNeedWifi, false, 0, true );
+>>>>>>> New screens added to connection helper
 			
 			ExternalInterface.addCallback("onTick",onTick);
 			ExternalInterface.addCallback("setState",setState);
@@ -52,20 +75,134 @@ package
 			flash.net.navigateToURL(new URLRequest("https://play.google.com/store/apps/details?id=com.brassmonkey.controller"),"_getbrassmonkey");
 			
 		}
+		
+		protected function primePopup( frame:int ):void
+		{
+			helper.popup.gotoAndStop( frame );
+			
+			helper.popup.closeBtn.buttonMode = true;
+			helper.popup.closeBtn.addEventListener( MouseEvent.MOUSE_UP, onClosePopup, false, 0, true );
+			
+			switch ( frame )
+			{
+				case 1:
+					helper.popup.appleLrg.buttonMode = true;
+					helper.popup.appleLrg.addEventListener( MouseEvent.MOUSE_UP, onHelpIOS, false, 0, true );
+					helper.popup.appleLrgTxt.buttonMode = true;
+					helper.popup.appleLrgTxt.addEventListener( MouseEvent.MOUSE_UP, onHelpIOS, false, 0, true );
+					
+					helper.popup.androidLrg.buttonMode = true;
+					helper.popup.androidLrg.addEventListener( MouseEvent.MOUSE_UP, onHelpAndroid, false, 0, true );
+					helper.popup.androidLrgTxt.buttonMode = true;
+					helper.popup.androidLrgTxt.addEventListener( MouseEvent.MOUSE_UP, onHelpAndroid, false, 0, true );
+					break;
+				case 2:
+				case 3:
+					helper.popup.alrightBtn.buttonMode = true;
+					helper.popup.alrightBtn.addEventListener( MouseEvent.MOUSE_UP, onClosePopup, false, 0, true );
+					break;
+			}
+		}
+		
 		protected function onGetHelp(event:MouseEvent):void
 		{
-			flash.net.navigateToURL(new URLRequest("http://playbrassmonkey.com/support"),"_helpme");
+//			flash.net.navigateToURL(new URLRequest("http://playbrassmonkey.com/support"),"_helpme");
 			
+			helper.listeningForState = false;
+			
+			helper._deviceList.visible = false;
+			
+			helper.popup.visible = true;
+			primePopup( 1 );
 		}
+		
+		protected function onHelpIOS( e:MouseEvent ):void
+		{
+			helper.listeningForState = false;
+			
+			helper._deviceList.visible = false;
+			
+			helper.popup.visible = true;
+			primePopup( 2 );
+		}
+		
+		protected function onHelpAndroid( e:MouseEvent ):void
+		{
+			helper.listeningForState = false;
+			
+			helper._deviceList.visible = false;
+			
+			helper.popup.visible = true;
+			primePopup( 3 );
+		}
+		
+		protected function onClosePopup( e:MouseEvent ):void
+		{
+			helper._info.removeEventListener( MouseEvent.CLICK, onClosePopup );
+			
+			helper.setStep( 1 );
+			helper.hideButtons();
+			
+			helper._deviceList.visible = false;
+			helper.popup.gotoAndStop( 1 );
+			helper.popup.visible = false;
+			
+			helper.helpBtn.visible = true;
+			helper.quotes.visible = true;
+			helper.download_ios.visible = true;
+			helper.download_android.visible = true;
+			helper.topimage.visible = true;
+			
+			helper._info.y = 470;
+			
+			printHelp( install_device, true );
+			helper.listeningForState = true;
+		}
+		
+		protected function onNeedApp( e:MouseEvent ):void
+		{
+			helper.listeningForState = true;
+			
+			helper.setStep( 1 );
+			helper.hideButtons();
+			
+			helper._deviceList.visible = false;
+			
+			helper.helpBtn.visible = true;
+			helper.quotes.visible = true;
+			helper.download_ios.visible = true;
+			helper.download_android.visible = true;
+			helper.topimage.visible = true;
+			
+			helper._info.y = 470;
+			
+			printHelp( install_device, true );
+		}
+		
+		protected function onNeedWifi( e:MouseEvent ):void
+		{
+			helper.listeningForState = false;
+			
+			helper.hideButtons();
+			
+			helper._deviceList.visible = false;
+			
+			helper.popup.visible = true;
+			primePopup( 1 );
+		}
+		
 		protected function onResize(event:Event):void
 		{
 		
 			
 		}
 		
-		public function printHelp( val:String):void
+		public function printHelp( val:String, bypass:Boolean = false ):void
 		{
-			helper._info.text=val;
+			if ( !helper.listeningForState && !bypass )
+				return;
+			
+			helper._info.htmlText=val;
 			helper._info.selectable = true;
 		}
 		public function setState( val:String):void

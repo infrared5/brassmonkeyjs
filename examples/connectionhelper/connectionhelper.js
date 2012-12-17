@@ -74,12 +74,12 @@ bm.helper.onShowSlot=function(val){
   flashObj.setSlot(val);     
 };
  
-bm.helper.helperTick=function(msg ){
+bm.helper.helperTick=function(msg){
   var flashObj = document.getElementById(connectionHelper.flashObjectId);
   flashObj.onTick(msg);  
 };
  
-bm.helper.printHelp=function(msg ){
+bm.helper.printHelp=function(msg){
   var flashObj = document.getElementById(connectionHelper.flashObjectId);
   flashObj.printHelp(msg); 
 }
