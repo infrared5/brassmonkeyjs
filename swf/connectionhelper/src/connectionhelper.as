@@ -42,6 +42,7 @@ package
 			install_device			= resourceManager.getString( "connecter", "install_device" );
 			
 			helper=new Connector();
+			addChild(helper);
 			helper.nodeviceBtn.visible = false;
 			helper.phone.visible = false;
 			helper._deviceList.visible = false;
@@ -53,7 +54,7 @@ package
 			
 			helper.download_ios.addEventListener(MouseEvent.MOUSE_UP, onGetIos);
 			helper.download_android.addEventListener(MouseEvent.MOUSE_UP,onGetAndroid);
-			helper.nodeviceBtn.addEventListener(MouseEvent.MOUSE_UP,onGetHelp);
+			helper.nodeviceBtn.addEventListener(MouseEvent.MOUSE_UP,onGetAdditionalHelp);
 			helper.helpBtn.addEventListener(MouseEvent.MOUSE_UP,onGetHelp);
 			//https://itunes.apple.com/us/app/brass-monkey/id455013514
 			
@@ -64,7 +65,6 @@ package
 			ExternalInterface.addCallback("setState",setState);
 			ExternalInterface.addCallback("setSlot",setSlot);
 			ExternalInterface.addCallback("printHelp",printHelp);
-			addChild(helper);
 		}
 		
 		protected function onGetIos(event:MouseEvent):void
@@ -103,13 +103,24 @@ package
 					helper.popup.alrightBtn.buttonMode = true;
 					helper.popup.alrightBtn.addEventListener( MouseEvent.MOUSE_UP, onClosePopup, false, 0, true );
 					break;
+				case 4:
+					helper.popup.supportBtn.buttonMode = true;
+					helper.popup.supportBtn.addEventListener( MouseEvent.MOUSE_UP, onGetSupport, false, 0, true );
 			}
+		}
+		
+		protected function onGetAdditionalHelp(event:MouseEvent):void
+		{
+			helper.listeningForState = false;
+			
+			helper._deviceList.visible = false;
+			
+			helper.popup.visible = true;
+			primePopup( 4 );
 		}
 		
 		protected function onGetHelp(event:MouseEvent):void
 		{
-//			flash.net.navigateToURL(new URLRequest("http://playbrassmonkey.com/support"),"_helpme");
-			
 			helper.listeningForState = false;
 			
 			helper._deviceList.visible = false;
@@ -140,8 +151,6 @@ package
 		
 		protected function onClosePopup( e:MouseEvent ):void
 		{
-			helper._info.removeEventListener( MouseEvent.CLICK, onClosePopup );
-			
 			helper.setStep( 1 );
 			helper.hideButtons();
 			
@@ -193,6 +202,30 @@ package
 			
 			helper.popup.visible = true;
 			primePopup( 1 );
+		}
+		
+		protected function onGetSupport( e:MouseEvent ):void
+		{
+			helper.setStep( 1 );
+			helper.hideButtons();
+			
+			helper._deviceList.visible = false;
+			helper.popup.gotoAndStop( 1 );
+			helper.popup.visible = false;
+			helper.phone.visible = false;
+			
+			helper.helpBtn.visible = true;
+			helper.quotes.visible = true;
+			helper.download_ios.visible = true;
+			helper.download_android.visible = true;
+			helper.topimage.visible = true;
+			
+			helper._info.y = 470;
+			
+			printHelp( install_device, true );
+			helper.listeningForState = true;
+			
+			flash.net.navigateToURL( new URLRequest( 'http://playbrassmonkey.com/support' ) );
 		}
 		
 		protected function onResize(event:Event):void
