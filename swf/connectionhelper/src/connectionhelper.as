@@ -34,7 +34,7 @@ package
 			prevVisibleElements = new Vector.<DisplayObject>();
 			stage.addEventListener(Event.RESIZE, onResize);
 			stage.scaleMode = StageScaleMode.NO_SCALE;
-			stage.align = StageAlign.TOP_LEFT;
+			stage.align = StageAlign.TOP;
 			
 			resourceManager = ResourceManager.getInstance();
 			
