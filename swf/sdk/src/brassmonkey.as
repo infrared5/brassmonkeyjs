@@ -33,14 +33,10 @@ package
 	[ResourceBundle("helper")]
 	public class brassmonkey extends Sprite
 	{
-		
-		
 		private var resourceManager:IResourceManager =ResourceManager.getInstance();
-		
 		
 		internal static var PARAM_CONTROLLER_XML:String="bmControllerXML"
 		
-			
 		private var brassMonkey:BMApplication=new BMApplication(loaderInfo.parameters); 
 		private var _canCall:Boolean=true;
 		private var controlIndex:int=0;
@@ -58,7 +54,9 @@ package
 		private var conn:Boolean=false;
 		private var _updateTicker:uint=0;
 		private var _clockTicker:uint=0;
-
+		
+		//	TODO:	Change to 10 if necessary for server
+		protected var connectionCheckTime:uint = 5;
 		
 		public static var install_device:String;
 		public static var see_device:String;
@@ -72,6 +70,7 @@ package
 		public static var android_instructions:String;
 		
 		public var clients:Array=[];
+		
 		public function brassmonkey()
 		{		
 			install_device			= (resourceManager.getString( "helper", "install_device" ));
@@ -97,9 +96,7 @@ package
 				return;
 			doUpdate();
 			this.interation=0;
-			//	TODO: Check with server guys about length of update check
-			//	TODO: Reduce length of update check if possible to 5000 or below
-			_updateTicker=flash.utils.setInterval(doUpdate, 10000);
+			_updateTicker=flash.utils.setInterval(doUpdate, connectionCheckTime * 1000);
 			_clockTicker=flash.utils.setInterval(onTick, 1000);
 		}
 		
@@ -910,9 +907,9 @@ package
 		
 		private function onTick():void
 		{
-			interation ++;
-			interation>10?10:interation;
-			ExternalInterface.call("bm.helper.helperTick",(10 - interation).toString());	
+			interation++;
+			interation = Math.min( interation, connectionCheckTime );
+			ExternalInterface.call("bm.helper.helperTick",((connectionCheckTime+1) - interation).toString());	
 		}
 		
 		private function printHelp(msg:String):void

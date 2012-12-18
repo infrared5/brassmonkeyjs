@@ -9,6 +9,7 @@ package
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.external.ExternalInterface;
+	import flash.geom.ColorTransform;
 	import flash.net.URLRequest;
 	import flash.net.navigateToURL;
 	
@@ -219,11 +220,9 @@ package
 			var colors:Array = [0xff6600, 0xffcc00, 0xff3399, 0xff0066, 0xcc00ff, 0x999900, 0x9999cc, 0x00cc99, 0x287200, 0x00ccff, 0x003366, 0x99ff00, 0xcc0000, 0x80cd68, 0x6600ff];
 			var index:int = Math.max( 0, parseInt(val)-1 ) % colors.length;
 			var color:uint = colors[ index ];
-			var g:Graphics = (helper.phone.slot as MovieClip).graphics;
-			g.clear();
-			g.beginFill( color );
-			g.drawRoundRect( 0, 0, 18, 17, 10.0, 10.0 );
-			g.endFill();
+			var ct:ColorTransform = (helper.phone.slot as MovieClip).transform.colorTransform;
+			ct.color = color;
+			(helper.phone.slot as MovieClip).transform.colorTransform = ct;
 		}
 		public function onTick(val:int):void
 		{
