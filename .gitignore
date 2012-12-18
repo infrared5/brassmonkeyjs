@@ -2,3 +2,5 @@
 
 #-----Flash Builder Project Ignores----
 swf/sdk/.metadata
+
+*.esproj/
