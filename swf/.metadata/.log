@@ -856,3 +856,17 @@ java.io.FileNotFoundException: C:\Users\Andrew\Documents\GitHub\brassmonkeyjs\sw
 	at com.adobe.flexbuilder.codemodel.internal.indices.SearchIndexGateway.getOccurrences(SearchIndexGateway.java:166)
 	at com.adobe.flexide.as.core.search.MarkOccurrencesProcessor$ReferenceSearcher.run(MarkOccurrencesProcessor.java:115)
 	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:54)
+!SESSION 2012-12-18 16:02:36.483 -----------------------------------------------
+eclipse.buildId=I20100608-0911
+java.version=1.6.0_16
+java.vendor=Sun Microsystems Inc.
+BootLoader constants: OS=win32, ARCH=x86, WS=win32, NL=en_US
+Command-line arguments:  -os win32 -ws win32 -arch x86
+
+!ENTRY org.eclipse.ui 2 0 2012-12-18 16:02:40.047
+!MESSAGE Warnings while parsing the commands from the 'org.eclipse.ui.commands' and 'org.eclipse.ui.actionDefinitions' extension points.
+!SUBENTRY 1 org.eclipse.ui 2 0 2012-12-18 16:02:40.047
+!MESSAGE Commands should really have a category: plug-in='com.qnx.flashbuilder.multiplatform.qnx.ui', id='com.qnx.flashbuilder.multiplatform.qnx.ui.commands.OpenInfoCenter', categoryId='com.qnx.flashbuilder.multiplatform.qnx.ui.commands.category.help'
+
+!ENTRY com.adobe.flexbuilder.ui 4 1 2012-12-18 16:02:42.853
+!MESSAGE Product = null version = 460 edition = prem
