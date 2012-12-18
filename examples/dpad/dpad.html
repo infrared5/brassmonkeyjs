@@ -1,0 +1,165 @@
+<html>
+<head>
+  <title>DPad - HTML5 SDK for Brass Monkey</title>
+  
+  <!-- 
+    TODO: Remove this temporary modified brassmonkey implementation. 
+          This was to make the SDK work in 960 x 640 dimensions.
+  -->
+  <script type="text/javascript" src="bm.js"></script>
+  <script type="text/javascript" src="dpad.js"></script>
+  
+  
+  <style>
+    #dpad{
+      width: 100px;
+      height: 100px;
+      float: left;
+    }
+    #world{
+      clear: both;
+      width: 640px;
+      height: 480px;
+      background: black;
+    }
+    #character{
+      width: 16px;
+      height: 16px;
+      background: red;
+      position: absolute;
+    }
+    #canvas{
+      position: absolute;
+    }
+  </style>
+</head>
+<body style="margin:0px;background:white;">
+  <p id="angle">0</p>
+  <div id="slot-color" style="float: left;width:100px;height:100px;text-align:center;line-height:100px;font-family:Arial;">Slot Color</div>
+  <img id="dpad" src="dpad.png" />
+  
+  <div id="world">
+    <canvas id="canvas" width="640" height="480"></canvas>
+    <div id="character"></div>
+  </div>
+  <div id="log"></div>
+  <script>
+    var images = [],
+        layout = [],
+        // Create a DPad, pass in images,layout arrows
+        // so that some resources/elements can be procedurally
+        // added to them
+        dpad = new DPad(images,layout);
+        
+    
+  
+    dpad.on(function(which,isKeyDown){
+      var log = document.getElementById('log');
+      //log.innerHTML = (which+' '+(isKeyDown?"pressed":"released"))+'<br>'+log.innerHTML
+//      console.log();
+    });
+  
+    bm.init({
+      name: "DPad - SDK Examples",
+      bmMaxPlayers:1,
+      bmAppId:"62e822bc0e6b9f22fc158763591845be",
+      swfURL:"../../src/swf/bin/brassmonkey.swf",
+      design: {
+        orientation: "landscape",
+        touchEnabled: false,
+        accelerometerEnabled: false,
+        images:images,
+        layout:layout
+      }
+    });
+    
+    bm.onShowSlot(function(color){
+      document.getElementById('slot-color').style.background = color;
+    });
+    
+    var x = 320-8,
+        y = 240-8,
+        lastUpdate = (new Date).getTime(),
+        speed = 110;
+    setInterval(function(){
+      var curTime = (new Date).getTime(),
+          timeElapsed = (curTime-lastUpdate)/1000;// Convert to seconds
+      lastUpdate = curTime;
+    
+      // Let the DPad update it's states
+      dpad.update();
+      
+      // Display the DPad's latest state
+      document.getElementById('dpad').src = dpad.getCurrentStateImage();
+      
+      if(dpad.getState('right')){
+        x+=speed*timeElapsed; 
+      }
+      if(dpad.getState('left')){
+        x-=speed*timeElapsed; 
+      }
+      if(dpad.getState('up')){
+        y-=speed*timeElapsed; 
+      }
+      if(dpad.getState('down')){
+        y+=speed*timeElapsed; 
+      }
+      
+      document.getElementById('character').style.marginLeft = x+"px";
+      document.getElementById('character').style.marginTop = y+"px";
+      
+      
+      
+    },1000/30);
+
+    // Angle Testing Stuff
+    var cvs = document.getElementById('canvas'),
+        ctx = cvs.getContext('2d');
+        
+    ctx.strokeStyle="white";
+    ctx.beginPath();
+    
+    function drawLine(angle){
+      ctx.moveTo(320,240);
+      ctx.lineTo(320+Math.sin(angle*Math.PI/180)*1000,240+Math.cos(angle*Math.PI/180)*1000);
+    }
+    for(var a = 0; a<360;a+=45){
+      drawLine(-22.5+a);
+    }
+    
+    ctx.stroke();
+
+    function getAngle(x,y){
+      return Math.floor(
+        360-((Math.atan2(x,y)/Math.PI*180)+180)  
+      );
+    }
+    
+    var zonesLookUp = [
+        "up",
+        "upright",
+        "right",
+        "downright",
+        "down",
+        "downleft",
+        "left",
+        "upleft"
+      ];
+    function getZone(degrees){
+      // Special Case for Up Zone
+      if( degrees>(360-24) || degrees<23 ){
+        return 0;
+      } 
+      return Math.floor((degrees-22)/45)+1;
+    }
+
+    document.getElementById('world').onmousemove = function(e){
+      var angle = getAngle(e.clientX-320,e.clientY-240-135),
+          zone = getZone(angle);
+      //document.getElementById('angle').innerHTML = ""+angle+"  "+zone+" "+zonesLookUp[zone];
+    };
+    angle
+  </script>
+</body>
+</html>
+
