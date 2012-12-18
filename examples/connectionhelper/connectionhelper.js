@@ -5,7 +5,7 @@ connectionHelper = {};
 
 var isVisible = true;
 
-connectionHelper.init = function(swf,parentElemId){
+connectionHelper.init = function(swf,parentElemId,cb){
 
   connectionHelper.flashObjectId = parentElemId;
 
@@ -40,6 +40,10 @@ connectionHelper.init = function(swf,parentElemId){
             connectionHelper.show();
           } else {
             connectionHelper.hide();
+          }
+          
+          if(cb!==undefined){
+            cb();
           }
           
         }
