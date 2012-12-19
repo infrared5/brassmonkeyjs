@@ -1,7 +1,6 @@
 package
 {
 	import flash.display.DisplayObject;
-	import flash.display.Graphics;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
@@ -29,13 +28,12 @@ package
 		
 		protected var install_device:String;
 		
+		protected var tip:MovieClip;
+		
 		[ResourceBundle("connecter")]
 		public function connectionhelper()
 		{
 			prevVisibleElements = new Vector.<DisplayObject>();
-			stage.addEventListener(Event.RESIZE, onResize);
-			stage.scaleMode = StageScaleMode.NO_SCALE;
-			stage.align = StageAlign.TOP;
 			
 			resourceManager = ResourceManager.getInstance();
 			
@@ -65,6 +63,11 @@ package
 			ExternalInterface.addCallback("setState",setState);
 			ExternalInterface.addCallback("setSlot",setSlot);
 			ExternalInterface.addCallback("printHelp",printHelp);
+			
+			stage.scaleMode = StageScaleMode.NO_SCALE;
+			stage.align = StageAlign.TOP;
+			
+			stage.addEventListener(Event.RESIZE, onResize);
 		}
 		
 		protected function onGetIos(event:MouseEvent):void
@@ -230,8 +233,26 @@ package
 		
 		public function onResize(event:Event):void
 		{
-			if ( helper && helper.phone && helper.phone.instructions && helper.phone.instructions.channeltip ) {
-				helper.phone.instructions.channeltip.x = stage.stageWidth - helper.phone.instructions.channeltip.width;
+			if ( !tip )
+			{
+				var n:int = stage.numChildren - 1;
+				var chd:DisplayObject;
+				while ( n > -1 )
+				{
+					chd = stage.getChildAt( n );
+					if ( chd.name == 'channeltip' )
+					{
+						tip = chd as MovieClip;
+						break;
+					}
+					n--;
+				}
+			}
+			
+			if ( tip )
+			{
+				tip.y = 0;
+				tip.x = 512 + ((stage.stageWidth * 0.5) - tip.width);
 			}
 		}
 		
