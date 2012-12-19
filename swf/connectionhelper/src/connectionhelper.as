@@ -230,7 +230,9 @@ package
 		
 		public function onResize(event:Event):void
 		{
-			//helper.phone.instructions.channeltip.x = stage.stageWidth - helper.phone.instructions.channeltip.width;
+			if ( helper && helper.phone && helper.phone.instructions && helper.phone.instructions.channeltip ) {
+				helper.phone.instructions.channeltip.x = stage.stageWidth - helper.phone.instructions.channeltip.width;
+			}
 		}
 		
 		public function printHelp( val:String, bypass:Boolean = false ):void
