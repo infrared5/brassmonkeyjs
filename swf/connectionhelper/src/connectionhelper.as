@@ -165,7 +165,7 @@ package
 			helper.download_android.visible = true;
 			helper.topimage.visible = true;
 			
-			helper._info.y = 470;
+			helper._info.y = 270;
 			
 			printHelp( install_device, true );
 			helper.listeningForState = true;
@@ -187,7 +187,7 @@ package
 			helper.download_android.visible = true;
 			helper.topimage.visible = true;
 			
-			helper._info.y = 470;
+			helper._info.y = 270;
 			
 			printHelp( install_device, true );
 		}
@@ -228,10 +228,9 @@ package
 			flash.net.navigateToURL( new URLRequest( 'http://playbrassmonkey.com/support' ) );
 		}
 		
-		protected function onResize(event:Event):void
+		public function onResize(event:Event):void
 		{
-		
-			
+			//helper.phone.instructions.channeltip.x = stage.stageWidth - helper.phone.instructions.channeltip.width;
 		}
 		
 		public function printHelp( val:String, bypass:Boolean = false ):void
