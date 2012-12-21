@@ -5,13 +5,13 @@ connectionHelper = {};
 
 var isVisible = true;
 
-connectionHelper.init = function(swf,parentElemId,cb){
+connectionHelper.init = function(swf,parentElemId,cb,fv){
 
   connectionHelper.flashObjectId = parentElemId;
 
   var swfVersionStr = "0.0.0",
       xiSwfUrlStr = "",
-      flashvars = {},
+      flashvars = fv || {},
       params = {},
       attributes = {};
       
@@ -23,9 +23,7 @@ connectionHelper.init = function(swf,parentElemId,cb){
   attributes.id = parentElemId;
   attributes.name = "ConnectionHelper";
   attributes.align = "middle";
-    
   
-    
   swfobject.embedSWF(
       swf, parentElemId, 
       "100%", "100%", 
