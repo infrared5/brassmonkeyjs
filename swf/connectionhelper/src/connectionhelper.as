@@ -23,6 +23,7 @@ package
 	public class connectionhelper extends Sprite
 	{
 		public var helper:Connector;
+		
 		protected var _stg:Stage;
 		
 		protected var prevVisibleElements:Vector.<DisplayObject>;
@@ -65,6 +66,22 @@ package
 			ExternalInterface.addCallback("setState",setState);
 			ExternalInterface.addCallback("setSlot",setSlot);
 			ExternalInterface.addCallback("printHelp",printHelp);
+			
+			addEventListener( Event.ADDED_TO_STAGE, onAddedToStage, false, 0, true );
+		}
+		
+		protected function onAddedToStage( e:Event ):void
+		{
+			stg = this.parent as Stage;
+			addEventListener( Event.ENTER_FRAME, onEnterFrame, false, 0, true );
+		}
+		
+		protected function onEnterFrame( e:Event ):void
+		{
+			if ( stg.getChildByName( 'channeltip' ) )
+			{
+				stg.getChildByName( 'channeltip' ).visible = helper.phone.visible;
+			}
 		}
 		
 		protected function onGetIos(event:MouseEvent):void
