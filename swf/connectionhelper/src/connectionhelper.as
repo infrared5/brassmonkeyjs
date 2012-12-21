@@ -3,6 +3,7 @@ package
 	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
+	import flash.display.Stage;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
@@ -22,6 +23,7 @@ package
 	public class connectionhelper extends Sprite
 	{
 		public var helper:Connector;
+		protected var _stg:Stage;
 		
 		protected var prevVisibleElements:Vector.<DisplayObject>;
 		protected var resourceManager:IResourceManager;
@@ -63,11 +65,6 @@ package
 			ExternalInterface.addCallback("setState",setState);
 			ExternalInterface.addCallback("setSlot",setSlot);
 			ExternalInterface.addCallback("printHelp",printHelp);
-			
-			stage.scaleMode = StageScaleMode.NO_SCALE;
-			stage.align = StageAlign.TOP;
-			
-			stage.addEventListener(Event.RESIZE, onResize);
 		}
 		
 		protected function onGetIos(event:MouseEvent):void
@@ -235,11 +232,11 @@ package
 		{
 			if ( !tip )
 			{
-				var n:int = stage.numChildren - 1;
+				var n:int = _stg.numChildren - 1;
 				var chd:DisplayObject;
 				while ( n > -1 )
 				{
-					chd = stage.getChildAt( n );
+					chd = _stg.getChildAt( n );
 					if ( chd.name == 'channeltip' )
 					{
 						tip = chd as MovieClip;
@@ -252,7 +249,7 @@ package
 			if ( tip )
 			{
 				tip.y = 0;
-				tip.x = 512 + ((stage.stageWidth * 0.5) - tip.width);
+				tip.x = 512 + ((_stg.stageWidth * 0.5) - tip.width);
 			}
 		}
 		
@@ -284,5 +281,20 @@ package
 			helper.onTick(val);
 			helper._timer.visible = true;	
 		}
+
+		public function get stg():Stage
+		{
+			return _stg;
+		}
+
+		public function set stg(value:Stage):void
+		{
+			_stg = value;
+			_stg.scaleMode = StageScaleMode.NO_SCALE;
+			_stg.align = StageAlign.TOP;
+			
+			_stg.addEventListener(Event.RESIZE, onResize);
+		}
+
 	}
 }

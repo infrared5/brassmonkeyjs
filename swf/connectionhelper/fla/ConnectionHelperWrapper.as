@@ -1,0 +1,52 @@
+package
+{
+	import flash.display.Loader;
+	import flash.display.Sprite;
+	import flash.events.Event;
+	import flash.events.IOErrorEvent;
+	import flash.net.URLRequest;
+	
+	[SWF(width="1024" ,height="768")]
+	public class ConnectionHelperWrapper extends Sprite
+	{
+		var preloader:Preloader;
+		var loader:Loader;
+		
+		public function ConnectionHelperWrapper()
+		{
+			super();
+			
+			stage.addEventListener(Event.RESIZE, onResize, false, 0, true);
+			
+			preloader = new Preloader();
+			preloader.x = (stage.stageWidth * 0.5) - (preloader.width * 0.5);
+			preloader.y = (stage.stageHeight * 0.5) - (preloader.height * 0.5);
+			addChild( preloader );
+			
+			loader = new Loader();
+			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onComplete, false, 0, true);
+			loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, onError, false, 0, true);
+			loader.load( new URLRequest( "../../swf/connectionhelper/bin/connectionhelper.swf" ) );
+		}
+		
+		protected function onResize( e:Event ):void
+		{
+			if ( contains( preloader ) )
+			{
+				preloader.x = (stage.stageWidth * 0.5) - (preloader.width * 0.5);
+				preloader.y = (stage.stageHeight * 0.5) - (preloader.height * 0.5);
+			}
+		}
+		
+		protected function onComplete( e:Event ):void
+		{
+			removeChild( preloader );
+			addChild( loader.content );
+		}
+		
+		protected function onError( e:IOErrorEvent ):void
+		{
+			
+		}
+	}
+}
