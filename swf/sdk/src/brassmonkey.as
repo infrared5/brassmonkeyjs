@@ -196,8 +196,13 @@ package
 		
 		private function onLoaded(event:Event):void
 		{	
-			brassMonkey.debugger=this;			
-			
+			/**
+			 * Commmented out upon updating BMApps.swc
+			 * 
+			 * @author	Kyle Kellogg
+			 * @date	01/02/2013
+			 */
+			//brassMonkey.debugger=this;
 			
 			brassMonkey.addEventListener(DeviceEvent.SLOT_DISPLAY_REQUEST, onSlot);
 			brassMonkey.addEventListener(DeviceEvent.DEVICE_AVAILABLE,this.onDeviceDiscovery);
