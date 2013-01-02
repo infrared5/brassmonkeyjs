@@ -183,7 +183,7 @@ package
 					event.device.removeEventListener(DeviceEvent.CAN_NOT_CONNECT, onDevice);
 					conn=false;
 					
-					brassMonkey.session.setNavMode(event.device);
+					//brassMonkey.session.setNavMode(event.device);
 					
 					printHelp(success);										
 					//this.idInfo.text='Success! You are now ready to play games!' ;
@@ -780,7 +780,8 @@ package
 			}
 			
 			
-			evt.device.controlMode=Device.MODE_NAVIGATION;
+			evt.device.controlMode=Device.MODE_GAMEPAD;
+			
 			var ser:Object={				
 					deviceId:evt.device.deviceId,
 					deviceName:evt.device.deviceName,
@@ -856,7 +857,8 @@ package
 			evt.device.addEventListener(DeviceEvent.ECHO, onEcho);
 			var dev:Object={deviceId:evt.device.deviceId,deviceName:evt.device.deviceName};
 			callBacks[evt.device.deviceId]={};
-			brassMonkey.session.setNavMode(evt.device);
+			
+			
 			ExternalInterface.call("bm.onDeviceConnectedInternal", dev);
 			
 		}

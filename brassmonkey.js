@@ -400,7 +400,7 @@ bm.onDeviceAvailableInternal=function(a)
 {
 	//console.log('onDeviceAvailableInternal '+ a.deviceId);
 	//portal defaults to nav. 
-	a.controlMode=bm.MODE_NAVIGATION;
+	a.controlMode=bm.MODE_GAMEPAD;
 	
 	for(var i=0;i<bm.da.length;i++)
 	{
