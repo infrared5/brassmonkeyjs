@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workbench progressCount="32" version="2.0">
 <workbenchAdvisor/>
-<window height="1180" width="1593" x="158" y="169">
+<window height="1180" width="1593" x="220" y="104">
 <fastViewData fastViewLocation="1024"/>
 <perspectiveBar>
 <itemSize x="208"/>
@@ -43,6 +43,9 @@
 </view>
 <view id="org.eclipse.ui.views.ProblemView" partName="Problems">
 <viewState PRIMARY_SORT_FIELD="org.eclipse.ui.ide.severityAndDescriptionField" categoryGroup="org.eclipse.ui.ide.severity" markerContentGenerator="org.eclipse.ui.ide.problemsGenerator" partName="Problems">
+<expanded>
+<category IMemento.internal.id="Errors (2 items)"/>
+</expanded>
 <columnWidths org.eclipse.ui.ide.locationField="75" org.eclipse.ui.ide.markerType="75" org.eclipse.ui.ide.pathField="100" org.eclipse.ui.ide.resourceField="75" org.eclipse.ui.ide.severityAndDescriptionField="250"/>
 <visible IMemento.internal.id="org.eclipse.ui.ide.severityAndDescriptionField"/>
 <visible IMemento.internal.id="org.eclipse.ui.ide.resourceField"/>
@@ -68,7 +71,7 @@
 <fpeElement fpePath="/connection-helper/lib"/>
 </fpeExpanded>
 <fpeSelection>
-<fpeElement fpePath="/connection-helper"/>
+<fpeElement fpePath="/connection-helper/fla/src"/>
 </fpeSelection>
 <filters>
 <filter element=".flexProperties" isEnabled="true"/>
@@ -98,7 +101,7 @@
 <element path="/connection-helper/lib"/>
 </expanded>
 <selection>
-<element path="/connection-helper"/>
+<element path="/connection-helper/fla/src"/>
 </selection>
 </viewState>
 </view>
