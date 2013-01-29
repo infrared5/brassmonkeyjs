@@ -1,6 +1,8 @@
 .DS_Store
 
+
 #-----Flash Builder Project Ignores----
 swf/sdk/.metadata
+.metadatas
 
 *.esproj/
