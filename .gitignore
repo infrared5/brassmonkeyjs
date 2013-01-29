@@ -3,6 +3,6 @@
 
 #-----Flash Builder Project Ignores----
 swf/sdk/.metadata
-.metadatas
+.metadata
 
 *.esproj/
