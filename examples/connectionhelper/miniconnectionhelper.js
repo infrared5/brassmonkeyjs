@@ -26,7 +26,7 @@ miniconnectionHelper.init = function(swf,parentElemId,cb,fv){
   
   swfobject.embedSWF(
       swf, parentElemId, 
-      "100%", "100%", 
+      "451", "275", 
       swfVersionStr, xiSwfUrlStr, 
       flashvars, params, attributes,
       function(e){

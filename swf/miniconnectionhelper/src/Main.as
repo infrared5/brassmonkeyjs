@@ -31,6 +31,7 @@ package
 		public function Main()
 		{
 			helper=new Connector();
+			helper.x = 287;
 			addChild(helper);
 			helper.nodeviceBtn.visible = false;
 			helper.phone.visible = false;
