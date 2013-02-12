@@ -203,6 +203,8 @@ package
 		public function onDeviceConnected():void
 		{
 			helper.success_screen.visible = true;
+			helper.addChild( helper.success_screen );
+			onClosePopup( null );
 		}
 		
 		public function onDeviceDisconnected():void
