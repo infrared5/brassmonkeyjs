@@ -48,11 +48,18 @@ miniconnectionHelper.init = function(swf,parentElemId,cb,fv){
       });
 
   bm.onDeviceConnected(function(device){
-    if(bm.getControllerCount()==1){
+    if(bm.getControllerCount()===1){
       var flashObj = document.getElementById(miniconnectionHelper.flashObjectId);
-      flashObj.shutDownHelper();
+      flashObj.onDeviceConnected();
     }
   });
+  
+  bm.onDeviceDisconnected( function( device ) {
+    if ( bm.getControllerCount() <= 0 ) {
+      var flashObj = document.getElementById( miniconnectionHelper.flashObjectId );
+      flashObj.onDeviceDisconnected();
+    }
+  } );
 }
 
 miniconnectionHelper.show = function(){
@@ -68,28 +75,5 @@ miniconnectionHelper.hide = function(){
   
   isVisible = false;
 }
-
-// Create helper object for brassmonkey.swf to call into
-bm.helper={};
-bm.helper.onShowSlot=function(val){
-  var flashObj = document.getElementById(miniconnectionHelper.flashObjectId);
-  flashObj.setSlot(val);     
-};
- 
-bm.helper.helperTick=function(msg){
-  var flashObj = document.getElementById(miniconnectionHelper.flashObjectId);
-  flashObj.onTick(msg);  
-};
- 
-bm.helper.printHelp=function(msg){
-  var flashObj = document.getElementById(miniconnectionHelper.flashObjectId);
-  flashObj.printHelp(msg); 
-}
-  
-bm.helper.setState= function (value){           
-  var flashObj = document.getElementById(miniconnectionHelper.flashObjectId);
-  flashObj.setState(value);
-};
-
 
 })();

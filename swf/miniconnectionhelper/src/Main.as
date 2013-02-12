@@ -51,9 +51,8 @@ package
 			helper.needAppBtn.addEventListener( MouseEvent.MOUSE_UP, onNeedApp, false, 0, true );
 			helper.needWifiBtn.addEventListener( MouseEvent.MOUSE_UP, onNeedWifi, false, 0, true );
 			
-			ExternalInterface.addCallback("onTick",onTick);
-			ExternalInterface.addCallback("setState",setState);
-			ExternalInterface.addCallback("setSlot",setSlot);
+			ExternalInterface.addCallback("onDeviceConnected",onDeviceConnected);
+			ExternalInterface.addCallback("onDeviceDisconnected",onDeviceDisconnected);
 			
 			addEventListener( Event.ADDED_TO_STAGE, onAddedToStage, false, 0, true );
 		}
@@ -201,36 +200,14 @@ package
 			}
 		}
 		
-		public function setState( val:String):void
+		public function onDeviceConnected():void
 		{
-			var message:Object = JSON.parse( val );
-			
-			if ( message.type == 'deviceConnected' )
-			{
-				if ( message.devices.length > 0 )
-				{
-					helper.success_screen.visible = true;
-					ExternalInterface.call( 'DevicesAvailable' );
-				}
-			}
-			else
-			{
-				helper.success_screen.visible = false;
-			}
+			helper.success_screen.visible = true;
 		}
 		
-		public function setSlot(val:String):void
+		public function onDeviceDisconnected():void
 		{
-			var colors:Array = [0xff6600, 0xffcc00, 0xff3399, 0xff0066, 0xcc00ff, 0x999900, 0x9999cc, 0x00cc99, 0x287200, 0x00ccff, 0x003366, 0x99ff00, 0xcc0000, 0x80cd68, 0x6600ff];
-			var index:int = Math.max( 0, parseInt(val)-1 ) % colors.length;
-			var color:uint = colors[ index ];
-			var ct:ColorTransform = (helper.phone.slot as MovieClip).transform.colorTransform;
-			ct.color = color;
-			(helper.phone.slot as MovieClip).transform.colorTransform = ct;
-		}
-		public function onTick(val:int):void
-		{
-			helper._timer.visible = true;	
+			helper.success_screen.visible = false;
 		}
 		
 		public function get stg():Stage
