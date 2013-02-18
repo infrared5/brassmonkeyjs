@@ -55,6 +55,19 @@ package
 			ExternalInterface.addCallback("onDeviceDisconnected",onDeviceDisconnected);
 			
 			addEventListener( Event.ADDED_TO_STAGE, onAddedToStage, false, 0, true );
+			
+			// Because the mini conneciton helper can be loaded by a preloader we can miss
+			// some messages coming from our hosting page environment. So we call out to 
+			// ask for the amount of connected devices
+			var results:Object= ExternalInterface.call("miniconnectionHelper.getControllerCount");
+			if(results){
+				// If there is at least one controller connected, then simulate an
+				// onDeviceConnected event
+				if(results.count>0){
+					onDeviceConnected();
+					
+				}
+			}
 		}
 		
 		protected function onAddedToStage( e:Event ):void

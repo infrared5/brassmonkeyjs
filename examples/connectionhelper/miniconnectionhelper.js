@@ -76,4 +76,12 @@ miniconnectionHelper.hide = function(){
   isVisible = false;
 }
 
+
+// This is called by the connectionhelper swf to get the current count
+// of connected controllers when it first initializes itself
+miniconnectionHelper.getControllerCount = function(){
+  var res = {count:bm.getControllerCount()}; 
+  return res;
+}
+
 })();
