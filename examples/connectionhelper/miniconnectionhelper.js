@@ -81,6 +81,7 @@ miniconnectionHelper.hide = function(){
 // of connected controllers when it first initializes itself
 miniconnectionHelper.getControllerCount = function(){
   var res = {count:bm.getControllerCount()}; 
+  //alert(res.count);
   return res;
 }
 
