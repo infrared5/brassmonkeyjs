@@ -21,10 +21,5 @@
 			<type>2</type>
 			<location>/Applications/XAMPP/xamppfiles/htdocs/brassmonkeyjs/swf/connectionhelper/bin</location>
 		</link>
-		<link>
-			<name>src-Preloader</name>
-			<type>2</type>
-			<location>/Applications/XAMPP/xamppfiles/htdocs/brassmonkeyjs/swf/connectionhelper/fla</location>
-		</link>
 	</linkedResources>
 </projectDescription>
