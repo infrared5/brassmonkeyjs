@@ -64,14 +64,14 @@ miniconnectionHelper.init = function(swf,parentElemId,cb,fv){
 
 miniconnectionHelper.show = function(){
   var flashObj = document.getElementById(miniconnectionHelper.flashObjectId);
-  flashObj.style.display = "block";
+  flashObj.style.visibility = "visible";
   
   isVisible = true;
 }
 
 miniconnectionHelper.hide = function(){
   var flashObj = document.getElementById(miniconnectionHelper.flashObjectId);
-  flashObj.style.display = "none";
+  flashObj.style.visibility = "hidden";
   
   isVisible = false;
 }

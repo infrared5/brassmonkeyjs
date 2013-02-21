@@ -5,9 +5,16 @@
   <script type="text/javascript" src="../../brassmonkey.js"></script>
   <script type="text/javascript" src="miniconnectionhelper.js"></script>
   
+  <style>
+    body{margin:0px;background:black;overflow:visible;}
+    #MiniConnectionHelper{margin:0px;background:black;text-align:center;overflow:visible;}
+    #toggle{
+      margin-top: 280px;
+    }
+  </style>  
 </head>
-<body style="margin:0px;background:black;text-align:center;overflow:visible;">
-  <div id="MiniConnectionHelper" style="margin:0px;background:black;text-align:center;overflow:visible;">
+<body style="">
+  <div id="MiniConnectionHelper">
           <p>
               To view this page ensure that Adobe Flash Player is installed 
               
@@ -19,7 +26,9 @@
                               + pageHost + "www.adobe.com/images/shared/download_buttons/get_flash_player.gif' alt='Get Adobe Flash player' /></a>" ); 
           </script> 
    </div>
-
+  
+  <input id="toggle" type="button" value="Hide"/>
+  
   <script>
     bm.init({
       name: "Brass Monkey",
@@ -38,6 +47,20 @@
       a.controlMode=bm.MODE_NAVIGATION;
       return a;
     });
+    
+    var toggle = document.getElementById('toggle'),
+        show = true;
+    toggle.onclick = function(){
+      show = !show;
+      
+      if(show){
+        miniconnectionHelper.show();
+        toggle.value = "Hide";
+      } else {
+        miniconnectionHelper.hide();
+        toggle.value = "Show";
+      }
+    }
     
   </script>
   

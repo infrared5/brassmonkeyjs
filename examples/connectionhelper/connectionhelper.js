@@ -57,14 +57,14 @@ connectionHelper.init = function(swf,parentElemId,cb,fv){
 
 connectionHelper.show = function(){
   var flashObj = document.getElementById(connectionHelper.flashObjectId);
-  flashObj.style.display = "block";
+  flashObj.style.visibility = "visible";
   
   isVisible = true;
 }
 
 connectionHelper.hide = function(){
   var flashObj = document.getElementById(connectionHelper.flashObjectId);
-  flashObj.style.display = "none";
+  flashObj.style.visibility = "hidden";
   
   isVisible = false;
 }
