@@ -1,8 +1,8 @@
 .DS_Store
 
-#Flash Builder Ignores
-src/.metadata/.plugins/com.adobe.flexbuilder.codemodel/searchCache/
-src/.metadata/.plugins/com.adobe.flexide.editorcore/imageCache
-src/.metadata/.plugins/com.adobe.flexbuilder.codemodel/SwcCache/
-src/.metadata/.plugins/org.eclipse.core.resources/.root
-src/.metadata/.plugins/com.adobe.flexbuilder.codemodel/searchCache
+
+#-----Flash Builder Project Ignores----
+swf/sdk/.metadata
+.metadata
+
+*.esproj/
