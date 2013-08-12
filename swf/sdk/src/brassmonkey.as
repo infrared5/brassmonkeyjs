@@ -17,6 +17,7 @@ package
 	import com.brassmonkey.events.TouchEvent;
 	import com.brassmonkey.events.VersionPacketEvent;
 	import com.brassmonkey.externals.BMRegistryInfo;
+	import com.brassmonkey.externals.DPadUpdate;
 	
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -248,6 +249,7 @@ package
 			ExternalInterface.addCallback("setControlpadPage", setControlpadPage);
 			ExternalInterface.addCallback("measurePing", measurePing);
 			
+			
 			if(loaderInfo.parameters.hasOwnProperty('bmControllerXML'))
 			{	
 				var controllerXML:String = decodeURIComponent(loaderInfo.parameters['bmControllerXML']);
@@ -373,30 +375,19 @@ package
 			ExternalInterface.addCallback("getDevice", getDevice);	
 			ExternalInterface.addCallback("setWaitMode", setWaitMode);	
 			
-
-		
 			ExternalInterface.addCallback("updateControlPad", updateControlPad);			
 			ExternalInterface.addCallback("closeDevice", closeDevice);
-
-			
 		}
-		
-
-		
-		public function loadPrivateResources(callback:String):void
-		{
-			
+				
+		public function loadPrivateResources(callback:String):void {	
 			privateResourcesToLoad=privateResourceQue.length;
-			while(privateResourceQue.length)
-			{
+			
+			while(privateResourceQue.length) {
 				var lq:LoaderQueue=privateResourceQue.shift();
 				lq.addEventListener(Event.COMPLETE, privateResourcesLoaded);
 				
 				lq.load();
-				
 			}
-			
-			
 		}
 		private function privateResourcesLoaded(e:Event):void
 		{
@@ -767,7 +758,18 @@ package
 				startHelper();
 			}
 			
+			evt.device.removeEventListener(DeviceEvent.DPAD, onDPad);
 		} 
+		
+		/**
+			*  This function is used to derive information about the dpad state and provide text feedback.
+				* @param event
+		**/
+		protected function onDPad(event:DeviceEvent):void {
+			var update:DPadUpdate=event.value as DPadUpdate; 	
+			
+			ExternalInterface.call( "bm.onDpadInternal", update.x, update.y, event.device.deviceId );
+		}
 		
 		
 		private function onDeviceDiscovery(evt:DeviceEvent):void 
@@ -866,7 +868,11 @@ package
 			
 			ExternalInterface.call("bm.onDeviceConnectedInternal", dev);
 			
+			// listen for dpad data.
+			evt.device.addEventListener(DeviceEvent.DPAD, onDPad);
+			
 		}
+		
 		
 		private function onEcho(event:DeviceEvent):void
 		{
