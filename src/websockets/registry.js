@@ -1,6 +1,6 @@
 (function(bm) {
-
-var registryUrl = "ws://qaregistry.monkeysecurity.com:6262/registry";
+//var registryUrl = "ws://qaregistry.monkeysecurity.com:6262/registry";
+var  registryUrl = "ws://76.104.235.243:6262/registry";
 
 var BMInvoke = function (method,returnMethod,data){
   this.methodName = method;
@@ -57,6 +57,7 @@ var debounce = function(func, wait, immediate) {
 var RegistryConnection = function(options) {   
   this.uri = registryUrl;
   this.websocket = null;
+  this.domain = {value:"a65971f24694b9c47a9bcd01"};
   this.clientInfo = {
     appId : options.appId,
     device : new BMDevice(options.deviceId, options.name),
@@ -105,14 +106,15 @@ rcp.onOpen = function(event){
 
 rcp.onClose = function(event){
   // TODO: event.close
-  console.log("registry closed");
+  console.log("registry closed "+JSON.stringify(event));
   bm.trigger("registrydisconnected", {});
-  this.retry = setTimeout(bind(this.start, this), 1500);
+  //this.retry = setTimeout(bind(this.start, this), 2000);
 };
 
 rcp.onError = function(event){
   // TODO: event.error
-  console.log("registry error");
+	
+  console.log("registry error "+JSON.stringify(event));
 };
 
 var paramValues = function(data) {

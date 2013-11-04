@@ -2,10 +2,22 @@
 <section name="Workbench">
 	<section name="NewWizardAction">
 	</section>
+	<section name="ShowViewDialog">
+		<item value="280" key="DIALOG_WIDTH"/>
+		<item value="org.eclipse.ui.views.ResourceNavigator" key="ShowViewDialog.STORE_SELECTED_VIEW_ID"/>
+		<item value="270" key="DIALOG_Y_ORIGIN"/>
+		<item value="820" key="DIALOG_X_ORIGIN"/>
+		<item value="414" key="DIALOG_HEIGHT"/>
+		<item value="1|Tahoma|8.25|0|WINDOWS|1|-11|0|0|0|400|0|0|0|1|0|0|0|0|Tahoma" key="DIALOG_FONT_NAME"/>
+		<list key="ShowViewDialog.STORE_EXPANDED_CATEGORIES_ID">
+			<item value="org.eclipse.ui"/>
+		</list>
+	</section>
 	<section name="ImportExportAction">
-		<item value="org.eclipse.ui.wizards.import.ExternalProject" key="ImportExportPage.STORE_SELECTED_IMPORT_WIZARD_ID"/>
+		<item value="com.adobe.flexbuilder.exportimport.importWizards.ImportWizard" key="ImportExportPage.STORE_SELECTED_IMPORT_WIZARD_ID"/>
 		<list key="ImportExportPage.STORE_EXPANDED_IMPORT_CATEGORIES">
 			<item value="org.eclipse.ui.Basic"/>
+			<item value="com.adobe.flexbuilder.importartwork.ui.importWizards.flex"/>
 		</list>
 	</section>
 </section>

@@ -228,3 +228,314 @@ Binding(COMMAND+SHIFT+F12,
 		,,true),null),
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.ui.contexts.window,,cocoa,system)
+!SESSION 2012-11-18 10:27:58.064 -----------------------------------------------
+eclipse.buildId=I20100608-0911
+java.version=1.6.0_16
+java.vendor=Sun Microsystems Inc.
+BootLoader constants: OS=win32, ARCH=x86, WS=win32, NL=en_US
+Command-line arguments:  -os win32 -ws win32 -arch x86 -data C:\workspaces\bmsocketsW\bmsockets\src
+
+!ENTRY org.eclipse.ui 2 0 2012-11-18 10:28:01.076
+!MESSAGE Warnings while parsing the commands from the 'org.eclipse.ui.commands' and 'org.eclipse.ui.actionDefinitions' extension points.
+!SUBENTRY 1 org.eclipse.ui 2 0 2012-11-18 10:28:01.076
+!MESSAGE Commands should really have a category: plug-in='com.qnx.flashbuilder.multiplatform.qnx.ui', id='com.qnx.flashbuilder.multiplatform.qnx.ui.commands.OpenInfoCenter', categoryId='com.qnx.flashbuilder.multiplatform.qnx.ui.commands.category.help'
+
+!ENTRY org.eclipse.ui 4 0 2012-11-18 10:28:02.782
+!MESSAGE null argument:
+!STACK 0
+org.eclipse.core.runtime.AssertionFailedException: null argument:
+	at org.eclipse.core.runtime.Assert.isNotNull(Assert.java:85)
+	at org.eclipse.core.runtime.Assert.isNotNull(Assert.java:73)
+	at org.eclipse.core.internal.events.ResourceChangeListenerList.remove(ResourceChangeListenerList.java:146)
+	at org.eclipse.core.internal.events.NotificationManager.removeListener(NotificationManager.java:305)
+	at org.eclipse.core.internal.resources.Workspace.removeResourceChangeListener(Workspace.java:2302)
+	at com.adobe.flexide.editorcore.editor.AbstractFlexEditor.dispose(AbstractFlexEditor.java:558)
+	at com.adobe.flexbuilder.as.editor.ActionScriptEditor.dispose(ActionScriptEditor.java:136)
+	at org.eclipse.ui.internal.EditorReference.createPartHelper(EditorReference.java:705)
+	at org.eclipse.ui.internal.EditorReference.createPart(EditorReference.java:465)
+	at org.eclipse.ui.internal.WorkbenchPartReference.getPart(WorkbenchPartReference.java:595)
+	at org.eclipse.ui.internal.EditorAreaHelper.setVisibleEditor(EditorAreaHelper.java:271)
+	at org.eclipse.ui.internal.EditorManager.setVisibleEditor(EditorManager.java:1459)
+	at org.eclipse.ui.internal.EditorManager$5.runWithException(EditorManager.java:972)
+	at org.eclipse.ui.internal.StartupThreading$StartupRunnable.run(StartupThreading.java:31)
+	at org.eclipse.swt.widgets.RunnableLock.run(RunnableLock.java:35)
+	at org.eclipse.swt.widgets.Synchronizer.runAsyncMessages(Synchronizer.java:135)
+	at org.eclipse.swt.widgets.Display.runAsyncMessages(Display.java:4140)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3757)
+	at org.eclipse.ui.application.WorkbenchAdvisor.openWindows(WorkbenchAdvisor.java:803)
+	at org.eclipse.ui.internal.Workbench$33.runWithException(Workbench.java:1595)
+	at org.eclipse.ui.internal.StartupThreading$StartupRunnable.run(StartupThreading.java:31)
+	at org.eclipse.swt.widgets.RunnableLock.run(RunnableLock.java:35)
+	at org.eclipse.swt.widgets.Synchronizer.runAsyncMessages(Synchronizer.java:135)
+	at org.eclipse.swt.widgets.Display.runAsyncMessages(Display.java:4140)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3757)
+	at org.eclipse.ui.internal.Workbench.runUI(Workbench.java:2604)
+	at org.eclipse.ui.internal.Workbench.access$4(Workbench.java:2494)
+	at org.eclipse.ui.internal.Workbench$7.run(Workbench.java:674)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:332)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:667)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:149)
+	at com.adobe.flexbuilder.standalone.FlashBuilderApplication.start(FlashBuilderApplication.java:108)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:196)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:110)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:79)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:344)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:179)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:622)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:577)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1410)
+
+!ENTRY org.eclipse.ui 4 0 2012-11-18 10:28:02.785
+!MESSAGE Unable to create editor ID com.adobe.flexbuilder.editors.actionscript.ActionScriptEditor: The file does not exist.
+!STACK 1
+org.eclipse.core.runtime.CoreException: The file does not exist.
+	at org.eclipse.core.internal.filebuffers.ResourceFileBuffer.create(ResourceFileBuffer.java:237)
+	at org.eclipse.core.internal.filebuffers.TextFileBufferManager.connect(TextFileBufferManager.java:112)
+	at org.eclipse.ui.editors.text.TextFileDocumentProvider.createFileInfo(TextFileDocumentProvider.java:559)
+	at org.eclipse.ui.editors.text.TextFileDocumentProvider.connect(TextFileDocumentProvider.java:478)
+	at com.adobe.flexide.editorcore.editor.AbstractFlexDocumentProvider.connect(AbstractFlexDocumentProvider.java:87)
+	at org.eclipse.ui.texteditor.AbstractTextEditor.doSetInput(AbstractTextEditor.java:4213)
+	at org.eclipse.ui.texteditor.StatusTextEditor.doSetInput(StatusTextEditor.java:237)
+	at org.eclipse.ui.texteditor.AbstractDecoratedTextEditor.doSetInput(AbstractDecoratedTextEditor.java:1451)
+	at com.adobe.flexbuilder.editors.derived.editor.DerivedTextEditor.doSetInput(DerivedTextEditor.java:177)
+	at com.adobe.flexide.editorcore.editor.AbstractFlexEditor.doSetInput(AbstractFlexEditor.java:1440)
+	at org.eclipse.ui.texteditor.AbstractTextEditor$19.run(AbstractTextEditor.java:3200)
+	at org.eclipse.jface.operation.ModalContext.runInCurrentThread(ModalContext.java:464)
+	at org.eclipse.jface.operation.ModalContext.run(ModalContext.java:372)
+	at org.eclipse.jface.window.ApplicationWindow$1.run(ApplicationWindow.java:759)
+	at org.eclipse.swt.custom.BusyIndicator.showWhile(BusyIndicator.java:70)
+	at org.eclipse.jface.window.ApplicationWindow.run(ApplicationWindow.java:756)
+	at org.eclipse.ui.internal.WorkbenchWindow.run(WorkbenchWindow.java:2642)
+	at org.eclipse.ui.texteditor.AbstractTextEditor.internalInit(AbstractTextEditor.java:3218)
+	at org.eclipse.ui.texteditor.AbstractTextEditor.init(AbstractTextEditor.java:3245)
+	at com.adobe.flexide.editorcore.editor.AbstractFlexEditor.init(AbstractFlexEditor.java:455)
+	at org.eclipse.ui.internal.EditorManager.createSite(EditorManager.java:828)
+	at org.eclipse.ui.internal.EditorReference.createPartHelper(EditorReference.java:647)
+	at org.eclipse.ui.internal.EditorReference.createPart(EditorReference.java:465)
+	at org.eclipse.ui.internal.WorkbenchPartReference.getPart(WorkbenchPartReference.java:595)
+	at org.eclipse.ui.internal.EditorAreaHelper.setVisibleEditor(EditorAreaHelper.java:271)
+	at org.eclipse.ui.internal.EditorManager.setVisibleEditor(EditorManager.java:1459)
+	at org.eclipse.ui.internal.EditorManager$5.runWithException(EditorManager.java:972)
+	at org.eclipse.ui.internal.StartupThreading$StartupRunnable.run(StartupThreading.java:31)
+	at org.eclipse.swt.widgets.RunnableLock.run(RunnableLock.java:35)
+	at org.eclipse.swt.widgets.Synchronizer.runAsyncMessages(Synchronizer.java:135)
+	at org.eclipse.swt.widgets.Display.runAsyncMessages(Display.java:4140)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3757)
+	at org.eclipse.ui.application.WorkbenchAdvisor.openWindows(WorkbenchAdvisor.java:803)
+	at org.eclipse.ui.internal.Workbench$33.runWithException(Workbench.java:1595)
+	at org.eclipse.ui.internal.StartupThreading$StartupRunnable.run(StartupThreading.java:31)
+	at org.eclipse.swt.widgets.RunnableLock.run(RunnableLock.java:35)
+	at org.eclipse.swt.widgets.Synchronizer.runAsyncMessages(Synchronizer.java:135)
+	at org.eclipse.swt.widgets.Display.runAsyncMessages(Display.java:4140)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3757)
+	at org.eclipse.ui.internal.Workbench.runUI(Workbench.java:2604)
+	at org.eclipse.ui.internal.Workbench.access$4(Workbench.java:2494)
+	at org.eclipse.ui.internal.Workbench$7.run(Workbench.java:674)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:332)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:667)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:149)
+	at com.adobe.flexbuilder.standalone.FlashBuilderApplication.start(FlashBuilderApplication.java:108)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:196)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:110)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:79)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:344)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:179)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:622)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:577)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1410)
+!SUBENTRY 1 org.eclipse.core.filebuffers 4 0 2012-11-18 10:28:02.785
+!MESSAGE The file does not exist.
+
+!ENTRY org.eclipse.ui 2 2 2012-11-18 10:28:02.850
+!MESSAGE Ignored attempt to add saveable that was already registered
+!STACK 0
+org.eclipse.core.runtime.AssertionFailedException: unknown saveable: org.eclipse.ui.internal.DefaultSaveable@1e247e2 from part: org.eclipse.ui.internal.ErrorEditorPart@1e247e2
+	at org.eclipse.ui.internal.SaveablesList.logWarning(SaveablesList.java:187)
+	at org.eclipse.ui.internal.SaveablesList.addModel(SaveablesList.java:117)
+	at org.eclipse.ui.internal.SaveablesList.addModels(SaveablesList.java:289)
+	at org.eclipse.ui.internal.SaveablesList.postOpen(SaveablesList.java:695)
+	at org.eclipse.ui.internal.PartList.partOpened(PartList.java:234)
+	at org.eclipse.ui.internal.PartList.access$0(PartList.java:210)
+	at org.eclipse.ui.internal.PartList$1.propertyChanged(PartList.java:40)
+	at org.eclipse.ui.internal.WorkbenchPartReference.fireInternalPropertyChange(WorkbenchPartReference.java:375)
+	at org.eclipse.ui.internal.WorkbenchPartReference.getPart(WorkbenchPartReference.java:610)
+	at org.eclipse.ui.internal.EditorAreaHelper.setVisibleEditor(EditorAreaHelper.java:271)
+	at org.eclipse.ui.internal.EditorManager.setVisibleEditor(EditorManager.java:1459)
+	at org.eclipse.ui.internal.EditorManager$5.runWithException(EditorManager.java:972)
+	at org.eclipse.ui.internal.StartupThreading$StartupRunnable.run(StartupThreading.java:31)
+	at org.eclipse.swt.widgets.RunnableLock.run(RunnableLock.java:35)
+	at org.eclipse.swt.widgets.Synchronizer.runAsyncMessages(Synchronizer.java:135)
+	at org.eclipse.swt.widgets.Display.runAsyncMessages(Display.java:4140)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3757)
+	at org.eclipse.ui.application.WorkbenchAdvisor.openWindows(WorkbenchAdvisor.java:803)
+	at org.eclipse.ui.internal.Workbench$33.runWithException(Workbench.java:1595)
+	at org.eclipse.ui.internal.StartupThreading$StartupRunnable.run(StartupThreading.java:31)
+	at org.eclipse.swt.widgets.RunnableLock.run(RunnableLock.java:35)
+	at org.eclipse.swt.widgets.Synchronizer.runAsyncMessages(Synchronizer.java:135)
+	at org.eclipse.swt.widgets.Display.runAsyncMessages(Display.java:4140)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3757)
+	at org.eclipse.ui.internal.Workbench.runUI(Workbench.java:2604)
+	at org.eclipse.ui.internal.Workbench.access$4(Workbench.java:2494)
+	at org.eclipse.ui.internal.Workbench$7.run(Workbench.java:674)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:332)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:667)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:149)
+	at com.adobe.flexbuilder.standalone.FlashBuilderApplication.start(FlashBuilderApplication.java:108)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:196)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:110)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:79)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:344)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:179)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:622)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:577)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1410)
+
+!ENTRY com.adobe.flexbuilder.ui 4 1 2012-11-18 10:28:03.429
+!MESSAGE Product = null version = 460 edition = stnd
+
+!ENTRY org.eclipse.jdt.launching 1 0 2012-11-18 10:31:02.180
+!MESSAGE Installed JRE 'Java SE 6 (MacOS X Default)' removed due to missing VM type extension.
+
+!ENTRY com.adobe.flexbuilder.project 4 43 2012-11-18 10:32:31.918
+!MESSAGE Connection refused: connect
+!STACK 0
+java.net.ConnectException: Connection refused: connect
+	at java.net.PlainSocketImpl.socketConnect(Native Method)
+	at java.net.PlainSocketImpl.doConnect(Unknown Source)
+	at java.net.PlainSocketImpl.connectToAddress(Unknown Source)
+	at java.net.PlainSocketImpl.connect(Unknown Source)
+	at java.net.SocksSocketImpl.connect(Unknown Source)
+	at java.net.Socket.connect(Unknown Source)
+	at java.net.Socket.connect(Unknown Source)
+	at sun.net.NetworkClient.doConnect(Unknown Source)
+	at sun.net.www.http.HttpClient.openServer(Unknown Source)
+	at sun.net.www.http.HttpClient.openServer(Unknown Source)
+	at sun.net.www.http.HttpClient.<init>(Unknown Source)
+	at sun.net.www.http.HttpClient.New(Unknown Source)
+	at sun.net.www.http.HttpClient.New(Unknown Source)
+	at sun.net.www.protocol.http.HttpURLConnection.getNewHttpClient(Unknown Source)
+	at sun.net.www.protocol.http.HttpURLConnection.plainConnect(Unknown Source)
+	at sun.net.www.protocol.http.HttpURLConnection.connect(Unknown Source)
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream(Unknown Source)
+	at java.net.URL.openStream(Unknown Source)
+	at com.adobe.flexide.launching.AbstractFlexLaunchDelegate.checkSwfIsDebuggable(AbstractFlexLaunchDelegate.java:520)
+	at com.adobe.flexide.launching.AbstractFlexLaunchDelegate.finalLaunchCheck(AbstractFlexLaunchDelegate.java:496)
+	at org.eclipse.debug.internal.core.LaunchConfiguration.launch(LaunchConfiguration.java:835)
+	at org.eclipse.debug.internal.core.LaunchConfiguration.launch(LaunchConfiguration.java:703)
+	at org.eclipse.debug.internal.ui.DebugUIPlugin.buildAndLaunch(DebugUIPlugin.java:928)
+	at org.eclipse.debug.internal.ui.DebugUIPlugin$8.run(DebugUIPlugin.java:1132)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:54)
+!SESSION 2013-01-14 19:12:15.203 -----------------------------------------------
+eclipse.buildId=I20100608-0911
+java.version=1.6.0_16
+java.vendor=Sun Microsystems Inc.
+BootLoader constants: OS=win32, ARCH=x86, WS=win32, NL=en_US
+Command-line arguments:  -os win32 -ws win32 -arch x86 -data C:\workspaces\bmsocketsW\bmsockets\src
+
+!ENTRY org.eclipse.ui 2 0 2013-01-14 19:12:18.583
+!MESSAGE Warnings while parsing the commands from the 'org.eclipse.ui.commands' and 'org.eclipse.ui.actionDefinitions' extension points.
+!SUBENTRY 1 org.eclipse.ui 2 0 2013-01-14 19:12:18.583
+!MESSAGE Commands should really have a category: plug-in='com.qnx.flashbuilder.multiplatform.qnx.ui', id='com.qnx.flashbuilder.multiplatform.qnx.ui.commands.OpenInfoCenter', categoryId='com.qnx.flashbuilder.multiplatform.qnx.ui.commands.category.help'
+
+!ENTRY com.adobe.flexbuilder.ui 4 1 2013-01-14 19:12:23.811
+!MESSAGE Product = null version = 460 edition = stnd
+!SESSION 2013-01-17 13:20:31.449 -----------------------------------------------
+eclipse.buildId=I20100608-0911
+java.version=1.6.0_16
+java.vendor=Sun Microsystems Inc.
+BootLoader constants: OS=win32, ARCH=x86, WS=win32, NL=en_US
+Command-line arguments:  -os win32 -ws win32 -arch x86 -data C:\workspaces\bmsocketsW\bmsockets\src
+
+!ENTRY org.eclipse.ui 2 0 2013-01-17 13:20:34.676
+!MESSAGE Warnings while parsing the commands from the 'org.eclipse.ui.commands' and 'org.eclipse.ui.actionDefinitions' extension points.
+!SUBENTRY 1 org.eclipse.ui 2 0 2013-01-17 13:20:34.676
+!MESSAGE Commands should really have a category: plug-in='com.qnx.flashbuilder.multiplatform.qnx.ui', id='com.qnx.flashbuilder.multiplatform.qnx.ui.commands.OpenInfoCenter', categoryId='com.qnx.flashbuilder.multiplatform.qnx.ui.commands.category.help'
+
+!ENTRY com.adobe.flexbuilder.ui 4 1 2013-01-17 13:20:39.477
+!MESSAGE Product = null version = 460 edition = stnd
+!SESSION 2013-02-21 21:50:30.570 -----------------------------------------------
+eclipse.buildId=I20100608-0911
+java.version=1.6.0_16
+java.vendor=Sun Microsystems Inc.
+BootLoader constants: OS=win32, ARCH=x86, WS=win32, NL=en_US
+Command-line arguments:  -os win32 -ws win32 -arch x86 -data C:\workspaces\bmsocketsW\bmsockets\src
+
+!ENTRY org.eclipse.ui 2 0 2013-02-21 21:50:33.770
+!MESSAGE Warnings while parsing the commands from the 'org.eclipse.ui.commands' and 'org.eclipse.ui.actionDefinitions' extension points.
+!SUBENTRY 1 org.eclipse.ui 2 0 2013-02-21 21:50:33.770
+!MESSAGE Commands should really have a category: plug-in='com.qnx.flashbuilder.multiplatform.qnx.ui', id='com.qnx.flashbuilder.multiplatform.qnx.ui.commands.OpenInfoCenter', categoryId='com.qnx.flashbuilder.multiplatform.qnx.ui.commands.category.help'
+
+!ENTRY com.adobe.flexbuilder.ui 4 1 2013-02-21 21:50:38.340
+!MESSAGE Product = null version = 460 edition = stnd
+!SESSION 2013-02-28 15:27:20.669 -----------------------------------------------
+eclipse.buildId=I20100608-0911
+java.version=1.6.0_16
+java.vendor=Sun Microsystems Inc.
+BootLoader constants: OS=win32, ARCH=x86, WS=win32, NL=en_US
+Command-line arguments:  -os win32 -ws win32 -arch x86 -data C:\workspaces\bmsocketsW\bmsockets\src
+
+!ENTRY org.eclipse.ui 2 0 2013-02-28 15:27:24.008
+!MESSAGE Warnings while parsing the commands from the 'org.eclipse.ui.commands' and 'org.eclipse.ui.actionDefinitions' extension points.
+!SUBENTRY 1 org.eclipse.ui 2 0 2013-02-28 15:27:24.008
+!MESSAGE Commands should really have a category: plug-in='com.qnx.flashbuilder.multiplatform.qnx.ui', id='com.qnx.flashbuilder.multiplatform.qnx.ui.commands.OpenInfoCenter', categoryId='com.qnx.flashbuilder.multiplatform.qnx.ui.commands.category.help'
+
+!ENTRY com.adobe.flexbuilder.ui 4 1 2013-02-28 15:27:29.115
+!MESSAGE Product = null version = 460 edition = stnd
+!SESSION 2013-11-04 09:26:15.332 -----------------------------------------------
+eclipse.buildId=M20110210-1200
+java.version=1.7.0_25
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86, WS=win32, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.jee.product -product org.eclipse.epp.package.jee.product -product org.eclipse.epp.package.jee.product
+Command-line arguments:  -os win32 -ws win32 -arch x86 -product org.eclipse.epp.package.jee.product -product org.eclipse.epp.package.jee.product -data C:\workspaces\bmsocketsW\bmsockets\src -product org.eclipse.epp.package.jee.product
+
+!ENTRY org.eclipse.jface 2 0 2013-11-04 09:26:31.715
+!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
+!SUBENTRY 1 org.eclipse.jface 2 0 2013-11-04 09:26:31.715
+!MESSAGE A conflict occurred for ALT+SHIFT+D W:
+Binding(ALT+SHIFT+D W,
+	ParameterizedCommand(Command(org.eclipse.php.server.ui.phpServerShortcut.debug,Debug PHP Web Page,
+		Debug PHP Web Page,
+		Category(org.eclipse.debug.ui.category.run,Run/Debug,Run/Debug command category,true),
+		,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(ALT+SHIFT+D W,
+	ParameterizedCommand(Command(com.adobe.flexbuilder.debug.ui.flexLaunchShortcut.debug,Debug Web Application,
+		Debug an Adobe Flash Player web application.,
+		Category(org.eclipse.debug.ui.category.run,Run/Debug,Run/Debug command category,true),
+		,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+!SUBENTRY 1 org.eclipse.jface 2 0 2013-11-04 09:26:31.715
+!MESSAGE A conflict occurred for ALT+SHIFT+X W:
+Binding(ALT+SHIFT+X W,
+	ParameterizedCommand(Command(org.eclipse.php.server.ui.phpServerShortcut.run,Run PHP Web Page,
+		Run PHP Web Page,
+		Category(org.eclipse.debug.ui.category.run,Run/Debug,Run/Debug command category,true),
+		,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(ALT+SHIFT+X W,
+	ParameterizedCommand(Command(com.adobe.flexbuilder.debug.ui.flexLaunchShortcut.run,Run Web Application,
+		Run an Adobe Flash Player web application.,
+		Category(org.eclipse.debug.ui.category.run,Run/Debug,Run/Debug command category,true),
+		,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)

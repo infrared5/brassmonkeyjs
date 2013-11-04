@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+
+<meta charset="utf-8" />
+
+<title>WebSocket Test, Host</title>
+
+
+<script language="javascript" type="text/javascript">
+	
+	
+var anti = 1;
+var wsUri = "ws://registry.monkeysecurity.com:6262/registry";
+var output;
+var i = 0;	
+var intId = 0;	
+var retryTimeout = 0;
+var clientInfo;
+var session;
+var connection;
+
+	function BMInvoke(method,returnMethod,data){
+		this.methodName=method;
+		this.returnMethod=returnMethod;
+		this.data=data;
+		this.ws=32;
+	}
+
+	/**
+	 ADDRESS
+	 */
+	function BMAddress(host, port) {
+		this.host = host;
+		this.reliablePort = port;
+		this.unreliablePort = port;
+	};
+	/**
+	DEVICE
+	 */
+	function BMDevice(deviceId, deviceName) {
+		this.deviceId = deviceId;
+		this.deviceName = deviceName;
+		this.deviceType = "WEBSOCKET";
+	};
+	/**
+	INFO
+	 */
+	function BMInfo(appId, device, address, slot, max, current) {
+		this.appId = appId;
+		this.device = device;
+		this.address = address;
+		this.slotId = slot;
+		this.maxPlayers = max;
+		this.currentPlayers = current;
+	};
+	BMInfo.prototype.isHost = function() {
+		return this.slotId != 0;
+	}
+
+	/**
+	CONNECTION
+	 */
+	function BMConnection() {
+		this.uri = null;		
+		this.listener = null;
+		this.websocket = null;
+	}
+
+	BMConnection.prototype.register = function(info) {
+		writeToScreen('register');
+		var invoke = new BMInvoke("registry.register", "onRegister" , [info]);
+		var payload=JSON.stringify(invoke);		
+		this.websocket.send(payload);
+	}
+	
+	BMConnection.prototype.connect = function( listener, uri) {
+		this.uri = uri;
+		this.websocket = new WebSocket(uri);
+		this.websocket.onopen = listener.onOpen;
+		this.websocket.onclose = listener.onClose;
+		this.websocket.onmessage = listener.onMessage;
+		this.websocket.onerror = listener.onError;
+	};
+
+	
+	/**
+	SESSION
+	 */
+	function BMSession() {
+
+	};
+	
+	
+	BMSession.prototype.onMessage = function(event) {
+		
+		var myObject = JSON.parse(event.data);
+		var tType=0;
+
+		switch (myObject.ws) {
+
+		case 32://invoke
+			var i = myObject.data.length;
+			var j = 0;
+			var parameters = [];
+			writeToScreen(myObject.methodName);
+			
+			while (j < i) {
+				t = myObject.data[j++].value;				
+				parameters.push(t);
+			};
+			
+			var fn = window[myObject.methodName];
+			if(typeof fn === 'function') {				
+			    fn.apply(BMSession.prototype, parameters);
+			}else{
+				fn = BMSession.prototype[myObject.methodName];
+				if(typeof fn === 'function') {				
+				    fn.apply(BMSession.prototype, parameters);
+				}else{
+					writeToScreen('function not found');
+				}
+			}
+			break;
+
+		case 35://ping
+			writeToScreen("ping " +new Date(myObject.time));
+			break;
+		}
+	};
+	
+	BMSession.prototype.onOpen = function() {
+		writeToScreen('onOpen-');
+		//writeToScreen(this.connection);
+		connection.register(clientInfo);
+	};
+	
+	BMSession.prototype.onRegister = function(result) {
+		writeToScreen('onRegister-'+result);
+	};
+	
+	BMSession.prototype.onHostConnected = function(hostInfo) {
+		
+		if(hostInfo.device.deviceId == clientInfo.device.deviceId){
+			writeToScreen("My host info, slotId:"+hostInfo.slotId);
+			clientInfo=hostInfo;			
+		}
+	};
+	
+	BMSession.prototype.onList = function(result) {
+		writeToScreen('<span style="color: blue;"> onList ' + result
+				+ '</span>');
+	};
+	
+	BMSession.prototype.start = function() {
+		writeToScreen('<span style="color: blue;"> start </span>');
+		
+		connection.connect(this,wsUri);
+	};
+	BMSession.prototype.deviceConnectRequested = function(clientInfo){
+		writeToScreen('<span style="color: red;">deviceConnectRequested '+JSON.stringify(clientInfo)+' </span>');
+		
+
+			
+		connectClient(clientInfo);
+			
+		
+	}
+	var webs;
+	
+	onOpen= function(evt)
+	{
+		
+	}
+	
+	function connectClient(clientInfo){
+		
+		var newHost= clientInfo.address.host;
+		var newPort= 6262;
+		var uu="ws://"+newHost+":"+newPort+"/client";
+		writeToScreen(uu);
+		
+		
+		webs = new WebSocket(uu);
+		webs.onopen = function(evt){writeToScreen("onopen");};
+		webs.onclose =  function(evt){writeToScreen("onclose");};
+		webs.onmessage = function(evt){writeToScreen("onmessage");};
+		webs.onerror =  function(evt){writeToScreen("onerror");};
+		writeToScreen("set up");		
+		
+		
+		
+	}
+	
+
+	
+	function connectClient1(clientInfo){
+		writeToScreen('<span style="color: red;>connectClient1  </span>'); 
+	}
+	
+	function init() {
+		
+		output = document.getElementById("output");
+
+		clientInfo = new BMInfo("appId",new BMDevice("sefd-fff-host", "websocket host device woohoo"),	new BMAddress("192.168.10.1", 6262), 2, 2, 0);
+		connection = new BMConnection();
+		session = new BMSession();
+		session.start();
+	}
+
+	function writeToScreen(message) {
+		var pre = document.createElement("p");
+		pre.style.wordWrap = "break-word";
+		pre.innerHTML = message;
+		output.appendChild(pre);
+	}
+</script>
+<body onload="init();">
+<h2>WebSocket Test</h2>
+<input type="button" onclick="doTest();" value="Test">
+<div id="output"></div>
+</body>
+</html> 

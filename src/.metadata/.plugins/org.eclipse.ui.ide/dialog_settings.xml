@@ -25,9 +25,17 @@
 		<item value="org.eclipse.wb.swing.feature:1.0.0.r37x201106081552"/>
 		<item value="org.eclipse.wst.xml_ui.feature:3.3.0.v201103310011-7H7EFZ-DxumTla66ahfUnHfpsz0u5Z92pU4TxSL"/>
 	</list>
+	<section name="ChooseWorkspaceDialogSettings">
+		<item value="382" key="DIALOG_Y_ORIGIN"/>
+		<item value="667" key="DIALOG_X_ORIGIN"/>
+	</section>
 	<section name="ExternalProjectImportWizard">
 		<item value="false" key="WizardProjectsImportPage.STORE_ARCHIVE_SELECTED"/>
 		<item value="false" key="WizardProjectsImportPage.STORE_COPY_PROJECT_ID"/>
+	</section>
+	<section name="WORKBENCH_SETTINGS">
+		<list key="ENABLED_TRANSFERS">
+		</list>
 	</section>
 	<section name="ResourceNavigator">
 		<item value="" key="ResourceWorkingSetFilter.STORE_WORKING_SET"/>
