@@ -21,6 +21,11 @@ html{
   margin: 0 auto;
   padding: 0px 64px;
 }
+
+.content.content-extended {
+  width: 971px;
+}
+
 .header .logo a{
   float: left;
   padding: 23px 0px 20px 0px;
@@ -158,6 +163,10 @@ a.example{
   
 }
 
+.footer.footer-extended {
+  width: 1034px;
+}
+
 .footer .tabs{
   width: 506px;
   height: 40px;
@@ -240,6 +249,7 @@ a.example{
   font-size: 11px;
   line-height: 16px;
   margin: 15px 10px 22px 10px;
+  min-height: 26px;
 }
 .sdk div img{
   padding-left: 10px;
